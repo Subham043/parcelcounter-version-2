@@ -131,6 +131,16 @@ use App\Features\ProductSpecifications\Controllers\ProductSpecificationDeleteCon
 use App\Features\ProductSpecifications\Controllers\ProductSpecificationPaginateController;
 use App\Features\ProductSpecifications\Controllers\ProductSpecificationUpdateController;
 use App\Features\ProductSpecifications\Controllers\ProductSpecificationViewController;
+use App\Features\ProductVideos\Controllers\ProductVideoCreateController;
+use App\Features\ProductVideos\Controllers\ProductVideoDeleteController;
+use App\Features\ProductVideos\Controllers\ProductVideoPaginateController;
+use App\Features\ProductVideos\Controllers\ProductVideoUpdateController;
+use App\Features\ProductVideos\Controllers\ProductVideoViewController;
+use App\Features\ProductPrices\Controllers\ProductPriceCreateController;
+use App\Features\ProductPrices\Controllers\ProductPriceDeleteController;
+use App\Features\ProductPrices\Controllers\ProductPricePaginateController;
+use App\Features\ProductPrices\Controllers\ProductPriceUpdateController;
+use App\Features\ProductPrices\Controllers\ProductPriceViewController;
 use App\Features\TexteditorImages\Controllers\TexteditorImageCreateController;
 use App\Http\Enums\Guards;
 use App\Http\Enums\Throttle;
@@ -251,6 +261,22 @@ Route::prefix('v1')->middleware([Throttle::API->middleware()])->group(function (
                     Route::post('/update/{id}', [ProductColorUpdateController::class, 'index']);
                     Route::get('/view/{id}', [ProductColorViewController::class, 'index']);
                     Route::delete('/delete/{id}', [ProductColorDeleteController::class, 'index']);
+                });
+
+                Route::prefix('product-videos/{product_id}')->group(function () {
+                    Route::get('/paginate', [ProductVideoPaginateController::class, 'index']);
+                    Route::post('/create', [ProductVideoCreateController::class, 'index']);
+                    Route::post('/update/{id}', [ProductVideoUpdateController::class, 'index']);
+                    Route::get('/view/{id}', [ProductVideoViewController::class, 'index']);
+                    Route::delete('/delete/{id}', [ProductVideoDeleteController::class, 'index']);
+                });
+
+                Route::prefix('product-prices/{product_id}')->group(function () {
+                    Route::get('/paginate', [ProductPricePaginateController::class, 'index']);
+                    Route::post('/create', [ProductPriceCreateController::class, 'index']);
+                    Route::post('/update/{id}', [ProductPriceUpdateController::class, 'index']);
+                    Route::get('/view/{id}', [ProductPriceViewController::class, 'index']);
+                    Route::delete('/delete/{id}', [ProductPriceDeleteController::class, 'index']);
                 });
 
             });

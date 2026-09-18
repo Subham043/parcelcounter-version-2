@@ -23,6 +23,8 @@ return [
     App\Providers\ProductServiceProvider::class,
     App\Providers\ProductSpecificationServiceProvider::class,
     App\Providers\ProductColorServiceProvider::class,
+    App\Providers\ProductVideoServiceProvider::class,
+    App\Providers\ProductPriceServiceProvider::class,
     App\Providers\LegalContentServiceProvider::class,
     App\Providers\TexteditorImageServiceProvider::class,
     App\Providers\DeliverySlotServiceProvider::class,
