@@ -126,6 +126,11 @@ use App\Features\ProductColors\Controllers\ProductColorDeleteController;
 use App\Features\ProductColors\Controllers\ProductColorPaginateController;
 use App\Features\ProductColors\Controllers\ProductColorUpdateController;
 use App\Features\ProductColors\Controllers\ProductColorViewController;
+use App\Features\ProductImages\Controllers\ProductImageCreateController;
+use App\Features\ProductImages\Controllers\ProductImageDeleteController;
+use App\Features\ProductImages\Controllers\ProductImagePaginateController;
+use App\Features\ProductImages\Controllers\ProductImageUpdateController;
+use App\Features\ProductImages\Controllers\ProductImageViewController;
 use App\Features\ProductSpecifications\Controllers\ProductSpecificationCreateController;
 use App\Features\ProductSpecifications\Controllers\ProductSpecificationDeleteController;
 use App\Features\ProductSpecifications\Controllers\ProductSpecificationPaginateController;
@@ -280,6 +285,14 @@ Route::prefix('v1')->middleware([Throttle::API->middleware()])->group(function (
                     Route::post('/update/{id}', [ProductVideoUpdateController::class, 'index']);
                     Route::get('/view/{id}', [ProductVideoViewController::class, 'index']);
                     Route::delete('/delete/{id}', [ProductVideoDeleteController::class, 'index']);
+                });
+
+                Route::prefix('product-images/{product_id}')->group(function () {
+                    Route::get('/paginate', [ProductImagePaginateController::class, 'index']);
+                    Route::post('/create', [ProductImageCreateController::class, 'index']);
+                    Route::post('/update/{id}', [ProductImageUpdateController::class, 'index']);
+                    Route::get('/view/{id}', [ProductImageViewController::class, 'index']);
+                    Route::delete('/delete/{id}', [ProductImageDeleteController::class, 'index']);
                 });
 
                 Route::prefix('product-prices/{product_id}')->group(function () {
