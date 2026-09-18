@@ -141,6 +141,11 @@ use App\Features\ProductPrices\Controllers\ProductPriceDeleteController;
 use App\Features\ProductPrices\Controllers\ProductPricePaginateController;
 use App\Features\ProductPrices\Controllers\ProductPriceUpdateController;
 use App\Features\ProductPrices\Controllers\ProductPriceViewController;
+use App\Features\ProductStocks\Controllers\ProductStockCreateController;
+use App\Features\ProductStocks\Controllers\ProductStockDeleteController;
+use App\Features\ProductStocks\Controllers\ProductStockPaginateController;
+use App\Features\ProductStocks\Controllers\ProductStockUpdateController;
+use App\Features\ProductStocks\Controllers\ProductStockViewController;
 use App\Features\TexteditorImages\Controllers\TexteditorImageCreateController;
 use App\Http\Enums\Guards;
 use App\Http\Enums\Throttle;
@@ -277,6 +282,14 @@ Route::prefix('v1')->middleware([Throttle::API->middleware()])->group(function (
                     Route::post('/update/{id}', [ProductPriceUpdateController::class, 'index']);
                     Route::get('/view/{id}', [ProductPriceViewController::class, 'index']);
                     Route::delete('/delete/{id}', [ProductPriceDeleteController::class, 'index']);
+                });
+
+                Route::prefix('product-stocks/{product_id}')->group(function () {
+                    Route::get('/paginate', [ProductStockPaginateController::class, 'index']);
+                    Route::post('/create', [ProductStockCreateController::class, 'index']);
+                    Route::post('/update/{id}', [ProductStockUpdateController::class, 'index']);
+                    Route::get('/view/{id}', [ProductStockViewController::class, 'index']);
+                    Route::delete('/delete/{id}', [ProductStockDeleteController::class, 'index']);
                 });
 
             });

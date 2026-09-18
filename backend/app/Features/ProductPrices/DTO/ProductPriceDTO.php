@@ -8,8 +8,8 @@ use Illuminate\Support\Collection;
 final class ProductPriceDTO
 {
     public function __construct(
-        public readonly string $price,
-        public readonly string $min_quantity,
+        public readonly float $price,
+        public readonly int $min_quantity,
     ) {}
 
     /**
