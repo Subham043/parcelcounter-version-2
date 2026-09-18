@@ -121,6 +121,11 @@ use App\Features\PaymentOptions\Controllers\PaymentOptionPaginateController;
 use App\Features\PaymentOptions\Controllers\PaymentOptionSlugController;
 use App\Features\PaymentOptions\Controllers\PaymentOptionToggleStatusController;
 use App\Features\PaymentOptions\Controllers\PaymentOptionViewController;
+use App\Features\ProductSpecifications\Controllers\ProductSpecificationCreateController;
+use App\Features\ProductSpecifications\Controllers\ProductSpecificationDeleteController;
+use App\Features\ProductSpecifications\Controllers\ProductSpecificationPaginateController;
+use App\Features\ProductSpecifications\Controllers\ProductSpecificationUpdateController;
+use App\Features\ProductSpecifications\Controllers\ProductSpecificationViewController;
 use App\Features\TexteditorImages\Controllers\TexteditorImageCreateController;
 use App\Http\Enums\Guards;
 use App\Http\Enums\Throttle;
@@ -226,6 +231,15 @@ Route::prefix('v1')->middleware([Throttle::API->middleware()])->group(function (
                 Route::get('/view/{id}', [ProductViewController::class, 'index']);
                 Route::get('/slug/{slug}', [ProductSlugController::class, 'index']);
                 Route::delete('/delete/{id}', [ProductDeleteController::class, 'index']);
+
+                Route::prefix('product-specifications/{product_id}')->group(function () {
+                    Route::get('/paginate', [ProductSpecificationPaginateController::class, 'index']);
+                    Route::post('/create', [ProductSpecificationCreateController::class, 'index']);
+                    Route::post('/update/{id}', [ProductSpecificationUpdateController::class, 'index']);
+                    Route::get('/view/{id}', [ProductSpecificationViewController::class, 'index']);
+                    Route::delete('/delete/{id}', [ProductSpecificationDeleteController::class, 'index']);
+                });
+
             });
             
             Route::prefix('legal-contents')->group(function () {
