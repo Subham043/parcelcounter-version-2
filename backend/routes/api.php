@@ -141,6 +141,12 @@ use App\Features\ProductPrices\Controllers\ProductPriceDeleteController;
 use App\Features\ProductPrices\Controllers\ProductPricePaginateController;
 use App\Features\ProductPrices\Controllers\ProductPriceUpdateController;
 use App\Features\ProductPrices\Controllers\ProductPriceViewController;
+use App\Features\ProductReviews\Controllers\ProductReviewCreateController;
+use App\Features\ProductReviews\Controllers\ProductReviewDeleteController;
+use App\Features\ProductReviews\Controllers\ProductReviewPaginateController;
+use App\Features\ProductReviews\Controllers\ProductReviewToggleStatusController;
+use App\Features\ProductReviews\Controllers\ProductReviewUpdateController;
+use App\Features\ProductReviews\Controllers\ProductReviewViewController;
 use App\Features\ProductStocks\Controllers\ProductStockCreateController;
 use App\Features\ProductStocks\Controllers\ProductStockDeleteController;
 use App\Features\ProductStocks\Controllers\ProductStockPaginateController;
@@ -290,6 +296,15 @@ Route::prefix('v1')->middleware([Throttle::API->middleware()])->group(function (
                     Route::post('/update/{id}', [ProductStockUpdateController::class, 'index']);
                     Route::get('/view/{id}', [ProductStockViewController::class, 'index']);
                     Route::delete('/delete/{id}', [ProductStockDeleteController::class, 'index']);
+                });
+
+                Route::prefix('product-reviews/{product_id}')->group(function () {
+                    Route::get('/paginate', [ProductReviewPaginateController::class, 'index']);
+                    Route::post('/create', [ProductReviewCreateController::class, 'index']);
+                    Route::post('/update/{id}', [ProductReviewUpdateController::class, 'index']);
+                    Route::get('/view/{id}', [ProductReviewViewController::class, 'index']);
+                    Route::delete('/delete/{id}', [ProductReviewDeleteController::class, 'index']);
+                    Route::get('/status/{id}', [ProductReviewToggleStatusController::class, 'index']);
                 });
 
             });

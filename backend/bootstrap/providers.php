@@ -26,6 +26,7 @@ return [
     App\Providers\ProductVideoServiceProvider::class,
     App\Providers\ProductPriceServiceProvider::class,
     App\Providers\ProductStockServiceProvider::class,
+    App\Providers\ProductReviewServiceProvider::class,
     App\Providers\LegalContentServiceProvider::class,
     App\Providers\TexteditorImageServiceProvider::class,
     App\Providers\DeliverySlotServiceProvider::class,
