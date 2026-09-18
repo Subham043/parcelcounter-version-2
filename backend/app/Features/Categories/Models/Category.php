@@ -2,10 +2,12 @@
 
 namespace App\Features\Categories\Models;
 
+use App\Features\Products\Models\Product;
 use App\Features\SubCategories\Models\SubCategory;
 use App\Features\Users\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class Category extends Model
 {
@@ -42,6 +44,13 @@ class Category extends Model
         ];
     }
 
+    protected function slug(): Attribute
+    {
+        return Attribute::make(
+            set: fn (string $value) => str()->slug($value),
+        );
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id')->withDefault();
@@ -50,5 +59,10 @@ class Category extends Model
     public function sub_categories()
     {
         return $this->belongsToMany(SubCategory::class, 'category_of_sub_categories', 'category_id', 'sub_category_id');
+    }
+    
+    public function products()
+    {
+        return $this->belongsToMany(Product::class, 'category_of_products', 'category_id', 'product_id');
     }
 }

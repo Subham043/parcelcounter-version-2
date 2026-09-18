@@ -6,6 +6,7 @@ use App\Features\Categories\Models\Category;
 use App\Features\Users\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class SubCategory extends Model
 {
@@ -42,6 +43,13 @@ class SubCategory extends Model
         return [
             'is_active' => 'boolean',
         ];
+    }
+
+    protected function slug(): Attribute
+    {
+        return Attribute::make(
+            set: fn (string $value) => str()->slug($value),
+        );
     }
 
     public function user()

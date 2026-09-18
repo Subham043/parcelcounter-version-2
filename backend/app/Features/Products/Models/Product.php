@@ -1,15 +1,18 @@
 <?php
 
-namespace App\Features\PaymentOptions\Models;
+namespace App\Features\Products\Models;
 
+use App\Features\Categories\Models\Category;
 use App\Features\Users\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 
-class PaymentOption extends Model
+class Product extends Model
 {
     use HasFactory;
+
+    protected $table = 'products';
 
     /**
      * The attributes that are mass assignable.
@@ -19,9 +22,21 @@ class PaymentOption extends Model
     protected $fillable = [
         'name',
         'slug',
+        'hsn',
         'description',
+        'description_unfiltered',
+        'brief_description',
         'image',
+        'meta_title',
+        'meta_description',
+        'meta_keywords',
         'is_active',
+        'is_new',
+        'is_on_sale',
+        'is_featured',
+        'min_cart_quantity',
+        'cart_quantity_interval',
+        'cart_quantity_specification',
         'user_id',
     ];
 
@@ -34,6 +49,11 @@ class PaymentOption extends Model
     {
         return [
             'is_active' => 'boolean',
+            'is_new' => 'boolean',
+            'is_on_sale' => 'boolean',
+            'is_featured' => 'boolean',
+            'min_cart_quantity' => 'int',
+            'cart_quantity_interval' => 'int',
         ];
     }
 
@@ -47,5 +67,10 @@ class PaymentOption extends Model
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id')->withDefault();
+    }
+
+    public function categories()
+    {
+        return $this->belongsToMany(Category::class, 'category_of_products', 'product_id', 'category_id');
     }
 }

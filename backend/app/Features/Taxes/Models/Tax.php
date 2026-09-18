@@ -5,6 +5,7 @@ namespace App\Features\Taxes\Models;
 use App\Features\Users\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class Tax extends Model
 {
@@ -36,6 +37,13 @@ class Tax extends Model
             'is_inter_state_tax' => 'boolean',
             'is_active' => 'boolean',
         ];
+    }
+
+    protected function slug(): Attribute
+    {
+        return Attribute::make(
+            set: fn (string $value) => str()->slug($value),
+        );
     }
 
     public function user()

@@ -68,6 +68,14 @@ use App\Features\SubCategories\Controllers\SubCategoryToggleStatusController;
 use App\Features\SubCategories\Controllers\SubCategoryUpdateController;
 use App\Features\SubCategories\Controllers\SubCategoryViewController;
 use App\Features\SubCategories\Controllers\SubCategorySlugController;
+use App\Features\Products\Controllers\ProductCreateController;
+use App\Features\Products\Controllers\ProductDeleteController;
+use App\Features\Products\Controllers\ProductExportController;
+use App\Features\Products\Controllers\ProductPaginateController;
+use App\Features\Products\Controllers\ProductToggleStatusController;
+use App\Features\Products\Controllers\ProductUpdateController;
+use App\Features\Products\Controllers\ProductViewController;
+use App\Features\Products\Controllers\ProductSlugController;
 use App\Features\LegalContents\Controllers\LegalContentCreateController;
 use App\Features\LegalContents\Controllers\LegalContentDeleteController;
 use App\Features\LegalContents\Controllers\LegalContentExportController;
@@ -207,6 +215,17 @@ Route::prefix('v1')->middleware([Throttle::API->middleware()])->group(function (
                 Route::get('/view/{id}', [SubCategoryViewController::class, 'index']);
                 Route::get('/slug/{slug}', [SubCategorySlugController::class, 'index']);
                 Route::delete('/delete/{id}', [SubCategoryDeleteController::class, 'index']);
+            });
+            
+            Route::prefix('products')->group(function () {
+                Route::get('/excel', [ProductExportController::class, 'index']);
+                Route::get('/paginate', [ProductPaginateController::class, 'index']);
+                Route::post('/create', [ProductCreateController::class, 'index']);
+                Route::post('/update/{id}', [ProductUpdateController::class, 'index']);
+                Route::get('/status/{id}', [ProductToggleStatusController::class, 'index']);
+                Route::get('/view/{id}', [ProductViewController::class, 'index']);
+                Route::get('/slug/{slug}', [ProductSlugController::class, 'index']);
+                Route::delete('/delete/{id}', [ProductDeleteController::class, 'index']);
             });
             
             Route::prefix('legal-contents')->group(function () {

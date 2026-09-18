@@ -20,6 +20,7 @@ return [
     App\Providers\BlogServiceProvider::class,
     App\Providers\CategoryServiceProvider::class,
     App\Providers\SubCategoryServiceProvider::class,
+    App\Providers\ProductServiceProvider::class,
     App\Providers\LegalContentServiceProvider::class,
     App\Providers\TexteditorImageServiceProvider::class,
     App\Providers\DeliverySlotServiceProvider::class,

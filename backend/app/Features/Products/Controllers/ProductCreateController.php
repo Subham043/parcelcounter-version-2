@@ -1,0 +1,40 @@
+<?php
+
+namespace App\Features\Products\Controllers;
+
+use App\Features\Products\DTO\ProductCategoryIdDTO;
+use App\Features\Products\DTO\ProductDTO;
+use App\Features\Products\Interfaces\ProductServiceInterface;
+use App\Http\Controllers\Controller;
+use App\Features\Products\Requests\ProductCreatePostRequest;
+use App\Features\Products\Resources\ProductCollection;
+
+class ProductCreateController extends Controller
+{
+
+    public function __construct(private ProductServiceInterface $productService) {}
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+
+    public function index(ProductCreatePostRequest $request)
+    {
+        try {
+            //code...
+            $product = $this->productService->create(
+                ProductDTO::fromRequest($request),
+                ProductCategoryIdDTO::fromRequest($request)
+            );
+            return response()->json([
+                "message" => "Product created successfully.",
+                "data" => ProductCollection::make($product),
+            ], 201);
+        } catch (\Throwable $th) {
+            return response()->json(["message" => "Something went wrong. Please try again"], 400);
+        }
+    }
+}
