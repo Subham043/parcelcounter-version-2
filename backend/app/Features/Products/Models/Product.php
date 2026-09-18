@@ -3,6 +3,8 @@
 namespace App\Features\Products\Models;
 
 use App\Features\Categories\Models\Category;
+use App\Features\SubCategories\Models\SubCategory;
+use App\Features\Taxes\Models\Tax;
 use App\Features\Users\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -72,5 +74,15 @@ class Product extends Model
     public function categories()
     {
         return $this->belongsToMany(Category::class, 'category_of_products', 'product_id', 'category_id');
+    }
+
+    public function sub_categories()
+    {
+        return $this->belongsToMany(SubCategory::class, 'sub_category_of_products', 'product_id', 'sub_category_id');
+    }
+
+    public function taxes()
+    {
+        return $this->belongsToMany(Tax::class, 'tax_of_products', 'product_id', 'tax_id');
     }
 }

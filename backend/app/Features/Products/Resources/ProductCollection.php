@@ -40,6 +40,14 @@ class ProductCollection extends JsonResource
 				$this->relationLoaded('categories'),
 				fn () => ProductCategoryCollection::collection($this->categories)
 			),
+			'sub_categories' => $this->when(
+				$this->relationLoaded('sub_categories'),
+				fn () => ProductSubCategoryCollection::collection($this->sub_categories)
+			),
+			'taxes' => $this->when(
+				$this->relationLoaded('taxes'),
+				fn () => ProductTaxCollection::collection($this->taxes)
+			),
 			'created_at' => $this->created_at,
 			'updated_at' => $this->updated_at,
 		];

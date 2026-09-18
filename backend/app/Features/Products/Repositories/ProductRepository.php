@@ -13,17 +13,23 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 class ProductRepository implements ProductRepositoryInterface
 {
-    public function model(bool $withCategory = false): Builder
+    public function model(bool $withCategory = false, bool $withSubCategory = false, bool $withTax = false): Builder
     {
         return Product::select('id', 'name', 'hsn', 'slug', 'description', 'description_unfiltered', 'brief_description', 'image', 'meta_title', 'meta_description', 'meta_keywords', 'is_active', 'is_new', 'is_on_sale', 'is_featured', 'min_cart_quantity', 'cart_quantity_interval', 'cart_quantity_specification', 'user_id', 'created_at', 'updated_at')
         ->when($withCategory, function ($query) {
             return $query->with('categories:id,name');
+        })
+        ->when($withSubCategory, function ($query) {
+            return $query->with('sub_categories:id,name');
+        })
+        ->when($withTax, function ($query) {
+            return $query->with('taxes:id,name,slug,value,is_inter_state_tax');
         });
     }
 
-    public function query(bool $withCategory = false): QueryBuilder
+    public function query(bool $withCategory = false, bool $withSubCategory = false, bool $withTax = false): QueryBuilder
     {
-        return QueryBuilder::for($this->model($withCategory))
+        return QueryBuilder::for($this->model($withCategory, $withSubCategory, $withTax))
             ->defaultSort('-id')
             ->allowedSorts('id', 'name')
             ->allowedFilters([
@@ -67,29 +73,47 @@ class ProductRepository implements ProductRepositoryInterface
         ]);
     }
 
-    public function getById(int $id, bool $withCategory = false): Product
+    public function syncSubCategories(Product $product, array $data): Product
     {
-        return $this->model($withCategory)->findOrFail($id);
+        $product->sub_categories()->sync($data);
+
+        return $product->load([
+            'sub_categories:id,name',
+        ]);
     }
 
-    public function getByColumn(string $column, mixed $value, bool $withCategory = false): ?Product
+    public function syncTaxes(Product $product, array $data): Product
     {
-        return $this->model($withCategory)->where($column, $value)->first();
+        $product->taxes()->sync($data);
+
+        return $product->load([
+            'taxes:id,name,slug,value,is_inter_state_tax',
+        ]);
     }
 
-    public function getByColumnOrFail(string $column, mixed $value, bool $withCategory = false): Product
+    public function getById(int $id, bool $withCategory = false, bool $withSubCategory = false, bool $withTax = false): Product
     {
-        return $this->model($withCategory)->where($column, $value)->firstOrFail();
+        return $this->model($withCategory, $withSubCategory, $withTax)->findOrFail($id);
     }
 
-    public function paginate(int $total = 15, bool $withCategory = false): LengthAwarePaginator
+    public function getByColumn(string $column, mixed $value, bool $withCategory = false, bool $withSubCategory = false, bool $withTax = false): ?Product
     {
-        return $this->query($withCategory)->paginate($total)->appends(request()->query());
+        return $this->model($withCategory, $withSubCategory, $withTax)->where($column, $value)->first();
     }
 
-    public function getAll(bool $withCategory = false): Collection
+    public function getByColumnOrFail(string $column, mixed $value, bool $withCategory = false, bool $withSubCategory = false, bool $withTax = false): Product
     {
-        return $this->query($withCategory)->lazy(100)->collect();
+        return $this->model($withCategory, $withSubCategory, $withTax)->where($column, $value)->firstOrFail();
+    }
+
+    public function paginate(int $total = 15, bool $withCategory = false, bool $withSubCategory = false, bool $withTax = false): LengthAwarePaginator
+    {
+        return $this->query($withCategory, $withSubCategory, $withTax)->paginate($total)->appends(request()->query());
+    }
+
+    public function getAll(bool $withCategory = false, bool $withSubCategory = false, bool $withTax = false): Collection
+    {
+        return $this->query($withCategory, $withSubCategory, $withTax)->lazy(100)->collect();
     }
 }
 

@@ -46,6 +46,10 @@ class ProductCreatePostRequest extends InputRequest
             'meta_keywords' => 'nullable|string',
             'category' => 'required|array|min:1',
             'category.*' => 'required|numeric|exists:categories,id',
+            'sub_category' => 'required|array|min:1',
+            'sub_category.*' => 'required|numeric|exists:sub_categories,id',
+            'tax' => 'required|array|min:1',
+            'tax.*' => 'required|numeric|exists:taxes,id',
         ];
     }
 }

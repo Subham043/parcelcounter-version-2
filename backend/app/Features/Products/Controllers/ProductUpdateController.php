@@ -4,6 +4,8 @@ namespace App\Features\Products\Controllers;
 
 use App\Features\Products\DTO\ProductCategoryIdDTO;
 use App\Features\Products\DTO\ProductDTO;
+use App\Features\Products\DTO\ProductSubCategoryIdDTO;
+use App\Features\Products\DTO\ProductTaxIdDTO;
 use App\Features\Products\Interfaces\ProductServiceInterface;
 use App\Http\Controllers\Controller;
 use App\Features\Products\Requests\ProductUpdatePostRequest;
@@ -29,6 +31,8 @@ class ProductUpdateController extends Controller
             $updated_product = $this->productService->update(
                 ProductDTO::fromRequest($request),
                 ProductCategoryIdDTO::fromRequest($request),
+                ProductSubCategoryIdDTO::fromRequest($request),
+                ProductTaxIdDTO::fromRequest($request),
                 $product
             );
             return response()->json(["message" => "Product updated successfully.", "data" => ProductCollection::make($updated_product)], 200);

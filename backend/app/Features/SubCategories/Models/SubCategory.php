@@ -3,6 +3,7 @@
 namespace App\Features\SubCategories\Models;
 
 use App\Features\Categories\Models\Category;
+use App\Features\Products\Models\Product;
 use App\Features\Users\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -60,5 +61,10 @@ class SubCategory extends Model
     public function categories()
     {
         return $this->belongsToMany(Category::class, 'category_of_sub_categories', 'sub_category_id', 'category_id');
+    }
+
+    public function products()
+    {
+        return $this->belongsToMany(Product::class, 'sub_category_of_products', 'sub_category_id', 'product_id');
     }
 }

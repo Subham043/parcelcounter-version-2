@@ -4,6 +4,8 @@ namespace App\Features\Products\Services;
 
 use App\Features\Products\DTO\ProductCategoryIdDTO;
 use App\Features\Products\DTO\ProductDTO;
+use App\Features\Products\DTO\ProductSubCategoryIdDTO;
+use App\Features\Products\DTO\ProductTaxIdDTO;
 use App\Features\Products\Exports\ProductExport;
 use App\Features\Products\Interfaces\ProductRepositoryInterface;
 use App\Features\Products\Interfaces\ProductServiceInterface;
@@ -18,39 +20,43 @@ class ProductService implements ProductServiceInterface
 
 	public function __construct(private ProductRepositoryInterface $productRepository) {}
 
-	public function paginate(Int $total = 10, bool $withCategory = false): LengthAwarePaginator
+	public function paginate(Int $total = 10, bool $withCategory = false, bool $withSubCategory = false, bool $withTax = false): LengthAwarePaginator
 	{
-		return $this->productRepository->paginate($total, $withCategory);
+		return $this->productRepository->paginate($total, $withCategory, $withSubCategory, $withTax);
 	}
 
-	public function getById(Int $id, bool $withCategory = false): Product
+	public function getById(Int $id, bool $withCategory = false, bool $withSubCategory = false, bool $withTax = false): Product
 	{
-		return $this->productRepository->getById($id, $withCategory);
+		return $this->productRepository->getById($id, $withCategory, $withSubCategory, $withTax);
 	}
 
-	public function getBySlug(string $slug, bool $withCategory = false): Product
+	public function getBySlug(string $slug, bool $withCategory = false, bool $withSubCategory = false, bool $withTax = false): Product
 	{
-		return $this->productRepository->getByColumnOrFail('slug', $slug, $withCategory);
+		return $this->productRepository->getByColumnOrFail('slug', $slug, $withCategory, $withSubCategory, $withTax);
 	}
 
-	public function create(ProductDTO $data, ProductCategoryIdDTO $categoryIdDTO): Product
+	public function create(ProductDTO $data, ProductCategoryIdDTO $categoryIdDTO, ProductSubCategoryIdDTO $subCategoryIdDTO, ProductTaxIdDTO $taxIdDTO): Product
 	{
-		return DB::transaction(function () use ($data, $categoryIdDTO) {
+		return DB::transaction(function () use ($data, $categoryIdDTO, $subCategoryIdDTO, $taxIdDTO) {
 			$product = $this->productRepository->create([...$data->toArray(), 'user_id' => auth(Guards::API->value())->user()->id]);
 			$product = $this->productRepository->syncCategories($product, $categoryIdDTO->toArray());
+			$product = $this->productRepository->syncSubCategories($product, $subCategoryIdDTO->toArray());
+			$product = $this->productRepository->syncTaxes($product, $taxIdDTO->toArray());
 			return $product;
 		});
 	}
 
-	public function update(ProductDTO $data, ProductCategoryIdDTO $categoryIdDTO, Product $product): Product
+	public function update(ProductDTO $data, ProductCategoryIdDTO $categoryIdDTO, ProductSubCategoryIdDTO $subCategoryIdDTO, ProductTaxIdDTO $taxIdDTO, Product $product): Product
 	{
-		return DB::transaction(function () use ($data, $categoryIdDTO, $product) {
+		return DB::transaction(function () use ($data, $categoryIdDTO, $subCategoryIdDTO, $taxIdDTO, $product) {
 			$image = $product->image;
 			if($data->image){
 				$image = $data->image;
 			}
 			$product = $this->productRepository->update($product, [...$data->toArray(), 'image' => $image]);
 			$product = $this->productRepository->syncCategories($product, $categoryIdDTO->toArray());
+			$product = $this->productRepository->syncSubCategories($product, $subCategoryIdDTO->toArray());
+			$product = $this->productRepository->syncTaxes($product, $taxIdDTO->toArray());
 			return $product;
 		});
 	}
@@ -71,6 +77,6 @@ class ProductService implements ProductServiceInterface
 
 	public function exportProducts(): \Symfony\Component\HttpFoundation\BinaryFileResponse
 	{
-		return Excel::download(new ProductExport($this->productRepository->query(true)), 'products.xlsx');
+		return Excel::download(new ProductExport($this->productRepository->query(true, true, true)), 'products.xlsx');
 	}
 }
