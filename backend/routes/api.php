@@ -121,6 +121,11 @@ use App\Features\PaymentOptions\Controllers\PaymentOptionPaginateController;
 use App\Features\PaymentOptions\Controllers\PaymentOptionSlugController;
 use App\Features\PaymentOptions\Controllers\PaymentOptionToggleStatusController;
 use App\Features\PaymentOptions\Controllers\PaymentOptionViewController;
+use App\Features\ProductColors\Controllers\ProductColorCreateController;
+use App\Features\ProductColors\Controllers\ProductColorDeleteController;
+use App\Features\ProductColors\Controllers\ProductColorPaginateController;
+use App\Features\ProductColors\Controllers\ProductColorUpdateController;
+use App\Features\ProductColors\Controllers\ProductColorViewController;
 use App\Features\ProductSpecifications\Controllers\ProductSpecificationCreateController;
 use App\Features\ProductSpecifications\Controllers\ProductSpecificationDeleteController;
 use App\Features\ProductSpecifications\Controllers\ProductSpecificationPaginateController;
@@ -238,6 +243,14 @@ Route::prefix('v1')->middleware([Throttle::API->middleware()])->group(function (
                     Route::post('/update/{id}', [ProductSpecificationUpdateController::class, 'index']);
                     Route::get('/view/{id}', [ProductSpecificationViewController::class, 'index']);
                     Route::delete('/delete/{id}', [ProductSpecificationDeleteController::class, 'index']);
+                });
+
+                Route::prefix('product-colors/{product_id}')->group(function () {
+                    Route::get('/paginate', [ProductColorPaginateController::class, 'index']);
+                    Route::post('/create', [ProductColorCreateController::class, 'index']);
+                    Route::post('/update/{id}', [ProductColorUpdateController::class, 'index']);
+                    Route::get('/view/{id}', [ProductColorViewController::class, 'index']);
+                    Route::delete('/delete/{id}', [ProductColorDeleteController::class, 'index']);
                 });
 
             });
