@@ -1,0 +1,203 @@
+name: parcelcounter_backend
+
+services:
+
+  mysql:
+    image: mysql:8.4
+    restart: unless-stopped
+    container_name: parcelcounter-mysql
+    ports:
+      - "3306:3306"
+    env_file:
+      - .env
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+    volumes:
+      - ./docker/mysql:/var/lib/mysql
+    networks:
+      - parcelcounter-mysql-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u${DB_USERNAME}", "-p${DB_PASSWORD}"]
+      interval: 5s
+      timeout: 10s
+      retries: 20
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: parcelcounter-phpmyadmin
+    restart: unless-stopped
+    ports:
+      - '8086:80'
+    env_file:
+      - .env
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      PMA_HOST: ${DB_HOST}
+      PMA_PORT: ${DB_PORT}
+      PHP_ENABLE_XDEBUG: ${PHP_ENABLE_XDEBUG}
+      UPLOAD_LIMIT: ${UPLOAD_LIMIT}
+      PMA_ABSOLUTE_URI: ${APP_URL}/phpmyadmin/
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - parcelcounter-mysql-network
+      - parcelcounter-webserver-network
+
+  redis:
+    image: redis:7.2.4-alpine
+    container_name: parcelcounter-redis
+    restart: unless-stopped
+    command:
+      - 'redis-server'
+      - '--appendonly yes'
+      - '--requirepass ${REDIS_PASSWORD}'
+    volumes:
+      - ./docker/redis:/data
+    networks:
+      - parcelcounter-redis-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD}", "ping"]
+      interval: 5s
+      timeout: 10s
+      retries: 20
+
+  minio:
+    image: minio/minio:latest
+    container_name: parcelcounter-minio
+    restart: unless-stopped
+    command: server /data --console-address ":9001"
+    env_file:
+      - .env
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+      MINIO_BROWSER_REDIRECT_URL: http://parcelcounter-minio:9001/
+      MINIO_SERVER_URL: http://parcelcounter-minio:9000/
+    ports:
+      # - "9000:9000" //console api
+      - "9001:9001" #web api
+    volumes:
+      - ./docker/minio:/data
+    networks:
+      - parcelcounter-minio-network
+    healthcheck:
+      test: [ "CMD", "mc", "ready", "local" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  minio-init:
+    image: minio/mc
+    depends_on:
+      minio:
+        condition: service_healthy
+    entrypoint: >
+      /bin/sh -c "
+      sleep 15;
+      mc alias set local http://minio:9000 ${MINIO_ROOT_USER} ${MINIO_ROOT_PASSWORD};
+      mc mb local/${MINIO_PUBLIC_BUCKET} --ignore-existing;
+      mc mb local/${MINIO_PRIVATE_BUCKET} --ignore-existing;
+      mc anonymous set download local/${MINIO_PUBLIC_BUCKET};
+      exit 0;
+      "
+    networks:
+      - parcelcounter-minio-network
+
+  app:
+    build:
+      context: ./
+      dockerfile: docker/php/Dockerfile
+    container_name: parcelcounter-app
+    restart: unless-stopped
+    user: ${UID}:${GID}
+    env_file:
+      - .env
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      minio:
+        condition: service_healthy
+    volumes:
+      - ./:/var/www
+      - parcelcounter_app_composer_data:/.composer
+      - parcelcounter_app_npm_data:/.npm
+    working_dir: /var/www
+    environment:
+      # COMMAND: php-fpm
+      # PROCESS: app
+      PROCESS: app
+      COMMAND: php artisan octane:start --server=swoole --host=0.0.0.0 --port=8000
+    networks:
+      - parcelcounter-mysql-network
+      - parcelcounter-webserver-network
+      - parcelcounter-redis-network
+      - parcelcounter-minio-network
+
+
+  horizon:
+    extends: app
+    container_name: parcelcounter-horizon
+    environment:
+      COMMAND: php artisan horizon
+      PROCESS: horizon
+    ports: []  # remove hosting of external ports
+    networks:
+      - parcelcounter-mysql-network
+      - parcelcounter-redis-network
+      - parcelcounter-minio-network
+
+  schedule:
+    extends: app
+    container_name: parcelcounter-schedule
+    environment:
+      COMMAND: supercronic -quiet /var/www/docker/php/schedule/crontab
+      PROCESS: schedule
+    ports: []  # remove hosting of external ports
+    networks:
+      - parcelcounter-mysql-network
+      - parcelcounter-redis-network
+      - parcelcounter-minio-network
+
+  webserver:
+    image: nginx:1.26.0-alpine
+    container_name: parcelcounter-webserver
+    restart: unless-stopped
+    volumes:
+      - ./:/var/www
+      - ./docker/nginx/conf.d/:/etc/nginx/conf.d/
+      - ./storage/logs/nginx/:/var/log/nginx/
+    ports:
+      - "8000:80"
+    networks:
+      - parcelcounter-webserver-network
+      - parcelcounter-mysql-network
+      - parcelcounter-minio-network
+    depends_on:
+      app:
+        condition: service_started
+      mysql:
+        condition: service_healthy
+      minio:
+        condition: service_healthy
+
+volumes:
+  mysql_data:
+  redis_data:
+  minio_data:
+  parcelcounter_app_composer_data:
+  parcelcounter_app_npm_data:
+
+networks:
+  parcelcounter-mysql-network:
+  parcelcounter-webserver-network:
+  parcelcounter-redis-network:
+  parcelcounter-minio-network:

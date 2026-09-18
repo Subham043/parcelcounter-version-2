@@ -1,0 +1,51 @@
+<?php
+
+namespace App\Features\DeliverySlots\Exports;
+
+use Maatwebsite\Excel\Concerns\FromQuery;
+use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\WithMapping;
+use Spatie\QueryBuilder\QueryBuilder;
+
+
+class DeliverySlotExport implements FromQuery, WithHeadings, WithMapping
+{
+
+	private QueryBuilder $query;
+	public function __construct(QueryBuilder $query)
+	{
+		$this->query = $query;
+	}
+	public function query()
+	{
+		return $this->query; // Using cursor() to avoid memory overload
+	}
+
+	public function map($data): array
+	{
+		return [
+			$data->id,
+			$data->name,
+			$data->start_time,
+			$data->end_time,
+			$data->is_cod_allowed ? 'Yes' : 'No',
+			$data->is_active ? 'Yes' : 'No',
+			$data->user_id,
+			$data->created_at->format('Y-m-d H:i:s'),
+		];
+	}
+
+	public function headings(): array
+	{
+		return [
+			'Id',
+			'Name',
+			'Start Time',
+			'End Time',
+			'Is COD Allowed',
+			'Is Active',
+			'User Id',
+			'Created At',
+		];
+	}
+}

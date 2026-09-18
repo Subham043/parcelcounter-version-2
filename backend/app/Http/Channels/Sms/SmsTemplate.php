@@ -1,0 +1,12 @@
+<?php
+
+namespace App\Http\Channels\Sms;
+
+enum SmsTemplate: string
+{
+    case LOGIN_OTP = '1207172174139756075';
+    case DELIVERY_OTP = '1207172174594168131';
+    case LOCAL_LOGIN_OTP = '1207173631334457559';
+    case WEB_LOGIN_OTP = '1207173631631414784';
+    case AUTO_READ_LOGIN_OTP = '1207173631218395102';
+}
