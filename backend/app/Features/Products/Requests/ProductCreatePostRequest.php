@@ -50,6 +50,21 @@ class ProductCreatePostRequest extends InputRequest
             'sub_category.*' => 'required|numeric|exists:sub_categories,id',
             'tax' => 'required|array|min:1',
             'tax.*' => 'required|numeric|exists:taxes,id',
+            'specifications' => 'required|array|min:1',
+            'specifications.*.title' => 'required|string|max:255',
+            'specifications.*.description' => 'required|string',
+            'prices' => 'required|array|min:1',
+            'prices.*.min_quantity' => 'required|decimal:0,2|gte:1',
+            'prices.*.price' => 'required|integer|min:1',
+            'stocks' => 'required|array|min:1',
+            'stocks.*.purchase_stock' => 'required|decimal:0,2|gte:1',
+            'stocks.*.quantity' => 'required|integer|min:1',
+            'stocks.*.purchased_at' => 'required|date_format:Y-m-d',
+            'colors' => 'nullable|array',
+            'colors.*.name' => 'required|string|max:255',
+            'colors.*.code' => 'required|string|max:255',
+            'videos' => 'nullable|array',
+            'videos.*.video' => 'required|url|max:255',
         ];
     }
 }

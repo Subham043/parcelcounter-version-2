@@ -3,9 +3,14 @@
 namespace App\Features\Products\Services;
 
 use App\Features\Products\DTO\ProductCategoryIdDTO;
+use App\Features\Products\DTO\ProductColorDTO;
 use App\Features\Products\DTO\ProductDTO;
+use App\Features\Products\DTO\ProductPriceDTO;
+use App\Features\Products\DTO\ProductSpecificationDTO;
+use App\Features\Products\DTO\ProductStockDTO;
 use App\Features\Products\DTO\ProductSubCategoryIdDTO;
 use App\Features\Products\DTO\ProductTaxIdDTO;
+use App\Features\Products\DTO\ProductVideoDTO;
 use App\Features\Products\Exports\ProductExport;
 use App\Features\Products\Interfaces\ProductRepositoryInterface;
 use App\Features\Products\Interfaces\ProductServiceInterface;
@@ -20,35 +25,40 @@ class ProductService implements ProductServiceInterface
 
 	public function __construct(private ProductRepositoryInterface $productRepository) {}
 
-	public function paginate(Int $total = 10, bool $withCategory = false, bool $withSubCategory = false, bool $withTax = false): LengthAwarePaginator
+	public function paginate(Int $total = 10, bool $withCategory = false, bool $withSubCategory = false, bool $withTax = false, bool $withSpecification = false, bool $withImage = false, bool $withVideo = false, bool $withColors = false, bool $withPrice = false, bool $withStock = false, bool $withLatestStock = false, bool $withReview = false): LengthAwarePaginator
 	{
-		return $this->productRepository->paginate($total, $withCategory, $withSubCategory, $withTax);
+		return $this->productRepository->paginate($total, $withCategory, $withSubCategory, $withTax, $withSpecification, $withImage, $withVideo, $withColors, $withPrice, $withStock, $withLatestStock, $withReview);
 	}
 
-	public function getById(Int $id, bool $withCategory = false, bool $withSubCategory = false, bool $withTax = false): Product
+	public function getById(Int $id, bool $withCategory = false, bool $withSubCategory = false, bool $withTax = false, bool $withSpecification = false, bool $withImage = false, bool $withVideo = false, bool $withColors = false, bool $withPrice = false, bool $withStock = false, bool $withLatestStock = false, bool $withReview = false): Product
 	{
-		return $this->productRepository->getById($id, $withCategory, $withSubCategory, $withTax);
+		return $this->productRepository->getById($id, $withCategory, $withSubCategory, $withTax, $withSpecification, $withImage, $withVideo, $withColors, $withPrice, $withStock, $withLatestStock, $withReview);
 	}
 
-	public function getBySlug(string $slug, bool $withCategory = false, bool $withSubCategory = false, bool $withTax = false): Product
+	public function getBySlug(string $slug, bool $withCategory = false, bool $withSubCategory = false, bool $withTax = false, bool $withSpecification = false, bool $withImage = false, bool $withVideo = false, bool $withColors = false, bool $withPrice = false, bool $withStock = false, bool $withLatestStock = false, bool $withReview = false): Product
 	{
-		return $this->productRepository->getByColumnOrFail('slug', $slug, $withCategory, $withSubCategory, $withTax);
+		return $this->productRepository->getByColumnOrFail('slug', $slug, $withCategory, $withSubCategory, $withTax, $withSpecification, $withImage, $withVideo, $withColors, $withPrice, $withStock, $withLatestStock, $withReview);
 	}
 
-	public function create(ProductDTO $data, ProductCategoryIdDTO $categoryIdDTO, ProductSubCategoryIdDTO $subCategoryIdDTO, ProductTaxIdDTO $taxIdDTO): Product
+	public function create(ProductDTO $data, ProductCategoryIdDTO $categoryIdDTO, ProductSubCategoryIdDTO $subCategoryIdDTO, ProductTaxIdDTO $taxIdDTO, ProductSpecificationDTO $specificationDTO, ProductPriceDTO $priceDTO, ProductStockDTO $stockDTO, ProductColorDTO $colorDTO, ProductVideoDTO $videoDTO): Product
 	{
-		return DB::transaction(function () use ($data, $categoryIdDTO, $subCategoryIdDTO, $taxIdDTO) {
+		return DB::transaction(function () use ($data, $categoryIdDTO, $subCategoryIdDTO, $taxIdDTO, $specificationDTO, $priceDTO, $stockDTO, $colorDTO, $videoDTO) {
 			$product = $this->productRepository->create([...$data->toArray(), 'user_id' => auth(Guards::API->value())->user()->id]);
 			$product = $this->productRepository->syncCategories($product, $categoryIdDTO->toArray());
 			$product = $this->productRepository->syncSubCategories($product, $subCategoryIdDTO->toArray());
 			$product = $this->productRepository->syncTaxes($product, $taxIdDTO->toArray());
+			$product = $this->productRepository->saveSpecifications($product, $specificationDTO->toArray());
+			$product = $this->productRepository->savePrices($product, $priceDTO->toArray());
+			$product = $this->productRepository->saveStocks($product, $stockDTO->toArray());
+			$product = $this->productRepository->saveColors($product, $colorDTO->toArray());
+			$product = $this->productRepository->saveVideos($product, $videoDTO->toArray());
 			return $product;
 		});
 	}
 
-	public function update(ProductDTO $data, ProductCategoryIdDTO $categoryIdDTO, ProductSubCategoryIdDTO $subCategoryIdDTO, ProductTaxIdDTO $taxIdDTO, Product $product): Product
+	public function update(ProductDTO $data, ProductCategoryIdDTO $categoryIdDTO, ProductSubCategoryIdDTO $subCategoryIdDTO, ProductTaxIdDTO $taxIdDTO, ProductSpecificationDTO $specificationDTO, ProductPriceDTO $priceDTO, ProductStockDTO $stockDTO, ProductColorDTO $colorDTO, ProductVideoDTO $videoDTO, Product $product): Product
 	{
-		return DB::transaction(function () use ($data, $categoryIdDTO, $subCategoryIdDTO, $taxIdDTO, $product) {
+		return DB::transaction(function () use ($data, $categoryIdDTO, $subCategoryIdDTO, $taxIdDTO, $specificationDTO, $priceDTO, $stockDTO, $colorDTO, $videoDTO, $product) {
 			$image = $product->image;
 			if($data->image){
 				$image = $data->image;
@@ -57,6 +67,11 @@ class ProductService implements ProductServiceInterface
 			$product = $this->productRepository->syncCategories($product, $categoryIdDTO->toArray());
 			$product = $this->productRepository->syncSubCategories($product, $subCategoryIdDTO->toArray());
 			$product = $this->productRepository->syncTaxes($product, $taxIdDTO->toArray());
+			$product = $this->productRepository->saveSpecifications($product, $specificationDTO->toArray());
+			$product = $this->productRepository->savePrices($product, $priceDTO->toArray());
+			$product = $this->productRepository->saveStocks($product, $stockDTO->toArray());
+			$product = $this->productRepository->saveColors($product, $colorDTO->toArray());
+			$product = $this->productRepository->saveVideos($product, $videoDTO->toArray());
 			return $product;
 		});
 	}

@@ -48,6 +48,38 @@ class ProductCollection extends JsonResource
 				$this->relationLoaded('taxes'),
 				fn () => ProductTaxCollection::collection($this->taxes)
 			),
+			'specifications' => $this->when(
+				$this->relationLoaded('specifications'),
+				fn () => ProductSpecificationCollection::collection($this->specifications)
+			),
+			'images' => $this->when(
+				$this->relationLoaded('images'),
+				fn () => ProductImageCollection::collection($this->images)
+			),
+			'videos' => $this->when(
+				$this->relationLoaded('videos'),
+				fn () => ProductVideoCollection::collection($this->videos)
+			),
+			'colors' => $this->when(
+				$this->relationLoaded('colors'),
+				fn () => ProductColorCollection::collection($this->colors)
+			),
+			'prices' => $this->when(
+				$this->relationLoaded('prices'),
+				fn () => ProductPriceCollection::collection($this->prices)
+			),
+			'stocks' => $this->when(
+				$this->relationLoaded('stocks'),
+				fn () => ProductStockCollection::collection($this->stocks)
+			),
+			'latest_stock' => $this->when(
+				$this->relationLoaded('latest_stock'),
+				fn () => ProductStockCollection::make($this->latest_stock)
+			),
+			'reviews' => $this->when(
+				$this->relationLoaded('reviews'),
+				fn () => ProductReviewCollection::collection($this->reviews)
+			),
 			'created_at' => $this->created_at,
 			'updated_at' => $this->updated_at,
 		];

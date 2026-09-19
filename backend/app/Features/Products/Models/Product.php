@@ -3,6 +3,13 @@
 namespace App\Features\Products\Models;
 
 use App\Features\Categories\Models\Category;
+use App\Features\ProductColors\Models\ProductColor;
+use App\Features\ProductImages\Models\ProductImage;
+use App\Features\ProductPrices\Models\ProductPrice;
+use App\Features\ProductReviews\Models\ProductReview;
+use App\Features\ProductSpecifications\Models\ProductSpecification;
+use App\Features\ProductStocks\Models\ProductStock;
+use App\Features\ProductVideos\Models\ProductVideo;
 use App\Features\SubCategories\Models\SubCategory;
 use App\Features\Taxes\Models\Tax;
 use App\Features\Users\Models\User;
@@ -84,5 +91,45 @@ class Product extends Model
     public function taxes()
     {
         return $this->belongsToMany(Tax::class, 'tax_of_products', 'product_id', 'tax_id');
+    }
+
+    public function specifications()
+    {
+        return $this->hasMany(ProductSpecification::class, 'product_id');
+    }
+
+    public function colors()
+    {
+        return $this->hasMany(ProductColor::class, 'product_id');
+    }
+
+    public function reviews()
+    {
+        return $this->hasMany(ProductReview::class, 'product_id');
+    }
+
+    public function prices()
+    {
+        return $this->hasMany(ProductPrice::class, 'product_id')->orderBy('min_quantity', 'asc');
+    }
+
+    public function stocks()
+    {
+        return $this->hasMany(ProductStock::class, 'product_id');
+    }
+
+    public function latest_stock()
+    {
+        return $this->hasOne(ProductStock::class, 'product_id')->latestOfMany('purchased_at');
+    }
+
+    public function images()
+    {
+        return $this->hasMany(ProductImage::class, 'product_id');
+    }
+
+    public function videos()
+    {
+        return $this->hasMany(ProductVideo::class, 'product_id');
     }
 }

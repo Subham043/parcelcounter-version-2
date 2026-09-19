@@ -29,7 +29,7 @@ class ProductStockPostRequest extends InputRequest
         return [
             'purchase_stock' => 'required|decimal:0,2|gte:1',
             'quantity' => 'required|integer|min:1',
-            'purchased_at' => 'required|date',
+            'purchased_at' => 'required|date_format:Y-m-d',
         ];
     }
 }
