@@ -216,6 +216,22 @@ class ProductRepository implements ProductRepositoryInterface
         ]);
     }
 
+    public function saveImages(Product $product, array $data): Product
+    {
+        $data = collect($data)
+            ->map(fn ($image) => [
+                'product_id' => $product->id,
+                'image' => $image,
+            ])
+            ->toArray();
+
+        $product->images()->createMany($data);
+
+        return $product->load([
+            'images:id,image,image_title,image_alt,product_id',
+        ]);
+    }
+
     public function saveVideos(Product $product, array $data): Product
     {
         $data = collect($data)

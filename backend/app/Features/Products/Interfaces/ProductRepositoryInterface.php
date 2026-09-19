@@ -22,6 +22,7 @@ interface ProductRepositoryInterface
     public function saveStocks(Product $product, array $data): Product;
     public function saveColors(Product $product, array $data): Product;
     public function saveVideos(Product $product, array $data): Product;
+    public function saveImages(Product $product, array $data): Product;
     public function delete(Product $product): Product;
     public function getById(int $id, bool $withCategory = false, bool $withSubCategory = false, bool $withTax = false, bool $withSpecification = false, bool $withImage = false, bool $withVideo = false, bool $withColors = false, bool $withPrice = false, bool $withStock = false, bool $withLatestStock = false, bool $withReview = false): Product;
     public function getByColumn(string $column, mixed $value, bool $withCategory = false, bool $withSubCategory = false, bool $withTax = false, bool $withSpecification = false, bool $withImage = false, bool $withVideo = false, bool $withColors = false, bool $withPrice = false, bool $withStock = false, bool $withLatestStock = false, bool $withReview = false): ?Product;

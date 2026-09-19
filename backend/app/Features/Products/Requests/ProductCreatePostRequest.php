@@ -65,6 +65,8 @@ class ProductCreatePostRequest extends InputRequest
             'colors.*.code' => 'required|string|max:255',
             'videos' => 'nullable|array',
             'videos.*.video' => 'required|url|max:255',
+            'images' => 'nullable|array',
+            'images.*.image' => 'required|image|mimes:jpeg,png,jpg,webp|max:2048',
         ];
     }
 }

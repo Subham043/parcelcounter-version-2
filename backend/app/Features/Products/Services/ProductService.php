@@ -5,6 +5,7 @@ namespace App\Features\Products\Services;
 use App\Features\Products\DTO\ProductCategoryIdDTO;
 use App\Features\Products\DTO\ProductColorDTO;
 use App\Features\Products\DTO\ProductDTO;
+use App\Features\Products\DTO\ProductImageDTO;
 use App\Features\Products\DTO\ProductPriceDTO;
 use App\Features\Products\DTO\ProductSpecificationDTO;
 use App\Features\Products\DTO\ProductStockDTO;
@@ -40,9 +41,9 @@ class ProductService implements ProductServiceInterface
 		return $this->productRepository->getByColumnOrFail('slug', $slug, $withCategory, $withSubCategory, $withTax, $withSpecification, $withImage, $withVideo, $withColors, $withPrice, $withStock, $withLatestStock, $withReview);
 	}
 
-	public function create(ProductDTO $data, ProductCategoryIdDTO $categoryIdDTO, ProductSubCategoryIdDTO $subCategoryIdDTO, ProductTaxIdDTO $taxIdDTO, ProductSpecificationDTO $specificationDTO, ProductPriceDTO $priceDTO, ProductStockDTO $stockDTO, ProductColorDTO $colorDTO, ProductVideoDTO $videoDTO): Product
+	public function create(ProductDTO $data, ProductCategoryIdDTO $categoryIdDTO, ProductSubCategoryIdDTO $subCategoryIdDTO, ProductTaxIdDTO $taxIdDTO, ProductSpecificationDTO $specificationDTO, ProductPriceDTO $priceDTO, ProductStockDTO $stockDTO, ProductColorDTO $colorDTO, ProductVideoDTO $videoDTO, ProductImageDTO $imageDTO): Product
 	{
-		return DB::transaction(function () use ($data, $categoryIdDTO, $subCategoryIdDTO, $taxIdDTO, $specificationDTO, $priceDTO, $stockDTO, $colorDTO, $videoDTO) {
+		return DB::transaction(function () use ($data, $categoryIdDTO, $subCategoryIdDTO, $taxIdDTO, $specificationDTO, $priceDTO, $stockDTO, $colorDTO, $videoDTO, $imageDTO) {
 			$product = $this->productRepository->create([...$data->toArray(), 'user_id' => auth(Guards::API->value())->user()->id]);
 			$product = $this->productRepository->syncCategories($product, $categoryIdDTO->toArray());
 			$product = $this->productRepository->syncSubCategories($product, $subCategoryIdDTO->toArray());
@@ -52,13 +53,14 @@ class ProductService implements ProductServiceInterface
 			$product = $this->productRepository->saveStocks($product, $stockDTO->toArray());
 			$product = $this->productRepository->saveColors($product, $colorDTO->toArray());
 			$product = $this->productRepository->saveVideos($product, $videoDTO->toArray());
+			$product = $this->productRepository->saveImages($product, $imageDTO->toArray());
 			return $product;
 		});
 	}
 
-	public function update(ProductDTO $data, ProductCategoryIdDTO $categoryIdDTO, ProductSubCategoryIdDTO $subCategoryIdDTO, ProductTaxIdDTO $taxIdDTO, ProductSpecificationDTO $specificationDTO, ProductPriceDTO $priceDTO, ProductStockDTO $stockDTO, ProductColorDTO $colorDTO, ProductVideoDTO $videoDTO, Product $product): Product
+	public function update(ProductDTO $data, ProductCategoryIdDTO $categoryIdDTO, ProductSubCategoryIdDTO $subCategoryIdDTO, ProductTaxIdDTO $taxIdDTO, ProductSpecificationDTO $specificationDTO, ProductPriceDTO $priceDTO, ProductStockDTO $stockDTO, ProductColorDTO $colorDTO, ProductVideoDTO $videoDTO, ProductImageDTO $imageDTO, Product $product): Product
 	{
-		return DB::transaction(function () use ($data, $categoryIdDTO, $subCategoryIdDTO, $taxIdDTO, $specificationDTO, $priceDTO, $stockDTO, $colorDTO, $videoDTO, $product) {
+		return DB::transaction(function () use ($data, $categoryIdDTO, $subCategoryIdDTO, $taxIdDTO, $specificationDTO, $priceDTO, $stockDTO, $colorDTO, $videoDTO, $imageDTO, $product) {
 			$image = $product->image;
 			if($data->image){
 				$image = $data->image;
@@ -72,6 +74,7 @@ class ProductService implements ProductServiceInterface
 			$product = $this->productRepository->saveStocks($product, $stockDTO->toArray());
 			$product = $this->productRepository->saveColors($product, $colorDTO->toArray());
 			$product = $this->productRepository->saveVideos($product, $videoDTO->toArray());
+			$product = $this->productRepository->saveImages($product, $imageDTO->toArray());
 			return $product;
 		});
 	}

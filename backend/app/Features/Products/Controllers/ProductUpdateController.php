@@ -5,6 +5,7 @@ namespace App\Features\Products\Controllers;
 use App\Features\Products\DTO\ProductCategoryIdDTO;
 use App\Features\Products\DTO\ProductColorDTO;
 use App\Features\Products\DTO\ProductDTO;
+use App\Features\Products\DTO\ProductImageDTO;
 use App\Features\Products\DTO\ProductPriceDTO;
 use App\Features\Products\DTO\ProductSpecificationDTO;
 use App\Features\Products\DTO\ProductStockDTO;
@@ -43,6 +44,7 @@ class ProductUpdateController extends Controller
                 ProductStockDTO::fromRequest($request),
                 ProductColorDTO::fromRequest($request),
                 ProductVideoDTO::fromRequest($request),
+                ProductImageDTO::fromRequest($request),
                 $product
             );
             return response()->json(["message" => "Product updated successfully.", "data" => ProductCollection::make($updated_product)], 200);

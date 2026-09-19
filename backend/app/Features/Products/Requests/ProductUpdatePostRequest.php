@@ -37,6 +37,8 @@ class ProductUpdatePostRequest extends ProductCreatePostRequest
             'videos' => 'nullable|array',
             'videos.*.id' => 'nullable|numeric|exists:product_videos,id',
             'videos.*.video' => 'required|url|max:255',
+            'images' => 'nullable|array',
+            'images.*.image' => 'required|image|mimes:jpeg,png,jpg,webp|max:2048',
         ]);
     }
 }
