@@ -35,6 +35,7 @@ return [
     App\Providers\AboutSectionServiceProvider::class,
     App\Providers\PaymentOptionServiceProvider::class,
     App\Providers\BillingInformationServiceProvider::class,
+    App\Providers\GlobalSearchServiceProvider::class,
     App\Providers\MapServiceProvider::class,
     Maatwebsite\Excel\ExcelServiceProvider::class,
     Spatie\Permission\PermissionServiceProvider::class,

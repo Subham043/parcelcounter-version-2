@@ -116,6 +116,7 @@ use App\Features\ContactFormEnquiries\Controllers\ContactFormEnquiryDeleteContro
 use App\Features\ContactFormEnquiries\Controllers\ContactFormEnquiryExportController;
 use App\Features\ContactFormEnquiries\Controllers\ContactFormEnquiryPaginateController;
 use App\Features\ContactFormEnquiries\Controllers\ContactFormEnquiryViewController;
+use App\Features\GlobalSearch\Controllers\GlobalSearchPaginateController;
 use App\Features\Map\Controllers\MapAutoCompleteController;
 use App\Features\Map\Controllers\MapDirectionController;
 use App\Features\Map\Controllers\MapReverseGeocodingController;
@@ -414,5 +415,9 @@ Route::prefix('v1')->middleware([Throttle::API->middleware()])->group(function (
         Route::post('/autocomplete', [MapAutoCompleteController::class, 'index']);
         Route::post('/reverse-geocoding', [MapReverseGeocodingController::class, 'index']);
         Route::post('/direction', [MapDirectionController::class, 'index']);
+    });
+
+    Route::prefix('search')->group(function () {
+        Route::get('/', [GlobalSearchPaginateController::class, 'index']);
     });
 });
