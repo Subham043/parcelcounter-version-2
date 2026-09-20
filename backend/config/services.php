@@ -41,4 +41,19 @@ return [
         'enabled' => env('SMS_ENABLED', false),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | OLA Map Configuration
+    |--------------------------------------------------------------------------
+    |
+    */
+
+    'map' => [
+        'enabled' => env('OLA_MAP_ENABLED', false),
+        'project_id' => env('OLA_MAP_PROJECT_ID'),
+        'api_key' => env('OLA_MAP_API_KEY'),
+        'client_id' => env('OLA_MAP_CLIENT_ID'),
+        'client_secret' => env('OLA_MAP_CLIENT_SECRET'),
+    ],
+
 ];
