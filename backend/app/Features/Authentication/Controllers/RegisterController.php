@@ -2,7 +2,9 @@
 
 namespace App\Features\Authentication\Controllers;
 
+use App\Features\Authentication\DTO\EmailLoginDTO;
 use App\Features\Authentication\DTO\LoginDTO;
+use App\Features\Authentication\DTO\PhoneLoginDTO;
 use App\Features\Authentication\DTO\RegisterDTO;
 use App\Features\Authentication\Interfaces\AuthServiceInterface;
 use App\Features\Authentication\Requests\RegisterPostRequest;
@@ -18,7 +20,7 @@ class RegisterController extends Controller
     public function index(RegisterPostRequest $request)
     {
         $user = $this->authService->register(RegisterDTO::fromRequest($request), UserRoleDTO::fromRequest($request));
-        $token = $this->authService->login(LoginDTO::fromRequest($request), Guards::API);
+        $token = $this->authService->login(PhoneLoginDTO::fromRequest($request), Guards::API);
         $cookie = $this->authService->set_cookie($token);
         return response()->json([
             'message' => 'Registered successfully.',

@@ -1,7 +1,8 @@
 <?php
 
 use App\Features\Authentication\Controllers\ForgotPasswordController;
-use App\Features\Authentication\Controllers\LoginController;
+use App\Features\Authentication\Controllers\PhoneLoginController;
+use App\Features\Authentication\Controllers\EmailLoginController;
 use App\Features\Authentication\Controllers\RegisterController;
 use App\Features\Authentication\Controllers\ResetPasswordController;
 use App\Features\Roles\Controllers\RolePaginateController;
@@ -105,6 +106,11 @@ use App\Features\AboutSections\Controllers\AboutSectionPaginateController;
 use App\Features\AboutSections\Controllers\AboutSectionToggleStatusController;
 use App\Features\AboutSections\Controllers\AboutSectionUpdateController;
 use App\Features\AboutSections\Controllers\AboutSectionViewController;
+use App\Features\Account\Controllers\LogoutController;
+use App\Features\Account\Controllers\PasswordUpdateController;
+use App\Features\Account\Controllers\ProfileController;
+use App\Features\Account\Controllers\ProfileUpdateController;
+use App\Features\Account\Controllers\RefreshTokenController;
 use App\Features\BillingInformations\Controllers\BillingInformationCreateController;
 use App\Features\BillingInformations\Controllers\BillingInformationDeleteController;
 use App\Features\BillingInformations\Controllers\BillingInformationExportController;
@@ -167,11 +173,23 @@ use App\Http\Enums\Throttle;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->middleware([Throttle::API->middleware()])->group(function () {
-    Route::prefix('auth')->group(function () {
-        Route::post('/login', [LoginController::class, 'index'])->middleware([Throttle::AUTH->middleware()]);
-        Route::post('/register', [RegisterController::class, 'index'])->middleware([Throttle::AUTH->middleware()]);
-        Route::post('/forgot-password', [ForgotPasswordController::class, 'index'])->middleware([Throttle::AUTH->middleware()]);
-        Route::post('/reset-password/{token}', [ResetPasswordController::class, 'index'])->middleware([Throttle::AUTH->middleware()])->whereAlphaNumeric('token')->name('password.reset');
+    Route::prefix('auth')->middleware([Throttle::AUTH->middleware()])->group(function () {
+        Route::post('/login-with-phone-password', [PhoneLoginController::class, 'index']);
+        Route::post('/login-with-email-password', [EmailLoginController::class, 'index']);
+        Route::post('/register', [RegisterController::class, 'index']);
+        Route::post('/forgot-password', [ForgotPasswordController::class, 'index']);
+        Route::post('/reset-password/{token}', [ResetPasswordController::class, 'index'])->whereAlphaNumeric('token')->name('password.reset');
+    });
+
+    //Account Routes
+    Route::prefix('account')->group(function () {
+        Route::post('/refresh', [RefreshTokenController::class, 'index']);
+        Route::middleware([Guards::API->middleware()])->group(function () {
+            Route::get('/', [ProfileController::class, 'index']);
+            Route::post('/update', [ProfileUpdateController::class, 'index']);
+            Route::post('/password', [PasswordUpdateController::class, 'index']);
+            Route::post('/logout', [LogoutController::class, 'index'])->middleware([Throttle::AUTH->middleware()]);
+        });
     });
 
     Route::middleware([Guards::API->middleware(), 'verified'])->group(function () {

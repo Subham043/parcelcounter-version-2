@@ -2,7 +2,8 @@
 
 namespace App\Features\Authentication\Services;
 
-use App\Features\Authentication\DTO\LoginDTO;
+use App\Features\Authentication\DTO\EmailLoginDTO;
+use App\Features\Authentication\DTO\PhoneLoginDTO;
 use App\Features\Authentication\DTO\RegisterDTO;
 use App\Features\Authentication\Interfaces\AuthServiceInterface;
 use App\Features\Users\DTO\UserRoleDTO;
@@ -30,7 +31,7 @@ class AuthService implements AuthServiceInterface
 		return $user->refresh();
 	}
 
-	public function login(LoginDTO $credentials, Guards $guard): string|false
+	public function login(PhoneLoginDTO|EmailLoginDTO $credentials, Guards $guard): string|false
 	{
 		return Auth::guard($guard->value())->attempt($credentials->toArray());
 	}

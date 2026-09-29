@@ -2,11 +2,11 @@
 
 namespace App\Features\Authentication\DTO;
 
-use App\Features\Authentication\Requests\LoginPostRequest;
+use App\Features\Authentication\Requests\PhoneLoginPostRequest;
 use App\Features\Authentication\Requests\RegisterPostRequest;
 use Illuminate\Support\Collection;
 
-final class LoginDTO
+final class PhoneLoginDTO
 {
     public function __construct(
         public readonly string $phone,
@@ -14,10 +14,10 @@ final class LoginDTO
     ) {}
 
     /**
-     * @param LoginPostRequest $request
+     * @param PhoneLoginPostRequest|RegisterPostRequest $request
      * @return self
      */
-    public static function fromRequest(LoginPostRequest|RegisterPostRequest $request): self
+    public static function fromRequest(PhoneLoginPostRequest|RegisterPostRequest $request): self
     {
         return new self(
             phone: $request->validated('phone'),
@@ -40,7 +40,7 @@ final class LoginDTO
     }
 
     /**
-     * @extends \Illuminate\Support\Collection<int, LoginDTO>
+     * @extends \Illuminate\Support\Collection<int, PhoneLoginDTO>
      */
     public function toCollection(): Collection
     {

@@ -46,7 +46,7 @@ class RegisterPostRequest extends InputRequest
                 Roles::RewardRiders->value,
                 Roles::AppPromoter->value,
             ]),],
-            // 'captcha' => ['required', 'captcha']
+            'captcha' => ['required', 'captcha']
         ];
     }
 

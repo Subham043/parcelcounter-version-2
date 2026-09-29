@@ -1,0 +1,384 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@import "@fontsource-variable/inter";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+    --font-heading: var(--font-sans);
+    --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --color-sidebar-ring: var(--sidebar-ring);
+    --color-sidebar-border: var(--sidebar-border);
+    --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+    --color-sidebar-accent: var(--sidebar-accent);
+    --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+    --color-sidebar-primary: var(--sidebar-primary);
+    --color-sidebar-foreground: var(--sidebar-foreground);
+    --color-sidebar: var(--sidebar);
+    --color-chart-5: var(--chart-5);
+    --color-chart-4: var(--chart-4);
+    --color-chart-3: var(--chart-3);
+    --color-chart-2: var(--chart-2);
+    --color-chart-1: var(--chart-1);
+    --color-ring: var(--ring);
+    --color-input: var(--input);
+    --color-border: var(--border);
+    --color-destructive: var(--destructive);
+    --color-accent-foreground: var(--accent-foreground);
+    --color-accent: var(--accent);
+    --color-muted-foreground: var(--muted-foreground);
+    --color-muted: var(--muted);
+    --color-secondary-foreground: var(--secondary-foreground);
+    --color-secondary: var(--secondary);
+    --color-primary-foreground: var(--primary-foreground);
+    --color-primary: var(--primary);
+    --color-popover-foreground: var(--popover-foreground);
+    --color-popover: var(--popover);
+    --color-card-foreground: var(--card-foreground);
+    --color-card: var(--card);
+    --color-foreground: var(--foreground);
+    --color-background: var(--background);
+    --radius-sm: calc(var(--radius) * 0.6);
+    --radius-md: calc(var(--radius) * 0.8);
+    --radius-lg: var(--radius);
+    --radius-xl: calc(var(--radius) * 1.4);
+    --radius-2xl: calc(var(--radius) * 1.8);
+    --radius-3xl: calc(var(--radius) * 2.2);
+    --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+:root {
+    --background: oklch(1 0 0);
+    --foreground: oklch(0.145 0 0);
+    --card: oklch(1 0 0);
+    --card-foreground: oklch(0.145 0 0);
+    --popover: oklch(1 0 0);
+    --popover-foreground: oklch(0.145 0 0);
+    --primary: oklch(0.205 0 0);
+    --primary-foreground: oklch(0.985 0 0);
+    --secondary: oklch(0.97 0 0);
+    --secondary-foreground: oklch(0.205 0 0);
+    --muted: oklch(0.97 0 0);
+    --muted-foreground: oklch(0.556 0 0);
+    --accent: oklch(0.97 0 0);
+    --accent-foreground: oklch(0.205 0 0);
+    --destructive: oklch(0.577 0.245 27.325);
+    --border: oklch(0.922 0 0);
+    --input: oklch(0.922 0 0);
+    --ring: oklch(0.708 0 0);
+    --chart-1: oklch(0.87 0 0);
+    --chart-2: oklch(0.556 0 0);
+    --chart-3: oklch(0.439 0 0);
+    --chart-4: oklch(0.371 0 0);
+    --chart-5: oklch(0.269 0 0);
+    --radius: 0.625rem;
+    --sidebar: #2e3e50;
+    --sidebar-foreground: #c8d8ec;
+    --sidebar-primary: #1e3a52;
+    --sidebar-primary-foreground: #ffffff;
+    --sidebar-accent: #1a2d45;
+    --sidebar-accent-foreground: #ffffff;
+    --sidebar-border: #1f3347;
+    --sidebar-ring: #2ac1d8;
+}
+
+.dark {
+    --background: oklch(0.145 0 0);
+    --foreground: oklch(0.985 0 0);
+    --card: oklch(0.205 0 0);
+    --card-foreground: oklch(0.985 0 0);
+    --popover: oklch(0.205 0 0);
+    --popover-foreground: oklch(0.985 0 0);
+    --primary: oklch(0.922 0 0);
+    --primary-foreground: oklch(0.205 0 0);
+    --secondary: oklch(0.269 0 0);
+    --secondary-foreground: oklch(0.985 0 0);
+    --muted: oklch(0.269 0 0);
+    --muted-foreground: oklch(0.708 0 0);
+    --accent: oklch(0.269 0 0);
+    --accent-foreground: oklch(0.985 0 0);
+    --destructive: oklch(0.704 0.191 22.216);
+    --border: oklch(1 0 0 / 10%);
+    --input: oklch(1 0 0 / 15%);
+    --ring: oklch(0.556 0 0);
+    --chart-1: oklch(0.87 0 0);
+    --chart-2: oklch(0.556 0 0);
+    --chart-3: oklch(0.439 0 0);
+    --chart-4: oklch(0.371 0 0);
+    --chart-5: oklch(0.269 0 0);
+    --sidebar: #2e3e50;
+    --sidebar-foreground: #c8d8ec;
+    --sidebar-primary: #1e3a52;
+    --sidebar-primary-foreground: #ffffff;
+    --sidebar-accent: #1a2d45;
+    --sidebar-accent-foreground: #ffffff;
+    --sidebar-border: #1f3347;
+    --sidebar-ring: #2ac1d8;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+    }
+  body {
+    @apply text-foreground bg-[#f9fafb];
+    }
+  html {
+    @apply font-sans;
+    }
+  }
+  .css-13cymwt-control, .css-t3ipsp-control, .css-16xfy0z-control{
+    background-color: color-mix(in oklab, var(--input) 50%, transparent) !important;
+    border-radius: calc(var(--radius) * 1.8) !important;
+    border-color: transparent !important;
+    min-height: 35px !important;
+  }
+
+  .css-t3ipsp-control{
+    border-color: var(--ring) !important;
+    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow) !important;
+  }
+
+  .rbc-toolbar {
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.rbc-today {
+    background-color: #9dbef282;
+}
+
+.rbc-off-range-bg {
+    background: rgb(237 237 237);
+}
+
+.rbc-header {
+    background: #121d2e;
+    color: white;
+}
+
+.rbc-toolbar .rbc-toolbar-label {
+    font-family: math;
+    font-weight: 600;
+    letter-spacing: 2px;
+    font-size: 1.2rem;
+}
+
+.rbc-toolbar {
+    margin-bottom: 16px;
+}
+
+.rbc-toolbar button {
+    height: 34px;
+    padding: 0 13px;
+
+    border: 0;
+    border-radius: 8px;
+
+    color: #64748b;
+    background: #f1f5f9;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    box-shadow: none;
+
+    transition: all 150ms ease;
+}
+
+.rbc-toolbar button:hover {
+    color: #334155;
+    background: #e2e8f0;
+}
+
+/* Active Month / Week / Day / Agenda */
+.rbc-toolbar button.rbc-active {
+    color: #4338ca;
+    background: #eef2ff;
+
+    box-shadow: inset 0 0 0 1px #c7d2fe;
+}
+
+.rbc-toolbar button.rbc-active:hover {
+    color: #3730a3;
+    background: #e0e7ff;
+}
+
+/* Navigation buttons */
+.rbc-toolbar .rbc-btn-group:first-child button {
+    color: #0f766e;
+    background: #ecfdf5;
+}
+
+.rbc-toolbar .rbc-btn-group:first-child button:hover {
+    color: #047857;
+    background: #d1fae5;
+}
+
+/* Today */
+.rbc-toolbar .rbc-btn-group:first-child button:nth-child(2) {
+    color: #b45309;
+    background: #fffbeb;
+}
+
+.rbc-toolbar .rbc-btn-group:first-child button:nth-child(2):hover {
+    color: #92400e;
+    background: #fef3c7;
+}
+
+/* ================================
+   Calendar Toolbar
+================================ */
+
+.rbc-toolbar {
+    margin-bottom: 16px;
+}
+
+/* Navigation buttons: Prev / Today / Next */
+.rbc-toolbar > .rbc-btn-group:first-child {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.rbc-toolbar > .rbc-btn-group:first-child button {
+    height: 34px;
+    padding: 0 12px;
+
+    border: 1px solid #e0e7ff;
+    border-radius: 8px;
+
+    color: #6366f1;
+    background: #f5f7ff;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    box-shadow: none;
+
+    transition: all 150ms ease;
+}
+
+.rbc-toolbar > .rbc-btn-group:first-child button:hover {
+    color: #4f46e5;
+    background: #eef2ff;
+    border-color: #c7d2fe;
+}
+
+/* Today */
+.rbc-toolbar > .rbc-btn-group:first-child button:nth-child(2) {
+    color: #b45309;
+    background: #fffbeb;
+    border-color: #fde68a;
+}
+
+.rbc-toolbar > .rbc-btn-group:first-child button:nth-child(2):hover {
+    color: #92400e;
+    background: #fef3c7;
+}
+
+
+/* ================================
+   Month / Week / Day / Agenda
+================================ */
+
+.rbc-toolbar > .rbc-btn-group:last-child {
+    display: inline-flex;
+    align-items: center;
+
+    padding: 3px;
+
+    background: #f1f5f9;
+
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+
+    gap: 2px;
+}
+
+/* Individual view buttons */
+.rbc-toolbar > .rbc-btn-group:last-child button {
+    height: 30px;
+    padding: 0 13px;
+
+    border: 0;
+    border-radius: 7px;
+
+    color: #64748b;
+    background: transparent;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    box-shadow: none;
+
+    transition:
+        color 150ms ease,
+        background-color 150ms ease,
+        box-shadow 150ms ease;
+}
+
+.rbc-toolbar > .rbc-btn-group:last-child button:hover {
+    color: #475569;
+    background: #e2e8f0;
+}
+
+/* Active view */
+.rbc-toolbar > .rbc-btn-group:last-child button.rbc-active {
+    color: #4338ca;
+    background: #ffffff;
+
+    box-shadow:
+        0 1px 3px rgb(15 23 42 / 8%),
+        0 0 0 1px rgb(99 102 241 / 8%);
+}
+
+.rbc-toolbar > .rbc-btn-group:last-child button.rbc-active:hover {
+    color: #3730a3;
+    background: #ffffff;
+}
+
+.rbc-header {
+    height: 28px;
+    padding: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #6366f1;
+    background: #f8f7ff;
+
+    border: 0;
+    border-bottom: 1px solid #e9e7ff;
+
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+
+    transition: background-color 150ms ease;
+}
+
+.rbc-header:hover {
+    background: #f1efff;
+}
+
+.rbc-header + .rbc-header {
+    border-left: 1px solid #eeecf8;
+}
+
+/* Weekend headers */
+.rbc-header:nth-child(6),
+.rbc-header:nth-child(7) {
+    color: #8b5cf6;
+    background: #faf8ff;
+}
+
+/* Optional: make the current day header stand out */
+.rbc-header.rbc-today {
+    color: #4f46e5;
+    background: #eef2ff;
+}

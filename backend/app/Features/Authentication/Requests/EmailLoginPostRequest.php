@@ -5,7 +5,7 @@ namespace App\Features\Authentication\Requests;
 use App\Http\Requests\InputRequest;
 
 
-class LoginPostRequest extends InputRequest
+class EmailLoginPostRequest extends InputRequest
 {
     /**
      * Determine if the user is authorized to make this request.

@@ -2,21 +2,21 @@
 
 namespace App\Features\Authentication\Controllers;
 
-use App\Features\Authentication\DTO\LoginDTO;
+use App\Features\Authentication\DTO\PhoneLoginDTO;
 use App\Features\Authentication\Interfaces\AuthServiceInterface;
-use App\Features\Authentication\Requests\LoginPostRequest;
+use App\Features\Authentication\Requests\PhoneLoginPostRequest;
 use App\Features\Authentication\Resources\AuthCollection;
 use App\Http\Controllers\Controller;
 use App\Http\Enums\Guards;
 
-class LoginController extends Controller
+class PhoneLoginController extends Controller
 {
     public function __construct(private AuthServiceInterface $authService) {}
 
-    public function index(LoginPostRequest $request)
+    public function index(PhoneLoginPostRequest $request)
     {
 
-        $token = $this->authService->login(LoginDTO::fromRequest($request), Guards::API);
+        $token = $this->authService->login(PhoneLoginDTO::fromRequest($request), Guards::API);
 
         if ($token) {
             $user = $this->authService->profile(Guards::API);

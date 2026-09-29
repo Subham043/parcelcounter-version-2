@@ -26,8 +26,8 @@ class ProfileUpdatePostRequest extends InputRequest
     {
         return [
             'name' => ['required', 'string'],
-            'email' => ['required','email:rfc,dns','unique:users,email,'.auth()->guard(Guards::API->value())->id()],
-            'phone' => ['nullable','numeric', 'digits:10', 'unique:users,phone,'.auth()->guard(Guards::API->value())->id()],
+            'email' => ['nullable','email:rfc,dns','unique:users,email,'.auth()->guard(Guards::API->value())->id()],
+            'phone' => ['required','numeric', 'digits:10', 'unique:users,phone,'.auth()->guard(Guards::API->value())->id()],
         ];
     }
 
