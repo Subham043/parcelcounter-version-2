@@ -1,166 +1,140 @@
 import { memo, useCallback, useMemo } from "react";
 import {
-    Pagination,
-    PaginationContent,
-    PaginationEllipsis,
-    PaginationItem,
-    PaginationLink,
-    PaginationNext,
-    PaginationPrevious,
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
 } from "@/components/ui/pagination";
 import { Field, FieldLabel } from "@/components/ui/field";
 import {
-    Select,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from "@/components/ui/select";
+import { usePaginationQueryParam } from "@/hooks/usePaginationQueryParam";
 
-function CustomPagination({
-    itemsPerPage,
-    currentPage,
-    totalCount,
-    changePerPage,
-    changePage,
-}: {
-    itemsPerPage: number;
-    currentPage: number;
-    totalCount: number;
-    changePerPage: (pageRange: number) => void;
-    changePage: (pageNo: number) => void;
-}) {
-    const totalPages = useMemo(
-        () => Math.ceil(totalCount / itemsPerPage),
-        [totalCount, itemsPerPage],
-    );
+function CustomPagination({ totalCount }: { totalCount: number }) {
+  const { page, setPage, total, setTotal } = usePaginationQueryParam();
 
-    const paginationItems = useMemo(() => {
-        const pages: (number | "ellipsis")[] = [];
+  const totalPages = useMemo(() => {
+    return Math.ceil(totalCount / Number(total));
+  }, [totalCount, total]);
 
-        if (totalPages <= 7) {
-            // Show all pages
-            for (let i = 1; i <= totalPages; i++) {
-                pages.push(i);
-            }
-        } else {
-            // Always show first page
-            pages.push(1);
+  const paginationItems = useMemo(() => {
+    const pages: (number | "ellipsis")[] = [];
 
-            if (currentPage > 4) {
-                pages.push("ellipsis");
-            }
+    if (totalPages <= 7) {
+      // Show all pages
+      for (let i = 1; i <= totalPages; i++) {
+        pages.push(i);
+      }
+    } else {
+      // Always show first page
+      pages.push(1);
 
-            // Pages around current page
-            const start = Math.max(2, currentPage - 1);
-            const end = Math.min(totalPages - 1, currentPage + 1);
+      if (page > 4) {
+        pages.push("ellipsis");
+      }
 
-            for (let i = start; i <= end; i++) {
-                pages.push(i);
-            }
+      // Pages around current page
+      const start = Math.max(2, page - 1);
+      const end = Math.min(totalPages - 1, page + 1);
 
-            if (currentPage < totalPages - 3) {
-                pages.push("ellipsis");
-            }
+      for (let i = start; i <= end; i++) {
+        pages.push(i);
+      }
 
-            // Always show last page
-            pages.push(totalPages);
-        }
+      if (page < totalPages - 3) {
+        pages.push("ellipsis");
+      }
 
-        return pages;
-    }, [currentPage, totalPages]);
+      // Always show last page
+      pages.push(totalPages);
+    }
 
-    const onChangePerPage = useCallback(
-        (value: string | null) => {
-            changePerPage(value ? Number(value) : 5);
-        },
-        [changePerPage],
-    );
+    return pages;
+  }, [page, totalPages]);
 
-    const onChangePage = useCallback(
-        (
-            e: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
-            pageNo: number,
-        ) => {
-            e.preventDefault();
-            changePage(pageNo);
-        },
-        [changePage],
-    );
-    return (
-        <div className="flex items-center justify-between gap-4 px-4 py-3">
-            <Field orientation="horizontal" className="w-fit">
-                <FieldLabel htmlFor="select-rows-per-page">
-                    Rows per page
-                </FieldLabel>
-                <Select
-                    value={itemsPerPage.toString()}
-                    onValueChange={onChangePerPage}
+  const onChangePerPage = useCallback(
+    (value: string | null) => {
+      setTotal(value ? Number(value) : 10);
+    },
+    [setTotal],
+  );
+
+  const onChangePage = useCallback(
+    (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>, pageNo: number) => {
+      e.preventDefault();
+      setPage(pageNo);
+    },
+    [setPage],
+  );
+  return (
+    <div className="flex items-center justify-between gap-4 px-4 py-3">
+      <Field orientation="horizontal" className="w-fit">
+        <FieldLabel htmlFor="select-rows-per-page">Rows per page</FieldLabel>
+        <Select value={total.toString()} onValueChange={onChangePerPage}>
+          <SelectTrigger className="w-20" id="select-rows-per-page">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent align="start">
+            <SelectGroup>
+              <SelectItem value="10">10</SelectItem>
+              <SelectItem value="20">20</SelectItem>
+              <SelectItem value="30">30</SelectItem>
+            </SelectGroup>
+          </SelectContent>
+        </Select>
+      </Field>
+      <Pagination className="mx-0 w-auto">
+        <PaginationContent>
+          <PaginationItem>
+            <PaginationPrevious
+              onClick={(e) => {
+                if (page > 1) onChangePage(e, page - 1);
+              }}
+              className={page === 1 ? "pointer-events-none opacity-50" : ""}
+            />
+          </PaginationItem>
+
+          {paginationItems.map((item, index) => (
+            <PaginationItem key={`${item}-${index}`}>
+              {item === "ellipsis" ? (
+                <PaginationEllipsis />
+              ) : (
+                <PaginationLink
+                  isActive={item === page}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    onChangePage(e, item);
+                  }}
                 >
-                    <SelectTrigger className="w-20" id="select-rows-per-page">
-                        <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent align="start">
-                        <SelectGroup>
-                            <SelectItem value="5">5</SelectItem>
-                            <SelectItem value="10">10</SelectItem>
-                            <SelectItem value="15">15</SelectItem>
-                        </SelectGroup>
-                    </SelectContent>
-                </Select>
-            </Field>
-            <Pagination className="mx-0 w-auto">
-                <PaginationContent>
-                    <PaginationItem>
-                        <PaginationPrevious
-                            onClick={(e) => {
-                                if (currentPage > 1)
-                                    onChangePage(e, currentPage - 1);
-                            }}
-                            className={
-                                currentPage === 1
-                                    ? "pointer-events-none opacity-50"
-                                    : ""
-                            }
-                        />
-                    </PaginationItem>
+                  {item}
+                </PaginationLink>
+              )}
+            </PaginationItem>
+          ))}
 
-                    {paginationItems.map((item, index) => (
-                        <PaginationItem key={`${item}-${index}`}>
-                            {item === "ellipsis" ? (
-                                <PaginationEllipsis />
-                            ) : (
-                                <PaginationLink
-                                    isActive={item === currentPage}
-                                    onClick={(e) => {
-                                        e.preventDefault();
-                                        onChangePage(e, item);
-                                    }}
-                                >
-                                    {item}
-                                </PaginationLink>
-                            )}
-                        </PaginationItem>
-                    ))}
-
-                    <PaginationItem>
-                        <PaginationNext
-                            onClick={(e) => {
-                                if (currentPage < totalPages)
-                                    onChangePage(e, currentPage + 1);
-                            }}
-                            className={
-                                currentPage === totalPages
-                                    ? "pointer-events-none opacity-50"
-                                    : ""
-                            }
-                        />
-                    </PaginationItem>
-                </PaginationContent>
-            </Pagination>
-        </div>
-    );
+          <PaginationItem>
+            <PaginationNext
+              onClick={(e) => {
+                if (page < totalPages) onChangePage(e, page + 1);
+              }}
+              className={
+                page === totalPages ? "pointer-events-none opacity-50" : ""
+              }
+            />
+          </PaginationItem>
+        </PaginationContent>
+      </Pagination>
+    </div>
+  );
 }
 
 export default memo(CustomPagination);

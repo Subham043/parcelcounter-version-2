@@ -27,8 +27,8 @@ export const api_routes = {
     create: "/api/v1/users/create",
     update: "/api/v1/users/update",
     delete: "/api/v1/users/delete",
-    toggle_status: "/api/v1/users/toggle-status",
-    toggle_verification: "/api/v1/users/toggle-verification",
+    toggle_status: "/api/v1/users/status",
+    toggle_verification: "/api/v1/users/verify",
   },
   charge: {
     paginate: "/api/v1/charges/paginate",
@@ -36,7 +36,7 @@ export const api_routes = {
     create: "/api/v1/charges/create",
     update: "/api/v1/charges/update",
     delete: "/api/v1/charges/delete",
-    toggle_status: "/api/v1/charges/toggle-status",
+    toggle_status: "/api/v1/charges/status",
     slug: "/api/v1/charges/slug",
   },
   tax: {
@@ -45,7 +45,7 @@ export const api_routes = {
     create: "/api/v1/taxes/create",
     update: "/api/v1/taxes/update",
     delete: "/api/v1/taxes/delete",
-    toggle_status: "/api/v1/taxes/toggle-status",
+    toggle_status: "/api/v1/taxes/status",
     slug: "/api/v1/taxes/slug",
   },
   testimonial: {
@@ -54,7 +54,7 @@ export const api_routes = {
     create: "/api/v1/testimonials/create",
     update: "/api/v1/testimonials/update",
     delete: "/api/v1/testimonials/delete",
-    toggle_status: "/api/v1/testimonials/toggle-status",
+    toggle_status: "/api/v1/testimonials/status",
   },
   delivery_slot: {
     paginate: "/api/v1/delivery-slots/paginate",
@@ -62,7 +62,7 @@ export const api_routes = {
     create: "/api/v1/delivery-slots/create",
     update: "/api/v1/delivery-slots/update",
     delete: "/api/v1/delivery-slots/delete",
-    toggle_status: "/api/v1/delivery-slots/toggle-status",
+    toggle_status: "/api/v1/delivery-slots/status",
   },
   blog: {
     paginate: "/api/v1/blogs/paginate",
@@ -70,7 +70,7 @@ export const api_routes = {
     create: "/api/v1/blogs/create",
     update: "/api/v1/blogs/update",
     delete: "/api/v1/blogs/delete",
-    toggle_status: "/api/v1/blogs/toggle-status",
+    toggle_status: "/api/v1/blogs/status",
     slug: "/api/v1/blogs/slug",
   },
   category: {
@@ -79,7 +79,7 @@ export const api_routes = {
     create: "/api/v1/categories/create",
     update: "/api/v1/categories/update",
     delete: "/api/v1/categories/delete",
-    toggle_status: "/api/v1/categories/toggle-status",
+    toggle_status: "/api/v1/categories/status",
     slug: "/api/v1/categories/slug",
   },
   sub_category: {
@@ -88,7 +88,7 @@ export const api_routes = {
     create: "/api/v1/sub-categories/create",
     update: "/api/v1/sub-categories/update",
     delete: "/api/v1/sub-categories/delete",
-    toggle_status: "/api/v1/sub-categories/toggle-status",
+    toggle_status: "/api/v1/sub-categories/status",
     slug: "/api/v1/sub-categories/slug",
   },
   product: {
@@ -97,7 +97,7 @@ export const api_routes = {
     create: "/api/v1/products/create",
     update: "/api/v1/products/update",
     delete: "/api/v1/products/delete",
-    toggle_status: "/api/v1/products/toggle-status",
+    toggle_status: "/api/v1/products/status",
     slug: "/api/v1/products/slug",
   },
   legal_content: {
@@ -106,7 +106,7 @@ export const api_routes = {
     create: "/api/v1/legal-contents/create",
     update: "/api/v1/legal-contents/update",
     delete: "/api/v1/legal-contents/delete",
-    toggle_status: "/api/v1/legal-contents/toggle-status",
+    toggle_status: "/api/v1/legal-contents/status",
     slug: "/api/v1/legal-contents/slug",
   },
   feature: {
@@ -115,6 +115,6 @@ export const api_routes = {
     create: "/api/v1/features/create",
     update: "/api/v1/features/update",
     delete: "/api/v1/features/delete",
-    toggle_status: "/api/v1/features/toggle-status",
+    toggle_status: "/api/v1/features/status",
   },
 } as const;

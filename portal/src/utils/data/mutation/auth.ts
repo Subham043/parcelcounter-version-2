@@ -1,5 +1,5 @@
 import { useToast } from "@/hooks/useToast";
-import { useAuthStore } from "@/store/auth.store";
+import { useAuthStore } from "@/stores/auth.store";
 import { useMutation } from "@tanstack/react-query";
 import { emailLoginHandler, emailForgotPasswordHandler, phonePasswordLoginHandler, registerHandler, resetPasswordHandler, phoneForgotPasswordHandler } from "../dal/auth";
 import type { EmailLoginFormValuesType, PhoneForgotPasswordFormValuesType, PhonePasswordLoginFormValuesType, RegisterFormValuesType } from "@/utils/data/schema/auth";

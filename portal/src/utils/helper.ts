@@ -25,3 +25,22 @@ export function handleFormServerErrors<T extends FieldValues>(
         });
     });
 }
+
+
+export const toTitleCase = (str: string) => {
+    return str.replace(/\w\S*/g, function (txt) {
+        return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+    });
+};
+
+export const getNameInitials = (name: string) => {
+    //max 2 letters
+    return name
+        .replace(/[^a-zA-Z]/g, " ")
+        .split(" ")
+        .filter((word) => word.length > 0)
+        .map((word) => word.charAt(0))
+        .slice(0, 2)
+        .join("")
+        .toUpperCase();
+};

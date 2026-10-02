@@ -10,5 +10,6 @@ export const env_production = {
   MODE: "production",
   API_ENDPOINT: "http://localhost:8000",
   APP_ENDPOINT: `http://localhost:5173`,
+  MAIN_WEBSITE: `http://localhost:3000`,
   CAPTCHA_KEY: `6LdfpfUsAAAAAEzspaJMKkBqdFiqe34vD6xnF_au`,
 } as const;

@@ -1,7 +1,7 @@
 import type { ProfileType } from "@/utils/types";
 import { useQuery, type UseQueryResult } from "@tanstack/react-query";
 import { getProfileHandler } from "../dal/profile";
-import { useAuthStore } from "@/store/auth.store";
+import { useAuthStore } from "@/stores/auth.store";
 
 
 export const ProfileQueryKey = (isEdit: boolean = false) => {

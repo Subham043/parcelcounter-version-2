@@ -1,5 +1,5 @@
 import SuspenseOutlet from "@/components/SuspenseOutlet";
-import { useAuthStore } from "@/store/auth.store";
+import { useAuthStore } from "@/stores/auth.store";
 import { page_routes } from "@/utils/routes/page_routes";
 import type { FC } from "react";
 import { Navigate, useLocation } from "react-router";

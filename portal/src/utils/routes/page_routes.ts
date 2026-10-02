@@ -12,5 +12,6 @@ export const page_routes = {
     name: "Login",
   },
   sign_up: { link: "/auth/sign-up", name: "Sign Up" },
+  charges: { link: "/charges", name: "Charges" },
   dashboard: { link: "/", name: "Dashboard" },
 } as const;

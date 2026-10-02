@@ -5,6 +5,10 @@ import { lazy } from "react";
 import SuspenseOutlet from "./components/SuspenseOutlet/index.tsx";
 
 const AuthPageLayout = lazy(() => import("@/layouts/AuthPageLayout/index.tsx"));
+const DashboardLayout = lazy(
+  () => import("@/layouts/DashboardLayout/index.tsx"),
+);
+const DeleteProvider = lazy(() => import("./contexts/DeleteProvider.tsx"));
 const AuthPersistLayout = lazy(
   () => import("@/layouts/AuthPermittedLayout/AuthPersistLayout.tsx"),
 );
@@ -33,6 +37,7 @@ const ResetWithPhone = lazy(
 const Register = lazy(() => import("@/pages/Auth/Register/index.tsx"));
 const PageNotFound = lazy(() => import("@/pages/PageNotFound/index.tsx"));
 const Dashboard = lazy(() => import("@/pages/Dashboard/index.tsx"));
+const Charge = lazy(() => import("@/pages/Charge/index.tsx"));
 
 function App() {
   return (
@@ -41,10 +46,15 @@ function App() {
         <Route element={<SuspenseOutlet />}>
           <Route element={<AuthPersistLayout />}>
             <Route element={<ProtectedLayout />}>
-              <Route
-                path={page_routes.dashboard.link}
-                element={<Dashboard />}
-              />
+              <Route element={<DeleteProvider />}>
+                <Route element={<DashboardLayout />}>
+                  <Route
+                    path={page_routes.dashboard.link}
+                    element={<Dashboard />}
+                  />
+                  <Route path={page_routes.charges.link} element={<Charge />} />
+                </Route>
+              </Route>
             </Route>
             <Route element={<GuestLayout />}>
               <Route element={<AuthPageLayout />}>

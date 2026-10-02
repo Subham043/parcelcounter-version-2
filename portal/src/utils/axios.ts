@@ -1,6 +1,6 @@
 import api, { type AxiosInstance } from "axios";
 import { axiosConfig } from "./constants/axios";
-import { useAuthStore } from "@/store/auth.store";
+import { useAuthStore } from "@/stores/auth.store";
 import { api_routes } from "./routes/api_routes";
 
 /*

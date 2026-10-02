@@ -1,6 +1,6 @@
 import PageLoader from "@/components/PageLoader";
 import SuspenseOutlet from "@/components/SuspenseOutlet";
-import { useAuthStore } from "@/store/auth.store";
+import { useAuthStore } from "@/stores/auth.store";
 import { useCallback, useLayoutEffect, useState, type FC } from "react";
 
 /*
