@@ -29,6 +29,18 @@ export type ChargeType = {
     updated_at: string;
 }
 
+export type DeliverySlotType = {
+    id: number;
+    name: string;
+    is_cod_allowed: boolean;
+    start_time: string;
+    end_time: string;
+    is_active: boolean;
+    user_id: number;
+    created_at: string;
+    updated_at: string;
+}
+
 
 export type AxiosErrorResponseType = {
     message: string;

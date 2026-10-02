@@ -3,6 +3,7 @@ import {
   ChevronDown,
   ChevronRight,
   BanknoteArrowUp,
+  ClipboardClock,
 } from "lucide-react";
 import { cn } from "@/utils/lib/utils";
 import { useMemo, useState } from "react";
@@ -46,15 +47,11 @@ const navSections: NavSection[] = [
         label: page_routes.charges.name,
         icon: <BanknoteArrowUp size={17} />,
         to: page_routes.charges.link,
-        // allowedRolesAndPermission: [
-        //   "canManageCourses",
-        //   "canModifyRecords",
-        //   "canSwitchOrganization",
-        //   "Super Admin",
-        //   "Admin",
-        //   "Instructor",
-        //   "Learner",
-        // ],
+      },
+      {
+        label: page_routes.delivery_slots.name,
+        icon: <ClipboardClock size={17} />,
+        to: page_routes.delivery_slots.link,
       },
     ],
     // allowedRolesAndPermission: [

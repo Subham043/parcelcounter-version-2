@@ -1,17 +1,17 @@
 import FilterClearBtn from "@/components/FilterClearBtn";
 import SearchField from "@/components/SearchField";
 import SelectActiveFilter from "@/components/SelectActiveFilter";
-import ChargePercentageFilter from "./ChargePercentageFilter";
+import DeliverySlotCODFilter from "./DeliverySlotCODFilter";
 
-function CategoryFilters() {
+function DeliverySlotFilters() {
   return (
     <div className="flex items-center gap-2">
       <SearchField />
-      <ChargePercentageFilter />
+      <DeliverySlotCODFilter />
       <SelectActiveFilter />
       <FilterClearBtn />
     </div>
   );
 }
 
-export default CategoryFilters;
+export default DeliverySlotFilters;

@@ -5,7 +5,8 @@ import { useChargeModalStore } from "../store/charge-modal.store";
 import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
 import ChargeDeleteBtn from "./ChargeDeleteBtn";
-import ChargeStatusToggle from "./ChargeStatusToggle";
+import StatusToggleBadge from "@/components/StatusToggleBadge";
+import { useChargeToggleStatusMutation } from "@/utils/data/mutation/charge";
 
 type ChargeTableProps = {
   charges: ChargeType[];
@@ -29,6 +30,11 @@ const ChargeTableRow = memo(function ChargeTableRow({
   is_active: ChargeType["is_active"];
   created_at: ChargeType["created_at"];
 }) {
+  const chargeToggleStatusMutation = useChargeToggleStatusMutation(id);
+
+  const onToggle = useCallback(async () => {
+    await chargeToggleStatusMutation.mutateAsync(undefined);
+  }, [chargeToggleStatusMutation]);
   const handleModalEdit = useChargeModalStore((state) => state.handleModalEdit);
   const onEditHandler = useCallback(() => {
     handleModalEdit(id);
@@ -47,7 +53,11 @@ const ChargeTableRow = memo(function ChargeTableRow({
         </p>
       </td>
       <td className="px-4 py-3 ">
-        <ChargeStatusToggle id={id} isActive={is_active} />
+        <StatusToggleBadge
+          isActive={is_active}
+          onToggle={onToggle}
+          loading={chargeToggleStatusMutation.isPending}
+        />
       </td>
       <td className="px-4 py-3 ">
         <p className="text-sm text-gray-500 truncate">

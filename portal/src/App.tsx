@@ -38,6 +38,7 @@ const Register = lazy(() => import("@/pages/Auth/Register/index.tsx"));
 const PageNotFound = lazy(() => import("@/pages/PageNotFound/index.tsx"));
 const Dashboard = lazy(() => import("@/pages/Dashboard/index.tsx"));
 const Charge = lazy(() => import("@/pages/Charge/index.tsx"));
+const DeliverySlot = lazy(() => import("@/pages/DeliverySlot/index.tsx"));
 
 function App() {
   return (
@@ -53,6 +54,10 @@ function App() {
                     element={<Dashboard />}
                   />
                   <Route path={page_routes.charges.link} element={<Charge />} />
+                  <Route
+                    path={page_routes.delivery_slots.link}
+                    element={<DeliverySlot />}
+                  />
                 </Route>
               </Route>
             </Route>
