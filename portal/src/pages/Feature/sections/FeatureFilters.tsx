@@ -1,17 +1,15 @@
 import FilterClearBtn from "@/components/FilterClearBtn";
 import SearchField from "@/components/SearchField";
 import SelectActiveFilter from "@/components/SelectActiveFilter";
-import ChargePercentageFilter from "./ChargePercentageFilter";
 
-function ChargeFilters() {
+function FeatureFilters() {
   return (
     <div className="flex items-center gap-2">
       <SearchField />
-      <ChargePercentageFilter />
       <SelectActiveFilter />
       <FilterClearBtn />
     </div>
   );
 }
 
-export default ChargeFilters;
+export default FeatureFilters;

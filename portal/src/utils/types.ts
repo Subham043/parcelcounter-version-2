@@ -41,6 +41,18 @@ export type DeliverySlotType = {
     updated_at: string;
 }
 
+export type FeatureType = {
+    id: number;
+    title: string;
+    description: string;
+    image: string;
+    image_url: string;
+    is_active: boolean;
+    user_id: number;
+    created_at: string;
+    updated_at: string;
+}
+
 
 export type AxiosErrorResponseType = {
     message: string;

@@ -4,6 +4,7 @@ import {
   ChevronRight,
   BanknoteArrowUp,
   ClipboardClock,
+  ScrollText,
 } from "lucide-react";
 import { cn } from "@/utils/lib/utils";
 import { useMemo, useState } from "react";
@@ -52,6 +53,11 @@ const navSections: NavSection[] = [
         label: page_routes.delivery_slots.name,
         icon: <ClipboardClock size={17} />,
         to: page_routes.delivery_slots.link,
+      },
+      {
+        label: page_routes.features.name,
+        icon: <ScrollText size={17} />,
+        to: page_routes.features.link,
       },
     ],
     // allowedRolesAndPermission: [

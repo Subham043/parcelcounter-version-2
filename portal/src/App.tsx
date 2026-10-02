@@ -39,6 +39,7 @@ const PageNotFound = lazy(() => import("@/pages/PageNotFound/index.tsx"));
 const Dashboard = lazy(() => import("@/pages/Dashboard/index.tsx"));
 const Charge = lazy(() => import("@/pages/Charge/index.tsx"));
 const DeliverySlot = lazy(() => import("@/pages/DeliverySlot/index.tsx"));
+const Feature = lazy(() => import("@/pages/Feature/index.tsx"));
 
 function App() {
   return (
@@ -57,6 +58,10 @@ function App() {
                   <Route
                     path={page_routes.delivery_slots.link}
                     element={<DeliverySlot />}
+                  />
+                  <Route
+                    path={page_routes.features.link}
+                    element={<Feature />}
                   />
                 </Route>
               </Route>
