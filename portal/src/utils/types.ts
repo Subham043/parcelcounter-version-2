@@ -79,6 +79,20 @@ export type TaxType = {
     updated_at: string;
 }
 
+export type BannerType = {
+    id: number;
+    title?: string;
+    alt?: string;
+    desktop_image: string;
+    desktop_image_url: string;
+    mobile_image: string;
+    mobile_image_url: string;
+    is_active: boolean;
+    user_id: number;
+    created_at: string;
+    updated_at: string;
+}
+
 export type ContactFormEnquiryType = {
     id: number;
     name: string;

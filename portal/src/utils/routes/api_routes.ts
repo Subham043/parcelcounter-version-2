@@ -117,6 +117,14 @@ export const api_routes = {
     delete: "/api/v1/features/delete",
     toggle_status: "/api/v1/features/status",
   },
+  banner: {
+    paginate: "/api/v1/banners/paginate",
+    view: "/api/v1/banners/view",
+    create: "/api/v1/banners/create",
+    update: "/api/v1/banners/update",
+    delete: "/api/v1/banners/delete",
+    toggle_status: "/api/v1/banners/status",
+  },
   contact_form_enquiry: {
     paginate: "/api/v1/contact-form-enquiries/paginate",
     view: "/api/v1/contact-form-enquiries/view",

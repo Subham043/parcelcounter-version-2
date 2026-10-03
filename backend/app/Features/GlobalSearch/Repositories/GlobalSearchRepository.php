@@ -9,8 +9,6 @@ use App\Features\SubCategories\Models\SubCategory;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Spatie\QueryBuilder\QueryBuilder;
 use Illuminate\Database\Eloquent\Builder;
-use Spatie\QueryBuilder\AllowedFilter;
-use Spatie\QueryBuilder\Filters\Filter;
 use Illuminate\Support\Facades\DB;
 
 class GlobalSearchRepository implements GlobalSearchRepositoryInterface

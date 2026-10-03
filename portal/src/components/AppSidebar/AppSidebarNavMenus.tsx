@@ -8,6 +8,7 @@ import {
   UserStar,
   HandCoins,
   MessageSquareDot,
+  Image,
 } from "lucide-react";
 import { cn } from "@/utils/lib/utils";
 import { useMemo, useState } from "react";
@@ -76,6 +77,11 @@ const navSections: NavSection[] = [
         label: page_routes.contact_form_enquiry.name,
         icon: <MessageSquareDot size={17} />,
         to: page_routes.contact_form_enquiry.link,
+      },
+      {
+        label: page_routes.banners.name,
+        icon: <Image size={17} />,
+        to: page_routes.banners.link,
       },
     ],
     // allowedRolesAndPermission: [

@@ -45,6 +45,7 @@ const Tax = lazy(() => import("@/pages/Tax/index.tsx"));
 const ContactFormEnquiry = lazy(
   () => import("@/pages/ContactFormEnquiry/index.tsx"),
 );
+const Banner = lazy(() => import("@/pages/Banner/index.tsx"));
 
 function App() {
   return (
@@ -77,6 +78,7 @@ function App() {
                     path={page_routes.contact_form_enquiry.link}
                     element={<ContactFormEnquiry />}
                   />
+                  <Route path={page_routes.banners.link} element={<Banner />} />
                 </Route>
               </Route>
             </Route>

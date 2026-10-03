@@ -18,5 +18,6 @@ export const page_routes = {
   testimonials: { link: "/testimonials", name: "Testimonials" },
   tax: { link: "/tax", name: "Tax" },
   contact_form_enquiry: { link: "/enquiry/contact-form", name: "Contact Form Enquiry" },
+  banners: { link: "/banners", name: "Banners" },
   dashboard: { link: "/", name: "Dashboard" },
 } as const;
