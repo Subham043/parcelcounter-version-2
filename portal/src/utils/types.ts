@@ -93,6 +93,19 @@ export type BannerType = {
     updated_at: string;
 }
 
+export type PaymentOptionType = {
+    id: number;
+    name: string;
+    slug: string;
+    description: string;
+    image: string;
+    image_url: string;
+    is_active: boolean;
+    user_id: number;
+    created_at: string;
+    updated_at: string;
+}
+
 export type ContactFormEnquiryType = {
     id: number;
     name: string;

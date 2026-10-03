@@ -125,6 +125,11 @@ export const api_routes = {
     delete: "/api/v1/banners/delete",
     toggle_status: "/api/v1/banners/status",
   },
+  payment_option: {
+    paginate: "/api/v1/payment-options/paginate",
+    view: "/api/v1/payment-options/view",
+    toggle_status: "/api/v1/payment-options/status",
+  },
   contact_form_enquiry: {
     paginate: "/api/v1/contact-form-enquiries/paginate",
     view: "/api/v1/contact-form-enquiries/view",

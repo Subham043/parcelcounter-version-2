@@ -9,6 +9,7 @@ import {
   HandCoins,
   MessageSquareDot,
   Image,
+  CreditCard,
 } from "lucide-react";
 import { cn } from "@/utils/lib/utils";
 import { useMemo, useState } from "react";
@@ -82,6 +83,11 @@ const navSections: NavSection[] = [
         label: page_routes.banners.name,
         icon: <Image size={17} />,
         to: page_routes.banners.link,
+      },
+      {
+        label: page_routes.payment_options.name,
+        icon: <CreditCard size={17} />,
+        to: page_routes.payment_options.link,
       },
     ],
     // allowedRolesAndPermission: [
