@@ -42,6 +42,9 @@ const DeliverySlot = lazy(() => import("@/pages/DeliverySlot/index.tsx"));
 const Feature = lazy(() => import("@/pages/Feature/index.tsx"));
 const Testimonial = lazy(() => import("@/pages/Testimonial/index.tsx"));
 const Tax = lazy(() => import("@/pages/Tax/index.tsx"));
+const ContactFormEnquiry = lazy(
+  () => import("@/pages/ContactFormEnquiry/index.tsx"),
+);
 
 function App() {
   return (
@@ -70,6 +73,10 @@ function App() {
                     element={<Testimonial />}
                   />
                   <Route path={page_routes.tax.link} element={<Tax />} />
+                  <Route
+                    path={page_routes.contact_form_enquiry.link}
+                    element={<ContactFormEnquiry />}
+                  />
                 </Route>
               </Route>
             </Route>

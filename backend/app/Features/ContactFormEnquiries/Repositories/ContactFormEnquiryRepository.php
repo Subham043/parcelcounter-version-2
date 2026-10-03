@@ -82,8 +82,17 @@ class CommonFilter implements Filter
                 ->orWhere('phone', $value)
                 ->orWhere('page_url', $value)
                 ->orWhere('subject', $value)
-                ->orWhere('message', $value)
-                ->orWhereRaw('MATCH(name, email, phone, page_url, subject, message) AGAINST(? IN BOOLEAN MODE)', [$value . '*']);
+                ->orWhere('message', $value);
+
+            $search = preg_replace('/[+\-<>()~*"@]/', ' ', $value);
+            $search = trim($search);
+
+            if ($search !== '') {
+                $q->orWhereRaw(
+                    'MATCH(name, email, phone, page_url, subject, message) AGAINST(? IN BOOLEAN MODE)',
+                    [$search . '*']
+                );
+            }
         });
     }
 }

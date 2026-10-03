@@ -17,5 +17,6 @@ export const page_routes = {
   features: { link: "/features", name: "Features" },
   testimonials: { link: "/testimonials", name: "Testimonials" },
   tax: { link: "/tax", name: "Tax" },
+  contact_form_enquiry: { link: "/enquiry/contact-form", name: "Contact Form Enquiry" },
   dashboard: { link: "/", name: "Dashboard" },
 } as const;

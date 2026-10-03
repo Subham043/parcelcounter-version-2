@@ -79,6 +79,18 @@ export type TaxType = {
     updated_at: string;
 }
 
+export type ContactFormEnquiryType = {
+    id: number;
+    name: string;
+    email: string;
+    phone?: string;
+    subject: string;
+    message: string;
+    page_url?: string;
+    created_at: string;
+    updated_at: string;
+}
+
 export type AxiosErrorResponseType = {
     message: string;
     errors?: Record<string, string[]>;

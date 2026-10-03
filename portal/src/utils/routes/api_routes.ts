@@ -117,4 +117,9 @@ export const api_routes = {
     delete: "/api/v1/features/delete",
     toggle_status: "/api/v1/features/status",
   },
+  contact_form_enquiry: {
+    paginate: "/api/v1/contact-form-enquiries/paginate",
+    view: "/api/v1/contact-form-enquiries/view",
+    delete: "/api/v1/contact-form-enquiries/delete",
+  },
 } as const;
