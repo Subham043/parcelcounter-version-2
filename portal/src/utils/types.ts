@@ -53,6 +53,20 @@ export type FeatureType = {
     updated_at: string;
 }
 
+export type TestimonialType = {
+    id: number;
+    name: string;
+    designation: string;
+    star: number;
+    message: string;
+    image: string;
+    image_url: string;
+    is_active: boolean;
+    user_id: number;
+    created_at: string;
+    updated_at: string;
+}
+
 
 export type AxiosErrorResponseType = {
     message: string;

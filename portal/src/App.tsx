@@ -40,6 +40,7 @@ const Dashboard = lazy(() => import("@/pages/Dashboard/index.tsx"));
 const Charge = lazy(() => import("@/pages/Charge/index.tsx"));
 const DeliverySlot = lazy(() => import("@/pages/DeliverySlot/index.tsx"));
 const Feature = lazy(() => import("@/pages/Feature/index.tsx"));
+const Testimonial = lazy(() => import("@/pages/Testimonial/index.tsx"));
 
 function App() {
   return (
@@ -62,6 +63,10 @@ function App() {
                   <Route
                     path={page_routes.features.link}
                     element={<Feature />}
+                  />
+                  <Route
+                    path={page_routes.testimonials.link}
+                    element={<Testimonial />}
                   />
                 </Route>
               </Route>

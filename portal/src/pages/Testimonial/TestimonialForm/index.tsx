@@ -1,5 +1,5 @@
 import { Controller } from "react-hook-form";
-import { useFeatureForm } from "./useFeatureForm";
+import { useTestimonialForm } from "./useTestimonialForm";
 import { Spinner } from "@/components/ui/spinner";
 import {
   Field,
@@ -25,13 +25,22 @@ import {
   InputGroupText,
   InputGroupTextarea,
 } from "@/components/ui/input-group";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 /*
- * Feature Form Drawer
+ * Testimonial Form Drawer
  */
-export default function FeatureForm() {
+export default function TestimonialForm() {
   const { form, modal, data, isLoading, onSubmit, handleClose } =
-    useFeatureForm();
+    useTestimonialForm();
   return (
     <Drawer
       open={modal.show}
@@ -44,7 +53,7 @@ export default function FeatureForm() {
     >
       <DrawerContent>
         <DrawerHeader>
-          <DrawerTitle>{`${modal.type === "create" ? "Create" : "Update"} Feature`}</DrawerTitle>
+          <DrawerTitle>{`${modal.type === "create" ? "Create" : "Update"} Testimonial`}</DrawerTitle>
         </DrawerHeader>
         <div className="flex-1 p-4">
           {isLoading ? (
@@ -57,20 +66,74 @@ export default function FeatureForm() {
               <div className="flex-1 scroll-fade overflow-y-auto">
                 <FieldGroup>
                   <Controller
-                    name="title"
+                    name="name"
                     control={form.control}
                     render={({ field, fieldState }) => (
                       <Field data-invalid={fieldState.invalid}>
-                        <FieldLabel htmlFor="feature-form-title">
-                          Title
+                        <FieldLabel htmlFor="feature-form-name">
+                          Name
                         </FieldLabel>
                         <Input
                           {...field}
                           aria-invalid={fieldState.invalid}
-                          placeholder="Enter title"
+                          placeholder="Enter name"
                           autoComplete="off"
-                          id="feature-form-title"
+                          id="feature-form-name"
                         />
+                        {fieldState.invalid && (
+                          <FieldError errors={[fieldState.error]} />
+                        )}
+                      </Field>
+                    )}
+                  />
+                  <Controller
+                    name="designation"
+                    control={form.control}
+                    render={({ field, fieldState }) => (
+                      <Field data-invalid={fieldState.invalid}>
+                        <FieldLabel htmlFor="feature-form-designation">
+                          Designation
+                        </FieldLabel>
+                        <Input
+                          {...field}
+                          aria-invalid={fieldState.invalid}
+                          placeholder="Enter designation"
+                          autoComplete="off"
+                          id="feature-form-designation"
+                        />
+                        {fieldState.invalid && (
+                          <FieldError errors={[fieldState.error]} />
+                        )}
+                      </Field>
+                    )}
+                  />
+                  <Controller
+                    name="star"
+                    control={form.control}
+                    render={({ field, fieldState }) => (
+                      <Field data-invalid={fieldState.invalid}>
+                        <FieldLabel htmlFor="feature-form-designation">
+                          Rating (out of 5)
+                        </FieldLabel>
+                        <Select
+                          value={field.value}
+                          onValueChange={(value) => field.onChange(value)}
+                          id="feature-form-star"
+                        >
+                          <SelectTrigger className="w-full">
+                            <SelectValue placeholder="Select Star" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectGroup>
+                              <SelectLabel>Select Star</SelectLabel>
+                              {Array.from({ length: 5 }).map((_, i) => (
+                                <SelectItem key={i} value={(i + 1).toString()}>
+                                  {i + 1}
+                                </SelectItem>
+                              ))}
+                            </SelectGroup>
+                          </SelectContent>
+                        </Select>
                         {fieldState.invalid && (
                           <FieldError errors={[fieldState.error]} />
                         )}
@@ -102,18 +165,18 @@ export default function FeatureForm() {
                     }}
                   />
                   <Controller
-                    name="description"
+                    name="message"
                     control={form.control}
                     render={({ field, fieldState }) => (
                       <Field data-invalid={fieldState.invalid}>
-                        <FieldLabel htmlFor="feature-form-description">
-                          Description
+                        <FieldLabel htmlFor="feature-form-message">
+                          Message
                         </FieldLabel>
                         <InputGroup>
                           <InputGroupTextarea
                             {...field}
-                            id="feature-form-description"
-                            placeholder="Enter description"
+                            id="feature-form-message"
+                            placeholder="Enter message"
                             rows={6}
                             className="min-h-24 resize-none"
                             aria-invalid={fieldState.invalid}

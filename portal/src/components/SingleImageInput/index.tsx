@@ -79,7 +79,7 @@ function SingleImageInput({ image, value, onChange }: Props) {
       />
 
       {value && (
-        <InputGroupAddon align="inline-end" className="shrink-0 p-0">
+        <InputGroupAddon align="inline-end" className="shrink-0 p-0 mr-0!">
           <Button
             type="button"
             variant="destructive"

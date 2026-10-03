@@ -5,6 +5,7 @@ import {
   BanknoteArrowUp,
   ClipboardClock,
   ScrollText,
+  UserStar,
 } from "lucide-react";
 import { cn } from "@/utils/lib/utils";
 import { useMemo, useState } from "react";
@@ -58,6 +59,11 @@ const navSections: NavSection[] = [
         label: page_routes.features.name,
         icon: <ScrollText size={17} />,
         to: page_routes.features.link,
+      },
+      {
+        label: page_routes.testimonials.name,
+        icon: <UserStar size={17} />,
+        to: page_routes.testimonials.link,
       },
     ],
     // allowedRolesAndPermission: [
