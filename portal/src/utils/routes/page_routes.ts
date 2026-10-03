@@ -16,5 +16,6 @@ export const page_routes = {
   delivery_slots: { link: "/delivery-slots", name: "Delivery Slots" },
   features: { link: "/features", name: "Features" },
   testimonials: { link: "/testimonials", name: "Testimonials" },
+  tax: { link: "/tax", name: "Tax" },
   dashboard: { link: "/", name: "Dashboard" },
 } as const;

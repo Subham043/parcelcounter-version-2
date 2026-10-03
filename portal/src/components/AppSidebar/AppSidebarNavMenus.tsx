@@ -6,6 +6,7 @@ import {
   ClipboardClock,
   ScrollText,
   UserStar,
+  HandCoins,
 } from "lucide-react";
 import { cn } from "@/utils/lib/utils";
 import { useMemo, useState } from "react";
@@ -64,6 +65,11 @@ const navSections: NavSection[] = [
         label: page_routes.testimonials.name,
         icon: <UserStar size={17} />,
         to: page_routes.testimonials.link,
+      },
+      {
+        label: page_routes.tax.name,
+        icon: <HandCoins size={17} />,
+        to: page_routes.tax.link,
       },
     ],
     // allowedRolesAndPermission: [

@@ -67,6 +67,17 @@ export type TestimonialType = {
     updated_at: string;
 }
 
+export type TaxType = {
+    id: number;
+    name: string;
+    slug: string;
+    value: number;
+    is_inter_state_tax: boolean;
+    is_active: boolean;
+    user_id: number;
+    created_at: string;
+    updated_at: string;
+}
 
 export type AxiosErrorResponseType = {
     message: string;
