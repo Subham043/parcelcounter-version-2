@@ -20,5 +20,6 @@ export const page_routes = {
   contact_form_enquiry: { link: "/enquiry/contact-form", name: "Contact Form Enquiry" },
   banners: { link: "/banners", name: "Banners" },
   payment_options: { link: "/payment-options", name: "Payment Options" },
+  legal_content: { link: "/legal-content", name: "Legal Content" },
   dashboard: { link: "/", name: "Dashboard" },
 } as const;

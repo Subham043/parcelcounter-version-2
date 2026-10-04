@@ -55,3 +55,7 @@ export const downloadExcel = (blob: Blob, filename: string) => {
     link.remove();
     window.URL.revokeObjectURL(url);
 };
+
+export const stripHtml = (html: string) => {
+    return html.replace(/<[^>]*>/g, "").trim();
+};

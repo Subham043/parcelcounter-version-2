@@ -1,210 +1,235 @@
 import { useToast } from "@/hooks/useToast";
-import { useLessonUploadImageMutation } from "@/utils/data/mutation/lesson";
+import { useTextEditorImageUploadMutation } from "@/utils/data/mutation/text_editor_image";
+import {
+  textEditorImageFormSchema,
+  type TextEditorImageFormValuesType,
+} from "@/utils/data/schema/text_editor_image";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { useCallback, useMemo, useRef } from "react";
+import { useForm, type Resolver, type UseFormReturn } from "react-hook-form";
 import ReactQuill from "react-quill-new";
 import "react-quill-new/dist/quill.snow.css";
+import { FieldError } from "../ui/field";
+import { handleFormServerErrors } from "@/utils/helper";
 
 interface RichTextEditorProps {
-    value: string;
-    onChange: (value: string) => void;
-    placeholder?: string;
-    disabled?: boolean;
+  value: string;
+  onChange: (value: string) => void;
+  onChangePlainText?: (value: string) => void;
+  placeholder?: string;
+  disabled?: boolean;
 }
 
-const MAX_IMAGE_SIZE = 5 * 1024 * 1024;
-
 const ACCEPTED_IMAGE_TYPES = [
-    "image/jpeg",
-    "image/png",
-    "image/webp",
-    "image/gif",
+  "image/jpeg",
+  "image/png",
+  "image/webp",
+  "image/gif",
 ];
 
+const FORM_DEFAULT_VALUES: TextEditorImageFormValuesType = {
+  image: undefined,
+};
+
 const RichTextEditor = ({
-    value,
-    onChange,
-    placeholder = "Write something...",
-    disabled = false,
+  value,
+  onChange,
+  onChangePlainText,
+  placeholder = "Write something...",
+  disabled = false,
 }: RichTextEditorProps) => {
-    const quillRef = useRef<ReactQuill>(null);
+  const quillRef = useRef<ReactQuill>(null);
 
-    const { toastError } = useToast();
-    const uploadMutation = useLessonUploadImageMutation();
+  const { toastError } = useToast();
+  const uploadMutation = useTextEditorImageUploadMutation();
 
-    /**
-     * Upload image to server
-     */
-    const uploadImage = useCallback(
-        async (file: File): Promise<string> => {
-            const response = await uploadMutation.mutateAsync({
-                upload: file,
-            });
+  const form = useForm({
+    resolver: yupResolver(
+      textEditorImageFormSchema,
+    ) as Resolver<TextEditorImageFormValuesType>,
+    defaultValues: FORM_DEFAULT_VALUES,
+  });
 
-            if (!response?.url) {
-                throw new Error("Image URL was not returned");
-            }
-
-            return response.url;
+  /**
+   * Upload image to server
+   */
+  const uploadImage = useCallback(
+    async (file: File): Promise<string> => {
+      const response = await uploadMutation.mutateAsync(
+        {
+          image: file,
         },
-        [uploadMutation.mutateAsync],
-    );
+        {
+          onError: (error) => {
+            handleFormServerErrors(
+              error,
+              form as UseFormReturn<TextEditorImageFormValuesType>,
+            );
+          },
+        },
+      );
 
-    /**
-     * Handle image upload from Quill toolbar
-     */
-    const handleImageUpload = useCallback(() => {
-        if (disabled || uploadMutation.isPending) {
-            return;
+      if (!response?.image_url) {
+        throw new Error("Image URL was not returned");
+      }
+
+      return response.image_url;
+    },
+    [uploadMutation.mutateAsync, form],
+  );
+
+  const handleImageSubmit = useCallback(
+    async (values: TextEditorImageFormValuesType): Promise<void> => {
+      const editor = quillRef.current?.getEditor();
+
+      if (!editor || !values.image) {
+        return;
+      }
+
+      const selection = editor.getSelection(true);
+      const index = selection?.index ?? editor.getLength();
+
+      try {
+        const imageUrl = await uploadImage(values.image as File);
+
+        const currentEditor = quillRef.current?.getEditor();
+
+        if (!currentEditor) {
+          return;
         }
 
-        const input = document.createElement("input");
+        currentEditor.insertEmbed(index, "image", imageUrl, "user");
 
-        input.type = "file";
-        input.accept = ACCEPTED_IMAGE_TYPES.join(",");
-        input.style.display = "none";
+        currentEditor.setSelection(index + 1, 0, "user");
+      } catch (error) {
+        toastError("Failed to upload image.");
+      }
+    },
+    [uploadImage, toastError],
+  );
 
-        document.body.appendChild(input);
+  /**
+   * Handle image upload from Quill toolbar
+   */
+  const handleImageUpload = useCallback(() => {
+    if (disabled || uploadMutation.isPending) {
+      return;
+    }
 
-        input.click();
+    const input = document.createElement("input");
 
-        input.onchange = async () => {
-            const file = input.files?.[0];
+    input.type = "file";
+    input.accept = ACCEPTED_IMAGE_TYPES.join(",");
+    input.style.display = "none";
 
-            // Remove temporary input
-            input.remove();
+    document.body.appendChild(input);
 
-            if (!file) {
-                return;
-            }
+    input.click();
 
-            /**
-             * Validate MIME type
-             */
-            if (!ACCEPTED_IMAGE_TYPES.includes(file.type)) {
-                toastError(
-                    "Invalid image type. Please upload JPG, PNG, WEBP or GIF.",
-                );
+    input.onchange = async () => {
+      const file = input.files?.[0];
 
-                return;
-            }
+      // Remove temporary input
+      input.remove();
 
-            /**
-             * Validate file size
-             */
-            if (file.size > MAX_IMAGE_SIZE) {
-                toastError("Image size must be less than 5MB.");
+      /**
+       * Put the file into React Hook Form.
+       */
+      form.setValue("image", file, {
+        shouldDirty: true,
+        shouldTouch: true,
+      });
 
-                return;
-            }
+      /**
+       * handleSubmit returns a function.
+       *
+       * Calling () actually executes validation + submit.
+       */
+      await form.handleSubmit((values) => {
+        handleImageSubmit(values);
+      })();
+    };
+  }, [disabled, uploadMutation.isPending, handleImageSubmit, form]);
 
-            /**
-             * Make sure editor still exists
-             */
-            const editor = quillRef.current?.getEditor();
+  const handleEditorChange = useCallback(
+    (html: string) => {
+      onChange(html);
 
-            if (!editor) {
-                return;
-            }
+      const editor = quillRef.current?.getEditor();
 
-            /**
-             * Save current selection BEFORE async upload.
-             *
-             * This is important because selection can become null
-             * while the upload is happening.
-             */
-            const selection = editor.getSelection(true);
+      if (!editor || !onChangePlainText) {
+        return;
+      }
 
-            const index = selection?.index ?? editor.getLength();
+      const plainText = editor.getText().trim();
 
-            try {
-                const imageUrl = await uploadImage(file);
+      onChangePlainText(plainText);
+    },
+    [onChange, onChangePlainText],
+  );
 
-                /**
-                 * Component/editor could have been unmounted
-                 * while upload was running.
-                 */
-                const currentEditor = quillRef.current?.getEditor();
+  /**
+   * Quill configuration.
+   *
+   * useMemo prevents ReactQuill from receiving a new
+   * modules object on every render.
+   */
+  const modules = useMemo(
+    () => ({
+      toolbar: {
+        container: [
+          [{ header: [1, 2, 3, 4, 5, 6, false] }],
 
-                if (!currentEditor) {
-                    return;
-                }
+          ["bold", "italic", "underline", "strike"],
 
-                /**
-                 * Insert image at the position where the user
-                 * originally had their cursor.
-                 */
-                currentEditor.insertEmbed(index, "image", imageUrl, "user");
+          [{ color: [] }, { background: [] }],
 
-                /**
-                 * Move cursor after image.
-                 */
-                currentEditor.setSelection(index + 1, 0, "user");
-            } catch (error) {
-                console.error("Image upload failed:", error);
+          [{ align: [] }],
 
-                toastError("Failed to upload image.");
-            }
-        };
-    }, [disabled, uploadMutation.isPending, uploadImage]);
+          [{ list: "ordered" }, { list: "bullet" }],
 
-    /**
-     * Quill configuration.
-     *
-     * useMemo prevents ReactQuill from receiving a new
-     * modules object on every render.
-     */
-    const modules = useMemo(
-        () => ({
-            toolbar: {
-                container: [
-                    [{ header: [1, 2, 3, 4, 5, 6, false] }],
+          [{ indent: "-1" }, { indent: "+1" }],
 
-                    ["bold", "italic", "underline", "strike"],
+          ["blockquote", "code-block"],
 
-                    [{ color: [] }, { background: [] }],
+          ["link", "image"],
 
-                    [{ align: [] }],
+          ["clean"],
+        ],
 
-                    [{ list: "ordered" }, { list: "bullet" }],
+        handlers: {
+          image: handleImageUpload,
+        },
+      },
+    }),
+    [handleImageUpload],
+  );
 
-                    [{ indent: "-1" }, { indent: "+1" }],
+  return (
+    <div className="relative overflow-hidden rounded-md border [&_.ql-editor]:min-h-56 [&_.ql-container]:min-h-56">
+      <ReactQuill
+        ref={quillRef}
+        theme="snow"
+        value={value}
+        onChange={handleEditorChange}
+        modules={modules}
+        placeholder={placeholder}
+        readOnly={disabled}
+      />
 
-                    ["blockquote", "code-block"],
+      {form.formState.errors.image?.message && (
+        <FieldError errors={[form.formState.errors.image]} />
+      )}
 
-                    ["link", "image"],
-
-                    ["clean"],
-                ],
-
-                handlers: {
-                    image: handleImageUpload,
-                },
-            },
-        }),
-        [handleImageUpload],
-    );
-
-    return (
-        <div className="relative overflow-hidden rounded-md border">
-            <ReactQuill
-                ref={quillRef}
-                theme="snow"
-                value={value}
-                onChange={onChange}
-                modules={modules}
-                placeholder={placeholder}
-                readOnly={disabled || uploadMutation.isPending}
-            />
-
-            {uploadMutation.isPending && (
-                <div className="absolute inset-0 z-10 flex items-center justify-center bg-background/60 backdrop-blur-[1px]">
-                    <div className="rounded-md border bg-background px-4 py-2 text-sm shadow-sm">
-                        Uploading image...
-                    </div>
-                </div>
-            )}
+      {uploadMutation.isPending && (
+        <div className="absolute inset-0 z-10 flex items-center justify-center bg-background/60 backdrop-blur-[1px]">
+          <div className="rounded-md border bg-background px-4 py-2 text-sm shadow-sm">
+            Uploading image...
+          </div>
         </div>
-    );
+      )}
+    </div>
+  );
 };
 
 export default RichTextEditor;

@@ -2,7 +2,6 @@
 
 namespace App\Features\LegalContents\Resources;
 
-use App\Http\Services\FileStorageService;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class LegalContentCollection extends JsonResource

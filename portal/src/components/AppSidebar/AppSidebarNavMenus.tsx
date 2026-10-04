@@ -10,6 +10,7 @@ import {
   MessageSquareDot,
   Image,
   CreditCard,
+  Gavel,
 } from "lucide-react";
 import { cn } from "@/utils/lib/utils";
 import { useMemo, useState } from "react";
@@ -88,6 +89,11 @@ const navSections: NavSection[] = [
         label: page_routes.payment_options.name,
         icon: <CreditCard size={17} />,
         to: page_routes.payment_options.link,
+      },
+      {
+        label: page_routes.legal_content.name,
+        icon: <Gavel size={17} />,
+        to: page_routes.legal_content.link,
       },
     ],
     // allowedRolesAndPermission: [

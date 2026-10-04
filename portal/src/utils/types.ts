@@ -118,6 +118,31 @@ export type ContactFormEnquiryType = {
     updated_at: string;
 }
 
+export type LegalContentType = {
+    id: number;
+    name: string;
+    heading: string;
+    slug: string;
+    description: string;
+    description_unfiltered: string;
+    is_active: boolean;
+    meta_title?: string;
+    meta_description?: string;
+    meta_keywords?: string;
+    user_id: number;
+    created_at: string;
+    updated_at: string;
+}
+
+export type TextEditorImageType = {
+    id: number;
+    image: string;
+    image_url: string;
+    user_id: number;
+    created_at: string;
+    updated_at: string;
+}
+
 export type AxiosErrorResponseType = {
     message: string;
     errors?: Record<string, string[]>;

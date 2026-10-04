@@ -149,4 +149,7 @@ export const api_routes = {
     delete: "/api/v1/contact-form-enquiries/delete",
     excel: "/api/v1/contact-form-enquiries/excel",
   },
+  text_editor_image: {
+    create: "/api/v1/texteditor-images/create",
+  },
 } as const;
