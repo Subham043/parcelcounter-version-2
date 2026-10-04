@@ -11,6 +11,7 @@ import {
   Image,
   CreditCard,
   Gavel,
+  FilePenLine,
 } from "lucide-react";
 import { cn } from "@/utils/lib/utils";
 import { useMemo, useState } from "react";
@@ -94,6 +95,11 @@ const navSections: NavSection[] = [
         label: page_routes.legal_content.name,
         icon: <Gavel size={17} />,
         to: page_routes.legal_content.link,
+      },
+      {
+        label: page_routes.blogs.name,
+        icon: <FilePenLine size={17} />,
+        to: page_routes.blogs.link,
       },
     ],
     // allowedRolesAndPermission: [

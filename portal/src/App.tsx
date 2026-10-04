@@ -48,6 +48,7 @@ const ContactFormEnquiry = lazy(
 const Banner = lazy(() => import("@/pages/Banner/index.tsx"));
 const PaymentOption = lazy(() => import("@/pages/PaymentOption/index.tsx"));
 const LegalContent = lazy(() => import("@/pages/LegalContent/index.tsx"));
+const Blog = lazy(() => import("@/pages/Blog/index.tsx"));
 
 function App() {
   return (
@@ -89,6 +90,7 @@ function App() {
                     path={page_routes.legal_content.link}
                     element={<LegalContent />}
                   />
+                  <Route path={page_routes.blogs.link} element={<Blog />} />
                 </Route>
               </Route>
             </Route>

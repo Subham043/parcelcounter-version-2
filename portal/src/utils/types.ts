@@ -118,6 +118,25 @@ export type ContactFormEnquiryType = {
     updated_at: string;
 }
 
+export type BlogType = {
+    id: number;
+    name: string;
+    heading: string;
+    slug: string;
+    description: string;
+    description_unfiltered: string;
+    image: string;
+    image_url: string;
+    is_active: boolean;
+    is_popular: boolean;
+    meta_title?: string;
+    meta_description?: string;
+    meta_keywords?: string;
+    user_id: number;
+    created_at: string;
+    updated_at: string;
+}
+
 export type LegalContentType = {
     id: number;
     name: string;
