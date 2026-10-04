@@ -34,19 +34,19 @@ export default function ChargeForm() {
       }}
       swipeDirection="right"
     >
-      <DrawerContent>
-        <DrawerHeader>
+      <DrawerContent className="h-full flex flex-col">
+        <DrawerHeader className="shrink-0">
           <DrawerTitle>{`${modal.type === "create" ? "Create" : "Update"} Charge`}</DrawerTitle>
         </DrawerHeader>
-        <div className="flex-1 p-4">
+        <div className="min-h-0 flex-1 p-4">
           {isLoading ? (
             <Spinner className="size-6 mx-auto" />
           ) : (
             <form
-              className="space-y-5 h-full flex flex-col"
+              className="space-y-5 flex h-full min-h-0 flex-col"
               onSubmit={onSubmit}
             >
-              <div className="flex-1 scroll-fade overflow-y-auto">
+              <div className="scroll-fade min-h-0 flex-1 overflow-y-auto">
                 <FieldGroup>
                   <Controller
                     name="name"
@@ -172,7 +172,7 @@ export default function ChargeForm() {
                   />
                 </FieldGroup>
               </div>
-              <DrawerFooter className="py-0">
+              <DrawerFooter className="shrink-0 p-0">
                 <div className="flex items-center justify-between gap-1">
                   <Button
                     type="submit"

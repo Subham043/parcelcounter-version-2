@@ -47,7 +47,7 @@ export default function LegalContentForm() {
         <DrawerHeader className="shrink-0">
           <DrawerTitle>{`${modal.type === "create" ? "Create" : "Update"} Legal Content`}</DrawerTitle>
         </DrawerHeader>
-        <div className="min-h-0 flex-1 px-4 py-4">
+        <div className="min-h-0 flex-1 p-4">
           {isLoading ? (
             <Spinner className="size-6 mx-auto" />
           ) : (
@@ -242,7 +242,7 @@ export default function LegalContentForm() {
                   </div>
                 </FieldGroup>
               </div>
-              <DrawerFooter className="shrink-0 px-0 py-0">
+              <DrawerFooter className="shrink-0 p-0">
                 <div className="flex items-center gap-1">
                   <Button
                     type="submit"

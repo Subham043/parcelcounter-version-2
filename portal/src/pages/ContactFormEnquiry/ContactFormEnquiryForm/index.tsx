@@ -33,16 +33,16 @@ export default function ContactFormEnquiryForm() {
       }}
       swipeDirection="right"
     >
-      <DrawerContent>
-        <DrawerHeader>
+      <DrawerContent className="h-full flex flex-col">
+        <DrawerHeader className="shrink-0">
           <DrawerTitle>View Enquiry</DrawerTitle>
         </DrawerHeader>
-        <div className="flex-1 p-4">
+        <div className="min-h-0 flex-1 p-4">
           {isLoading ? (
             <Spinner className="size-6 mx-auto" />
           ) : (
-            <div className="space-y-5 h-full flex flex-col">
-              <div className="flex-1 scroll-fade overflow-y-auto">
+            <div className="space-y-5 flex h-full min-h-0 flex-col">
+              <div className="scroll-fade min-h-0 flex-1 overflow-y-auto">
                 <FieldGroup>
                   <Field>
                     <FieldLabel htmlFor="enquiry-form-name">Name</FieldLabel>
@@ -120,7 +120,7 @@ export default function ContactFormEnquiryForm() {
                   </Field>
                 </FieldGroup>
               </div>
-              <DrawerFooter className="py-0">
+              <DrawerFooter className="shrink-0 p-0">
                 <DrawerClose
                   render={<Button variant="outline" type="button" />}
                 >

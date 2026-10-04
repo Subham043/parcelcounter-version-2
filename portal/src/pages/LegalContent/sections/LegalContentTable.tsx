@@ -16,6 +16,7 @@ type LegalContentTableProps = {
 const LegalContentTableRow = memo(function LegalContentTableRow({
   id,
   name,
+  slug,
   heading,
   description_unfiltered,
   is_active,
@@ -23,6 +24,7 @@ const LegalContentTableRow = memo(function LegalContentTableRow({
 }: {
   id: LegalContentType["id"];
   name: LegalContentType["name"];
+  slug: LegalContentType["slug"];
   heading: LegalContentType["heading"];
   description_unfiltered: LegalContentType["description_unfiltered"];
   is_active: LegalContentType["is_active"];
@@ -44,6 +46,9 @@ const LegalContentTableRow = memo(function LegalContentTableRow({
     <tr>
       <td className="px-4 py-3 font-medium text-gray-900">
         <p className="text-sm font-medium text-gray-800">{name}</p>
+      </td>
+      <td className="px-4 py-3 ">
+        <p className="text-sm text-gray-500">{slug}</p>
       </td>
       <td className="px-4 py-3 ">
         <p className="text-sm text-gray-500 truncate">{heading}</p>
@@ -84,6 +89,7 @@ function LegalContentTable({ loading, legalContents }: LegalContentTableProps) {
         <tr>
           {[
             "Name",
+            "Slug",
             "Heading",
             "Description",
             "Is Active",
@@ -98,13 +104,14 @@ function LegalContentTable({ loading, legalContents }: LegalContentTableProps) {
       </thead>
       <tbody className="divide-y divide-gray-100">
         {loading ? (
-          <TableRowLoading colSpan={6} />
+          <TableRowLoading colSpan={7} />
         ) : (
           legalContents.map((item) => (
             <LegalContentTableRow
               key={item.id}
               id={item.id}
               name={item.name}
+              slug={item.slug}
               heading={item.heading}
               description_unfiltered={item.description_unfiltered}
               is_active={item.is_active}
