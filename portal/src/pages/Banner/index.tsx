@@ -11,6 +11,7 @@ import BannerTable from "./sections/BannerTable";
 import EmptyDataBlock from "@/components/EmptyDataBlock";
 import CustomPagination from "@/components/CustomPagination";
 import BannerForm from "./BannerForm";
+import BannerExcelBtn from "./sections/BannerExcelBtn";
 
 const EMPTY_DATA: BannerType[] = [];
 
@@ -49,6 +50,7 @@ function Banner() {
               >
                 <RefreshCw size={14} />
               </Button>
+              <BannerExcelBtn />
               <Button onClick={handleModalOpen}>
                 <Plus size={16} /> Add
               </Button>

@@ -11,6 +11,7 @@ import DeliverySlotTable from "./sections/DeliverySlotTable";
 import EmptyDataBlock from "@/components/EmptyDataBlock";
 import CustomPagination from "@/components/CustomPagination";
 import DeliverySlotForm from "./DeliverySlotForm";
+import DeliverySlotExcelBtn from "./sections/DeliverySlotExcelBtn";
 
 const EMPTY_DATA: DeliverySlotType[] = [];
 
@@ -53,6 +54,7 @@ function DeliverySlot() {
               >
                 <RefreshCw size={14} />
               </Button>
+              <DeliverySlotExcelBtn />
               <Button onClick={handleModalOpen}>
                 <Plus size={16} /> Add
               </Button>

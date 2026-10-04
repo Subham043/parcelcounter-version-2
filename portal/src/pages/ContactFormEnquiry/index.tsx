@@ -11,6 +11,7 @@ import ContactFormEnquiryTable from "./sections/ContactFormEnquiryTable";
 import EmptyDataBlock from "@/components/EmptyDataBlock";
 import CustomPagination from "@/components/CustomPagination";
 import ContactFormEnquiryForm from "./ContactFormEnquiryForm";
+import ContactFormEnquiryExcelBtn from "./sections/ContactFormEnquiryExcelBtn";
 
 const EMPTY_DATA: ContactFormEnquiryType[] = [];
 
@@ -50,6 +51,7 @@ function ContactFormEnquiry() {
               >
                 <RefreshCw size={14} />
               </Button>
+              <ContactFormEnquiryExcelBtn />
             </div>
           </div>
         </CardHeader>

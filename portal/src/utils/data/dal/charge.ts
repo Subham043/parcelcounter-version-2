@@ -38,3 +38,9 @@ export const getChargesHandler = async (params: URLSearchParams, signal?: Generi
     const response = await axios.get<PaginationType<ChargeType>>(api_routes.charge.paginate, { params, signal });
     return response.data;
 }
+
+
+export const exportChargesHandler = async (params: URLSearchParams, signal?: GenericAbortSignal | undefined) => {
+    const response = await axios.get(api_routes.charge.excel, { params, signal, responseType: "blob" });
+    return new Blob([response.data], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+}

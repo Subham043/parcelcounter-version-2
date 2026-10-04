@@ -19,3 +19,9 @@ export const getContactFormEnquiriesHandler = async (params: URLSearchParams, si
     const response = await axios.get<PaginationType<ContactFormEnquiryType>>(api_routes.contact_form_enquiry.paginate, { params, signal });
     return response.data;
 }
+
+
+export const exportContactFormEnquiriesHandler = async (params: URLSearchParams, signal?: GenericAbortSignal | undefined) => {
+    const response = await axios.get(api_routes.contact_form_enquiry.excel, { params, signal, responseType: "blob" });
+    return new Blob([response.data], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+}

@@ -1,12 +1,13 @@
 import { useToast } from "@/hooks/useToast";
 import { useMutation } from "@tanstack/react-query";
 import type { TaxFormValuesType } from "../schema/tax";
-import { createTaxHandler, deleteTaxHandler, toggleTaxStatusHandler, updateTaxHandler } from "../dal/tax";
+import { createTaxHandler, deleteTaxHandler, exportTaxesHandler, toggleTaxStatusHandler, updateTaxHandler } from "../dal/tax";
 import type { PaginationType, TaxType } from "@/utils/types";
 import { TaxQueryKey, TaxesQueryKey } from "../query/tax";
 import { useSearchParams } from "react-router";
 import { usePaginationQueryParam } from "@/hooks/usePaginationQueryParam";
 import { useSearchQueryParam } from "@/hooks/useSearchQueryParam";
+import { downloadExcel } from "@/utils/helper";
 
 export const useTaxCreateMutation = () => {
     const { toastSuccess } = useToast();
@@ -128,6 +129,25 @@ export const useTaxDeleteMutation = (id: number) => {
             context.client.invalidateQueries({ queryKey: TaxesQueryKey(params) });
             context.client.setQueryData(TaxQueryKey(id), undefined);
             context.client.setQueryData(TaxQueryKey(id, true), undefined);
+        },
+        onError: (error: any) => {
+            toastError(error?.response?.data?.message || "Something went wrong, please try again later.");
+        },
+    });
+};
+
+
+export const useTaxExportMutation = () => {
+    const { toastSuccess, toastError } = useToast();
+    const [params] = useSearchParams();
+
+    return useMutation({
+        mutationFn: async () => {
+            return await exportTaxesHandler(params);
+        },
+        onSuccess: (data) => {
+            toastSuccess("Taxes exported successfully");
+            downloadExcel(data, `taxes_${new Date().toISOString().slice(0, 10)}.xlsx`);
         },
         onError: (error: any) => {
             toastError(error?.response?.data?.message || "Something went wrong, please try again later.");

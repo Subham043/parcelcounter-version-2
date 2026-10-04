@@ -8,6 +8,7 @@ import PaymentOptionFilters from "./sections/PaymentOptionFilters";
 import PaymentOptionTable from "./sections/PaymentOptionTable";
 import EmptyDataBlock from "@/components/EmptyDataBlock";
 import CustomPagination from "@/components/CustomPagination";
+import PaymentOptionExcelBtn from "./sections/PaymentOptionExcelBtn";
 
 const EMPTY_DATA: PaymentOptionType[] = [];
 
@@ -37,6 +38,7 @@ function PaymentOption() {
               >
                 <RefreshCw size={14} />
               </Button>
+              <PaymentOptionExcelBtn />
             </div>
           </div>
         </CardHeader>

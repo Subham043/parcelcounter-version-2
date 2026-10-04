@@ -11,6 +11,7 @@ import FeatureTable from "./sections/FeatureTable";
 import EmptyDataBlock from "@/components/EmptyDataBlock";
 import CustomPagination from "@/components/CustomPagination";
 import FeatureForm from "./FeatureForm";
+import FeatureExcelBtn from "./sections/FeatureExcelBtn";
 
 const EMPTY_DATA: FeatureType[] = [];
 
@@ -51,6 +52,7 @@ function Feature() {
               >
                 <RefreshCw size={14} />
               </Button>
+              <FeatureExcelBtn />
               <Button onClick={handleModalOpen}>
                 <Plus size={16} /> Add
               </Button>

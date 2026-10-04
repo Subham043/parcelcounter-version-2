@@ -1,12 +1,13 @@
 import { useToast } from "@/hooks/useToast";
 import { useMutation } from "@tanstack/react-query";
 import type { ChargeFormValuesType } from "../schema/charge";
-import { createChargeHandler, deleteChargeHandler, toggleChargeStatusHandler, updateChargeHandler } from "../dal/charge";
+import { createChargeHandler, deleteChargeHandler, exportChargesHandler, toggleChargeStatusHandler, updateChargeHandler } from "../dal/charge";
 import type { PaginationType, ChargeType } from "@/utils/types";
 import { ChargeQueryKey, ChargesQueryKey } from "../query/charge";
 import { useSearchParams } from "react-router";
 import { usePaginationQueryParam } from "@/hooks/usePaginationQueryParam";
 import { useSearchQueryParam } from "@/hooks/useSearchQueryParam";
+import { downloadExcel } from "@/utils/helper";
 
 export const useChargeCreateMutation = () => {
     const { toastSuccess } = useToast();
@@ -128,6 +129,24 @@ export const useChargeDeleteMutation = (id: number) => {
             context.client.invalidateQueries({ queryKey: ChargesQueryKey(params) });
             context.client.setQueryData(ChargeQueryKey(id), undefined);
             context.client.setQueryData(ChargeQueryKey(id, true), undefined);
+        },
+        onError: (error: any) => {
+            toastError(error?.response?.data?.message || "Something went wrong, please try again later.");
+        },
+    });
+};
+
+export const useChargeExportMutation = () => {
+    const { toastSuccess, toastError } = useToast();
+    const [params] = useSearchParams();
+
+    return useMutation({
+        mutationFn: async () => {
+            return await exportChargesHandler(params);
+        },
+        onSuccess: (data) => {
+            toastSuccess("Charges exported successfully");
+            downloadExcel(data, `charges_${new Date().toISOString().slice(0, 10)}.xlsx`);
         },
         onError: (error: any) => {
             toastError(error?.response?.data?.message || "Something went wrong, please try again later.");

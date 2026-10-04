@@ -26,6 +26,7 @@ function SearchField({ placeholder = "Search..." }: Props) {
         defaultValue={search}
         onChange={onSearchChange}
         autoFocus={search !== undefined && search.length > 0}
+        key={search}
       />
       <InputGroupAddon>
         <Search />

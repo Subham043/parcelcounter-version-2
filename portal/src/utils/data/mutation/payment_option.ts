@@ -2,8 +2,9 @@ import { useToast } from "@/hooks/useToast";
 import { useMutation } from "@tanstack/react-query";
 import { useSearchParams } from "react-router";
 import type { PaginationType, PaymentOptionType } from "@/utils/types";
-import { togglePaymentOptionStatusHandler } from "../dal/payment_option";
+import { exportPaymentOptionsHandler, togglePaymentOptionStatusHandler } from "../dal/payment_option";
 import { PaymentOptionQueryKey, PaymentOptionsQueryKey } from "../query/payment_option";
+import { downloadExcel } from "@/utils/helper";
 
 
 export const usePaymentOptionToggleStatusMutation = (id: number) => {
@@ -31,6 +32,25 @@ export const usePaymentOptionToggleStatusMutation = (id: number) => {
             });
             context.client.setQueryData(PaymentOptionQueryKey(id), data);
             context.client.setQueryData(PaymentOptionQueryKey(id, true), data);
+        },
+        onError: (error: any) => {
+            toastError(error?.response?.data?.message || "Something went wrong, please try again later.");
+        },
+    });
+};
+
+
+export const usePaymentOptionExportMutation = () => {
+    const { toastSuccess, toastError } = useToast();
+    const [params] = useSearchParams();
+
+    return useMutation({
+        mutationFn: async () => {
+            return await exportPaymentOptionsHandler(params);
+        },
+        onSuccess: (data) => {
+            toastSuccess("Payment options exported successfully");
+            downloadExcel(data, `payment_options_${new Date().toISOString().slice(0, 10)}.xlsx`);
         },
         onError: (error: any) => {
             toastError(error?.response?.data?.message || "Something went wrong, please try again later.");

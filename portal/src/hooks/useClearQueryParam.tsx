@@ -14,9 +14,7 @@ export const useClearQueryParam: CustomQueryParamHookType = () => {
     setSearchParams(
       () => {
         const params = new URLSearchParams();
-        if (params.has(PAGEKEY)) {
-          params.set(PAGEKEY, String(QueryInitialPageParam));
-        }
+        params.set(PAGEKEY, String(QueryInitialPageParam));
         return params;
       },
       { replace: true },

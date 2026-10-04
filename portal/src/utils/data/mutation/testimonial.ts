@@ -1,12 +1,13 @@
 import { useToast } from "@/hooks/useToast";
 import { useMutation } from "@tanstack/react-query";
 import type { TestimonialFormValuesType } from "../schema/testimonial";
-import { createTestimonialHandler, deleteTestimonialHandler, toggleTestimonialStatusHandler, updateTestimonialHandler } from "../dal/testimonial";
+import { createTestimonialHandler, deleteTestimonialHandler, exportTestimonialsHandler, toggleTestimonialStatusHandler, updateTestimonialHandler } from "../dal/testimonial";
 import type { PaginationType, TestimonialType } from "@/utils/types";
 import { TestimonialQueryKey, TestimonialsQueryKey } from "../query/testimonial";
 import { useSearchParams } from "react-router";
 import { usePaginationQueryParam } from "@/hooks/usePaginationQueryParam";
 import { useSearchQueryParam } from "@/hooks/useSearchQueryParam";
+import { downloadExcel } from "@/utils/helper";
 
 export const useTestimonialCreateMutation = () => {
     const { toastSuccess } = useToast();
@@ -128,6 +129,25 @@ export const useTestimonialDeleteMutation = (id: number) => {
             context.client.invalidateQueries({ queryKey: TestimonialsQueryKey(params) });
             context.client.setQueryData(TestimonialQueryKey(id), undefined);
             context.client.setQueryData(TestimonialQueryKey(id, true), undefined);
+        },
+        onError: (error: any) => {
+            toastError(error?.response?.data?.message || "Something went wrong, please try again later.");
+        },
+    });
+};
+
+
+export const useTestimonialExportMutation = () => {
+    const { toastSuccess, toastError } = useToast();
+    const [params] = useSearchParams();
+
+    return useMutation({
+        mutationFn: async () => {
+            return await exportTestimonialsHandler(params);
+        },
+        onSuccess: (data) => {
+            toastSuccess("Testimonials exported successfully");
+            downloadExcel(data, `testimonials_${new Date().toISOString().slice(0, 10)}.xlsx`);
         },
         onError: (error: any) => {
             toastError(error?.response?.data?.message || "Something went wrong, please try again later.");

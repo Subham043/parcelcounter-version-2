@@ -29,6 +29,7 @@ export const api_routes = {
     delete: "/api/v1/users/delete",
     toggle_status: "/api/v1/users/status",
     toggle_verification: "/api/v1/users/verify",
+    excel: "/api/v1/users/excel",
   },
   charge: {
     paginate: "/api/v1/charges/paginate",
@@ -38,6 +39,7 @@ export const api_routes = {
     delete: "/api/v1/charges/delete",
     toggle_status: "/api/v1/charges/status",
     slug: "/api/v1/charges/slug",
+    excel: "/api/v1/charges/excel",
   },
   tax: {
     paginate: "/api/v1/taxes/paginate",
@@ -47,6 +49,7 @@ export const api_routes = {
     delete: "/api/v1/taxes/delete",
     toggle_status: "/api/v1/taxes/status",
     slug: "/api/v1/taxes/slug",
+    excel: "/api/v1/taxes/excel",
   },
   testimonial: {
     paginate: "/api/v1/testimonials/paginate",
@@ -55,6 +58,7 @@ export const api_routes = {
     update: "/api/v1/testimonials/update",
     delete: "/api/v1/testimonials/delete",
     toggle_status: "/api/v1/testimonials/status",
+    excel: "/api/v1/testimonials/excel",
   },
   delivery_slot: {
     paginate: "/api/v1/delivery-slots/paginate",
@@ -63,6 +67,7 @@ export const api_routes = {
     update: "/api/v1/delivery-slots/update",
     delete: "/api/v1/delivery-slots/delete",
     toggle_status: "/api/v1/delivery-slots/status",
+    excel: "/api/v1/delivery-slots/excel",
   },
   blog: {
     paginate: "/api/v1/blogs/paginate",
@@ -72,6 +77,7 @@ export const api_routes = {
     delete: "/api/v1/blogs/delete",
     toggle_status: "/api/v1/blogs/status",
     slug: "/api/v1/blogs/slug",
+    excel: "/api/v1/blogs/excel",
   },
   category: {
     paginate: "/api/v1/categories/paginate",
@@ -81,6 +87,7 @@ export const api_routes = {
     delete: "/api/v1/categories/delete",
     toggle_status: "/api/v1/categories/status",
     slug: "/api/v1/categories/slug",
+    excel: "/api/v1/categories/excel",
   },
   sub_category: {
     paginate: "/api/v1/sub-categories/paginate",
@@ -90,6 +97,7 @@ export const api_routes = {
     delete: "/api/v1/sub-categories/delete",
     toggle_status: "/api/v1/sub-categories/status",
     slug: "/api/v1/sub-categories/slug",
+    excel: "/api/v1/sub-categories/excel",
   },
   product: {
     paginate: "/api/v1/products/paginate",
@@ -99,6 +107,7 @@ export const api_routes = {
     delete: "/api/v1/products/delete",
     toggle_status: "/api/v1/products/status",
     slug: "/api/v1/products/slug",
+    excel: "/api/v1/products/excel",
   },
   legal_content: {
     paginate: "/api/v1/legal-contents/paginate",
@@ -108,6 +117,7 @@ export const api_routes = {
     delete: "/api/v1/legal-contents/delete",
     toggle_status: "/api/v1/legal-contents/status",
     slug: "/api/v1/legal-contents/slug",
+    excel: "/api/v1/legal-contents/excel",
   },
   feature: {
     paginate: "/api/v1/features/paginate",
@@ -116,6 +126,7 @@ export const api_routes = {
     update: "/api/v1/features/update",
     delete: "/api/v1/features/delete",
     toggle_status: "/api/v1/features/status",
+    excel: "/api/v1/features/excel",
   },
   banner: {
     paginate: "/api/v1/banners/paginate",
@@ -124,15 +135,18 @@ export const api_routes = {
     update: "/api/v1/banners/update",
     delete: "/api/v1/banners/delete",
     toggle_status: "/api/v1/banners/status",
+    excel: "/api/v1/banners/excel",
   },
   payment_option: {
     paginate: "/api/v1/payment-options/paginate",
     view: "/api/v1/payment-options/view",
     toggle_status: "/api/v1/payment-options/status",
+    excel: "/api/v1/payment-options/excel",
   },
   contact_form_enquiry: {
     paginate: "/api/v1/contact-form-enquiries/paginate",
     view: "/api/v1/contact-form-enquiries/view",
     delete: "/api/v1/contact-form-enquiries/delete",
+    excel: "/api/v1/contact-form-enquiries/excel",
   },
 } as const;

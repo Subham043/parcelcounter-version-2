@@ -38,3 +38,8 @@ export const getDeliverySlotsHandler = async (params: URLSearchParams, signal?: 
     const response = await axios.get<PaginationType<DeliverySlotType>>(api_routes.delivery_slot.paginate, { params, signal });
     return response.data;
 }
+
+export const exportDeliverySlotsHandler = async (params: URLSearchParams, signal?: GenericAbortSignal | undefined) => {
+    const response = await axios.get(api_routes.delivery_slot.excel, { params, signal, responseType: "blob" });
+    return new Blob([response.data], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+}

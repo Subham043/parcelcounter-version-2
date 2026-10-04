@@ -11,6 +11,7 @@ import ChargeTable from "./sections/ChargeTable";
 import EmptyDataBlock from "@/components/EmptyDataBlock";
 import CustomPagination from "@/components/CustomPagination";
 import ChargeForm from "./ChargeForm";
+import ChargeExcelBtn from "./sections/ChargeExcelBtn";
 
 const EMPTY_DATA: ChargeType[] = [];
 
@@ -49,6 +50,7 @@ function Charge() {
               >
                 <RefreshCw size={14} />
               </Button>
+              <ChargeExcelBtn />
               <Button onClick={handleModalOpen}>
                 <Plus size={16} /> Add
               </Button>

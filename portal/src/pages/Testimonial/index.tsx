@@ -11,6 +11,7 @@ import TestimonialTable from "./sections/TestimonialTable";
 import EmptyDataBlock from "@/components/EmptyDataBlock";
 import CustomPagination from "@/components/CustomPagination";
 import TestimonialForm from "./TestimonialForm";
+import TestimonialExcelBtn from "./sections/TestimonialExcelBtn";
 
 const EMPTY_DATA: TestimonialType[] = [];
 
@@ -51,6 +52,7 @@ function Testimonial() {
               >
                 <RefreshCw size={14} />
               </Button>
+              <TestimonialExcelBtn />
               <Button onClick={handleModalOpen}>
                 <Plus size={16} /> Add
               </Button>

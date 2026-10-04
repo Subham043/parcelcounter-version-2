@@ -38,3 +38,9 @@ export const getTestimonialsHandler = async (params: URLSearchParams, signal?: G
     const response = await axios.get<PaginationType<TestimonialType>>(api_routes.testimonial.paginate, { params, signal });
     return response.data;
 }
+
+
+export const exportTestimonialsHandler = async (params: URLSearchParams, signal?: GenericAbortSignal | undefined) => {
+    const response = await axios.get(api_routes.testimonial.excel, { params, signal, responseType: "blob" });
+    return new Blob([response.data], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+}

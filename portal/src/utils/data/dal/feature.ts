@@ -38,3 +38,9 @@ export const getFeaturesHandler = async (params: URLSearchParams, signal?: Gener
     const response = await axios.get<PaginationType<FeatureType>>(api_routes.feature.paginate, { params, signal });
     return response.data;
 }
+
+
+export const exportFeaturesHandler = async (params: URLSearchParams, signal?: GenericAbortSignal | undefined) => {
+    const response = await axios.get(api_routes.feature.excel, { params, signal, responseType: "blob" });
+    return new Blob([response.data], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+}

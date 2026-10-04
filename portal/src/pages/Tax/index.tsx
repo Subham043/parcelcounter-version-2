@@ -11,6 +11,7 @@ import TaxTable from "./sections/TaxTable";
 import EmptyDataBlock from "@/components/EmptyDataBlock";
 import CustomPagination from "@/components/CustomPagination";
 import TaxForm from "./TaxForm";
+import TaxExcelBtn from "./sections/TaxExcelBtn";
 
 const EMPTY_DATA: TaxType[] = [];
 
@@ -47,6 +48,7 @@ function Tax() {
               >
                 <RefreshCw size={14} />
               </Button>
+              <TaxExcelBtn />
               <Button onClick={handleModalOpen}>
                 <Plus size={16} /> Add
               </Button>
