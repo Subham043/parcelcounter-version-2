@@ -1,22 +1,21 @@
 import TableRowLoading from "@/components/TableRowLoading";
-import type { BlogType } from "@/utils/types";
+import type { CategoryType } from "@/utils/types";
 import { memo, useCallback } from "react";
-import { useBlogModalStore } from "../store/blog-modal.store";
+import { useCategoryModalStore } from "../store/category-modal.store";
 import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
-import BlogDeleteBtn from "./BlogDeleteBtn";
+import CategoryDeleteBtn from "./CategoryDeleteBtn";
 import StatusToggleBadge from "@/components/StatusToggleBadge";
-import { useBlogToggleStatusMutation } from "@/utils/data/mutation/blog";
+import { useCategoryToggleStatusMutation } from "@/utils/data/mutation/category";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { getNameInitials } from "@/utils/helper";
-import ActiveBadge from "@/components/ActiveBadge";
 
-type BlogTableProps = {
-  blogs: BlogType[];
+type CategoryTableProps = {
+  categories: CategoryType[];
   loading: boolean;
 };
 
-const BlogTableRow = memo(function BlogTableRow({
+const CategoryTableRow = memo(function CategoryTableRow({
   id,
   name,
   slug,
@@ -24,25 +23,25 @@ const BlogTableRow = memo(function BlogTableRow({
   description_unfiltered,
   image_url,
   is_active,
-  is_popular,
   created_at,
 }: {
-  id: BlogType["id"];
-  name: BlogType["name"];
-  slug: BlogType["slug"];
-  heading: BlogType["heading"];
-  description_unfiltered: BlogType["description_unfiltered"];
-  image_url: BlogType["image_url"];
-  is_active: BlogType["is_active"];
-  is_popular: BlogType["is_popular"];
-  created_at: BlogType["created_at"];
+  id: CategoryType["id"];
+  name: CategoryType["name"];
+  slug: CategoryType["slug"];
+  heading: CategoryType["heading"];
+  description_unfiltered: CategoryType["description_unfiltered"];
+  image_url: CategoryType["image_url"];
+  is_active: CategoryType["is_active"];
+  created_at: CategoryType["created_at"];
 }) {
-  const legalContentToggleStatusMutation = useBlogToggleStatusMutation(id);
+  const legalContentToggleStatusMutation = useCategoryToggleStatusMutation(id);
 
   const onToggle = useCallback(async () => {
     await legalContentToggleStatusMutation.mutateAsync(undefined);
   }, [legalContentToggleStatusMutation]);
-  const handleModalEdit = useBlogModalStore((state) => state.handleModalEdit);
+  const handleModalEdit = useCategoryModalStore(
+    (state) => state.handleModalEdit,
+  );
   const onEditHandler = useCallback(() => {
     handleModalEdit(id);
   }, [id, handleModalEdit]);
@@ -73,9 +72,6 @@ const BlogTableRow = memo(function BlogTableRow({
         </p>
       </td>
       <td className="px-4 py-3 ">
-        <ActiveBadge value={is_popular} />
-      </td>
-      <td className="px-4 py-3 ">
         <StatusToggleBadge
           isActive={is_active}
           onToggle={onToggle}
@@ -92,14 +88,14 @@ const BlogTableRow = memo(function BlogTableRow({
           <Button size="xs" variant="secondary" onClick={onEditHandler}>
             Edit
           </Button>
-          <BlogDeleteBtn id={id} />
+          <CategoryDeleteBtn id={id} />
         </div>
       </td>
     </tr>
   );
 });
 
-function BlogTable({ loading, blogs }: BlogTableProps) {
+function CategoryTable({ loading, categories }: CategoryTableProps) {
   return (
     <table className="w-full text-sm">
       <thead className="bg-gray-50 text-xs uppercase tracking-wide text-gray-500">
@@ -109,7 +105,6 @@ function BlogTable({ loading, blogs }: BlogTableProps) {
             "Slug",
             "Heading",
             "Description",
-            "Is Popular",
             "Is Active",
             "Created At",
             "",
@@ -122,10 +117,10 @@ function BlogTable({ loading, blogs }: BlogTableProps) {
       </thead>
       <tbody className="divide-y divide-gray-100">
         {loading ? (
-          <TableRowLoading colSpan={8} />
+          <TableRowLoading colSpan={7} />
         ) : (
-          blogs.map((item) => (
-            <BlogTableRow
+          categories.map((item) => (
+            <CategoryTableRow
               key={item.id}
               id={item.id}
               name={item.name}
@@ -134,7 +129,6 @@ function BlogTable({ loading, blogs }: BlogTableProps) {
               image_url={item.image_url}
               description_unfiltered={item.description_unfiltered}
               is_active={item.is_active}
-              is_popular={item.is_popular}
               created_at={item.created_at}
             />
           ))
@@ -144,4 +138,4 @@ function BlogTable({ loading, blogs }: BlogTableProps) {
   );
 }
 
-export default memo(BlogTable);
+export default memo(CategoryTable);

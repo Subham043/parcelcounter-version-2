@@ -49,6 +49,7 @@ const Banner = lazy(() => import("@/pages/Banner/index.tsx"));
 const PaymentOption = lazy(() => import("@/pages/PaymentOption/index.tsx"));
 const LegalContent = lazy(() => import("@/pages/LegalContent/index.tsx"));
 const Blog = lazy(() => import("@/pages/Blog/index.tsx"));
+const Category = lazy(() => import("@/pages/Category/index.tsx"));
 
 function App() {
   return (
@@ -91,6 +92,10 @@ function App() {
                     element={<LegalContent />}
                   />
                   <Route path={page_routes.blogs.link} element={<Blog />} />
+                  <Route
+                    path={page_routes.categories.link}
+                    element={<Category />}
+                  />
                 </Route>
               </Route>
             </Route>

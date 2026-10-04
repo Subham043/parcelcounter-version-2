@@ -12,6 +12,7 @@ import {
   CreditCard,
   Gavel,
   FilePenLine,
+  ChartBarStacked,
 } from "lucide-react";
 import { cn } from "@/utils/lib/utils";
 import { useMemo, useState } from "react";
@@ -100,6 +101,11 @@ const navSections: NavSection[] = [
         label: page_routes.blogs.name,
         icon: <FilePenLine size={17} />,
         to: page_routes.blogs.link,
+      },
+      {
+        label: page_routes.categories.name,
+        icon: <ChartBarStacked size={17} />,
+        to: page_routes.categories.link,
       },
     ],
     // allowedRolesAndPermission: [
