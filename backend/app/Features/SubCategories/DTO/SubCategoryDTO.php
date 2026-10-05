@@ -12,7 +12,7 @@ final class SubCategoryDTO
     public function __construct(
         public readonly string $name,
         public readonly string $slug,
-        public readonly ?string $heading,
+        public readonly string $heading,
         public readonly string $description,
         public readonly string $description_unfiltered,
         public readonly ?string $image,
@@ -35,7 +35,7 @@ final class SubCategoryDTO
         return new self(
             name: $request->validated('name'),
             slug: $request->validated('slug'),
-            heading: $request->validated('heading') ?? null,
+            heading: $request->validated('heading'),
             description: $request->validated('description'),
             description_unfiltered: $request->validated('description_unfiltered'),
             image: $image,

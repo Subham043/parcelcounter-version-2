@@ -19,7 +19,7 @@ class CategoryPaginateController extends Controller
      */
     public function index(Request $request)
     {
-        $data = $this->categoryService->paginate($request->total ?? 10);
+        $data = $this->categoryService->paginate($request->total ?? 10, $request->query('is-select') == 'yes');
         return CategoryCollection::collection($data);
     }
 }

@@ -29,7 +29,7 @@ class SubCategoryCreatePostRequest extends InputRequest
         return [
             'name' => 'required|string|max:255',
             'slug' => 'required|string|max:255|unique:sub_categories',
-            'heading' => 'nullable|string|max:255',
+            'heading' => 'required|string|max:255',
             'description' => 'required|string',
             'description_unfiltered' => 'required|string',
             'image' => 'required|image|mimes:jpeg,png,jpg,webp|max:2048',

@@ -13,6 +13,7 @@ import {
   Gavel,
   FilePenLine,
   ChartBarStacked,
+  ChartColumnStacked,
 } from "lucide-react";
 import { cn } from "@/utils/lib/utils";
 import { useMemo, useState } from "react";
@@ -106,6 +107,11 @@ const navSections: NavSection[] = [
         label: page_routes.categories.name,
         icon: <ChartBarStacked size={17} />,
         to: page_routes.categories.link,
+      },
+      {
+        label: page_routes.sub_categories.name,
+        icon: <ChartColumnStacked size={17} />,
+        to: page_routes.sub_categories.link,
       },
     ],
     // allowedRolesAndPermission: [

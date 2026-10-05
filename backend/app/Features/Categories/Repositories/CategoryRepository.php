@@ -14,14 +14,19 @@ use Spatie\QueryBuilder\Filters\Filter;
 
 class CategoryRepository implements CategoryRepositoryInterface
 {
-    public function model(): Builder
+    public function model(bool $isSelect = false): Builder
     {
-        return Category::select('id', 'name', 'heading', 'slug', 'description', 'description_unfiltered', 'image', 'meta_title', 'meta_description', 'meta_keywords', 'is_active', 'user_id', 'created_at', 'updated_at');
+        return Category::when($isSelect==true, function ($query) {
+            return $query->select('id', 'name', 'slug');
+        })
+        ->when($isSelect==false, function ($query) {
+            return $query->select('id', 'name', 'heading', 'slug', 'description', 'description_unfiltered', 'image', 'meta_title', 'meta_description', 'meta_keywords', 'is_active', 'user_id', 'created_at', 'updated_at');
+        });
     }
 
-    public function query(): QueryBuilder
+    public function query(bool $isSelect = false): QueryBuilder
     {
-        return QueryBuilder::for($this->model())
+        return QueryBuilder::for($this->model($isSelect))
             ->defaultSort('-id')
             ->allowedSorts('id', 'name')
             ->allowedFilters([
@@ -69,14 +74,14 @@ class CategoryRepository implements CategoryRepositoryInterface
         return $this->model()->where($column, $value)->firstOrFail();
     }
 
-    public function paginate(int $total = 15): LengthAwarePaginator
+    public function paginate(int $total = 15, bool $isSelect = false): LengthAwarePaginator
     {
-        return $this->query()->paginate($total)->appends(request()->query());
+        return $this->query($isSelect)->paginate($total)->appends(request()->query());
     }
 
-    public function getAll(): Collection
+    public function getAll(bool $isSelect = false): Collection
     {
-        return $this->query()->lazy(100)->collect();
+        return $this->query($isSelect)->lazy(100)->collect();
     }
 }
 

@@ -9,7 +9,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 interface SubCategoryServiceInterface
 {
-    public function paginate(Int $total = 10, bool $withCategory = false): LengthAwarePaginator;
+    public function paginate(Int $total = 10, bool $withCategory = false, bool $isSelect = false): LengthAwarePaginator;
     public function create(SubCategoryDTO $data, CategoryIdDTO $categoryIdDTO): SubCategory;
     public function update(SubCategoryDTO $data, CategoryIdDTO $categoryIdDTO, SubCategory $subCategory): SubCategory;
     public function getById(int $id, bool $withCategory = false): SubCategory;

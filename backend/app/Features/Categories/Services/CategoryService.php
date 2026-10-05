@@ -17,9 +17,9 @@ class CategoryService implements CategoryServiceInterface
 
 	public function __construct(private CategoryRepositoryInterface $categoryRepository) {}
 
-	public function paginate(Int $total = 10): LengthAwarePaginator
+	public function paginate(Int $total = 10, bool $isSelect = false): LengthAwarePaginator
 	{
-		return $this->categoryRepository->paginate($total);
+		return $this->categoryRepository->paginate($total, $isSelect);
 	}
 
 	public function getById(Int $id): Category

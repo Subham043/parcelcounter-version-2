@@ -13,17 +13,23 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 class SubCategoryRepository implements SubCategoryRepositoryInterface
 {
-    public function model(bool $withCategory = false): Builder
+    public function model(bool $withCategory = false, bool $isSelect = false): Builder
     {
-        return SubCategory::select('id', 'name', 'heading', 'slug', 'description', 'description_unfiltered', 'image', 'meta_title', 'meta_description', 'meta_keywords', 'is_active', 'user_id', 'created_at', 'updated_at')
+        return SubCategory::
+        when($isSelect==true, function ($query) {
+            return $query->select('id', 'name', 'slug');
+        })
+        ->when($isSelect==false, function ($query) {
+            return $query->select('id', 'name', 'heading', 'slug', 'description', 'description_unfiltered', 'image', 'meta_title', 'meta_description', 'meta_keywords', 'is_active', 'user_id', 'created_at', 'updated_at');
+        })
         ->when($withCategory, function ($query) {
-            return $query->with('categories:id,name');
+            return $query->with('categories:id,name,slug');
         });
     }
 
-    public function query(bool $withCategory = false): QueryBuilder
+    public function query(bool $withCategory = false, bool $isSelect = false): QueryBuilder
     {
-        return QueryBuilder::for($this->model($withCategory))
+        return QueryBuilder::for($this->model($withCategory, $isSelect))
             ->defaultSort('-id')
             ->allowedSorts('id', 'name')
             ->allowedFilters([
@@ -35,6 +41,11 @@ class SubCategoryRepository implements SubCategoryRepositoryInterface
                     if (strtolower($value) == 'no') {
                         $query->where('is_active', false);
                     }
+                }),
+                AllowedFilter::callback('has_categories', function (Builder $query, $value) {
+                    $query->whereHas('categories', function($q) use($value) {
+                        $q->where('category_id', $value);
+                    });
                 }),
             ]);
     }
@@ -82,14 +93,14 @@ class SubCategoryRepository implements SubCategoryRepositoryInterface
         return $this->model($withCategory)->where($column, $value)->firstOrFail();
     }
 
-    public function paginate(int $total = 15, bool $withCategory = false): LengthAwarePaginator
+    public function paginate(int $total = 15, bool $withCategory = false, bool $isSelect = false): LengthAwarePaginator
     {
-        return $this->query($withCategory)->paginate($total)->appends(request()->query());
+        return $this->query($withCategory, $isSelect)->paginate($total)->appends(request()->query());
     }
 
-    public function getAll(bool $withCategory = false): Collection
+    public function getAll(bool $withCategory = false, bool $isSelect = false): Collection
     {
-        return $this->query($withCategory)->lazy(100)->collect();
+        return $this->query($withCategory, $isSelect)->lazy(100)->collect();
     }
 }
 

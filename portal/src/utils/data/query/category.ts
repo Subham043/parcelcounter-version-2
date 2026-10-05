@@ -12,16 +12,16 @@ export const CategoryQueryKey = (id: number, isEdit: boolean = false) => {
     return ["category", id, "view"]
 };
 
-export const CategoriesQueryKey = (params: URLSearchParams) => {
-    return ["categories", params.toString()]
+export const CategoriesQueryKey = (params: URLSearchParams, isSelect: boolean) => {
+    return ["categories", params.toString(), isSelect]
 };
 
 export const CategoryQueryFn = async ({ id, signal }: { id: number, signal?: AbortSignal }) => {
     return await getCategoryHandler(id, signal);
 }
 
-export const CategoriesQueryFn = async ({ params, signal }: { params: URLSearchParams, signal?: AbortSignal }) => {
-    return await getCategoriesHandler(params, signal);
+export const CategoriesQueryFn = async ({ params, signal, isSelect }: { params: URLSearchParams, signal?: AbortSignal, isSelect: boolean }) => {
+    return await getCategoriesHandler(params, signal, isSelect);
 }
 
 /*
@@ -43,16 +43,16 @@ export const useCategoryQuery: (id: number, enabled: boolean, isEdit?: boolean) 
 /*
   Sales Quotations Query Hook Function: This hook is used to fetch information of all the users
 */
-export const useCategoriesQuery: () => UseQueryResult<
+export const useCategoriesQuery: (isSelect?: boolean) => UseQueryResult<
     PaginationType<CategoryType> | undefined,
     unknown
-> = () => {
+> = (isSelect = false) => {
     const authToken = useAuthStore((state) => state.authToken)
     const [params] = useSearchParams();
 
     return useQuery({
-        queryKey: CategoriesQueryKey(params),
-        queryFn: ({ signal }) => CategoriesQueryFn({ params, signal }),
+        queryKey: CategoriesQueryKey(params, isSelect),
+        queryFn: ({ signal }) => CategoriesQueryFn({ params, isSelect, signal }),
         enabled: authToken !== null,
     });
 };

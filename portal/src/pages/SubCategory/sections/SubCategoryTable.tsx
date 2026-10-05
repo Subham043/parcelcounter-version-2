@@ -1,45 +1,48 @@
 import TableRowLoading from "@/components/TableRowLoading";
-import type { CategoryType } from "@/utils/types";
+import type { SubCategoryType } from "@/utils/types";
 import { memo, useCallback } from "react";
-import { useCategoryModalStore } from "../store/category-modal.store";
+import { useSubCategoryModalStore } from "../store/sub-category-modal.store";
 import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
-import CategoryDeleteBtn from "./CategoryDeleteBtn";
+import SubCategoryDeleteBtn from "./SubCategoryDeleteBtn";
 import StatusToggleBadge from "@/components/StatusToggleBadge";
-import { useCategoryToggleStatusMutation } from "@/utils/data/mutation/category";
+import { useSubCategoryToggleStatusMutation } from "@/utils/data/mutation/sub_category";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { getNameInitials } from "@/utils/helper";
 
-type CategoryTableProps = {
-  categories: CategoryType[];
+type SubCategoryTableProps = {
+  subCategories: SubCategoryType[];
   loading: boolean;
 };
 
-const CategoryTableRow = memo(function CategoryTableRow({
+const SubCategoryTableRow = memo(function SubCategoryTableRow({
   id,
   name,
   slug,
   heading,
+  categories,
   description_unfiltered,
   image_url,
   is_active,
   created_at,
 }: {
-  id: CategoryType["id"];
-  name: CategoryType["name"];
-  slug: CategoryType["slug"];
-  heading: CategoryType["heading"];
-  description_unfiltered: CategoryType["description_unfiltered"];
-  image_url: CategoryType["image_url"];
-  is_active: CategoryType["is_active"];
-  created_at: CategoryType["created_at"];
+  id: SubCategoryType["id"];
+  name: SubCategoryType["name"];
+  slug: SubCategoryType["slug"];
+  heading: SubCategoryType["heading"];
+  description_unfiltered: SubCategoryType["description_unfiltered"];
+  image_url: SubCategoryType["image_url"];
+  is_active: SubCategoryType["is_active"];
+  categories: SubCategoryType["categories"];
+  created_at: SubCategoryType["created_at"];
 }) {
-  const categoryToggleStatusMutation = useCategoryToggleStatusMutation(id);
+  const subCategoryToggleStatusMutation =
+    useSubCategoryToggleStatusMutation(id);
 
   const onToggle = useCallback(async () => {
-    await categoryToggleStatusMutation.mutateAsync(undefined);
-  }, [categoryToggleStatusMutation]);
-  const handleModalEdit = useCategoryModalStore(
+    await subCategoryToggleStatusMutation.mutateAsync(undefined);
+  }, [subCategoryToggleStatusMutation]);
+  const handleModalEdit = useSubCategoryModalStore(
     (state) => state.handleModalEdit,
   );
   const onEditHandler = useCallback(() => {
@@ -67,6 +70,11 @@ const CategoryTableRow = memo(function CategoryTableRow({
         <p className="text-sm text-gray-500 truncate">{heading}</p>
       </td>
       <td className="px-4 py-3 ">
+        <p className="text-sm text-gray-500">
+          {categories.map((item) => item.name).join(", ")}
+        </p>
+      </td>
+      <td className="px-4 py-3 ">
         <p className="text-sm text-gray-500 truncate">
           {description_unfiltered}
         </p>
@@ -75,7 +83,7 @@ const CategoryTableRow = memo(function CategoryTableRow({
         <StatusToggleBadge
           isActive={is_active}
           onToggle={onToggle}
-          loading={categoryToggleStatusMutation.isPending}
+          loading={subCategoryToggleStatusMutation.isPending}
         />
       </td>
       <td className="px-4 py-3 ">
@@ -88,14 +96,14 @@ const CategoryTableRow = memo(function CategoryTableRow({
           <Button size="xs" variant="secondary" onClick={onEditHandler}>
             Edit
           </Button>
-          <CategoryDeleteBtn id={id} />
+          <SubCategoryDeleteBtn id={id} />
         </div>
       </td>
     </tr>
   );
 });
 
-function CategoryTable({ loading, categories }: CategoryTableProps) {
+function SubCategoryTable({ loading, subCategories }: SubCategoryTableProps) {
   return (
     <table className="w-full text-sm">
       <thead className="bg-gray-50 text-xs uppercase tracking-wide text-gray-500">
@@ -104,6 +112,7 @@ function CategoryTable({ loading, categories }: CategoryTableProps) {
             "Name",
             "Slug",
             "Heading",
+            "Category",
             "Description",
             "Is Active",
             "Created At",
@@ -117,10 +126,10 @@ function CategoryTable({ loading, categories }: CategoryTableProps) {
       </thead>
       <tbody className="divide-y divide-gray-100">
         {loading ? (
-          <TableRowLoading colSpan={7} />
+          <TableRowLoading colSpan={8} />
         ) : (
-          categories.map((item) => (
-            <CategoryTableRow
+          subCategories.map((item) => (
+            <SubCategoryTableRow
               key={item.id}
               id={item.id}
               name={item.name}
@@ -128,6 +137,7 @@ function CategoryTable({ loading, categories }: CategoryTableProps) {
               heading={item.heading}
               image_url={item.image_url}
               description_unfiltered={item.description_unfiltered}
+              categories={item.categories}
               is_active={item.is_active}
               created_at={item.created_at}
             />
@@ -138,4 +148,4 @@ function CategoryTable({ loading, categories }: CategoryTableProps) {
   );
 }
 
-export default memo(CategoryTable);
+export default memo(SubCategoryTable);

@@ -22,6 +22,7 @@ export const page_routes = {
   payment_options: { link: "/payment-options", name: "Payment Options" },
   legal_content: { link: "/legal-content", name: "Legal Content" },
   blogs: { link: "/blogs", name: "Blog" },
-  categories: { link: "/categories", name: "Category" },
+  categories: { link: "/categories", name: "Categories" },
+  sub_categories: { link: "/sub-categories", name: "Sub-Categories" },
   dashboard: { link: "/", name: "Dashboard" },
 } as const;

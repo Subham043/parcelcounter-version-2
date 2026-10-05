@@ -19,7 +19,7 @@ class SubCategoryPaginateController extends Controller
      */
     public function index(Request $request)
     {
-        $data = $this->subCategoryService->paginate($request->total ?? 10, $request->query('include-category') == 'yes');
+        $data = $this->subCategoryService->paginate($request->total ?? 10, $request->query('include-category') == 'yes', $request->query('is-select') == 'yes');
         return SubCategoryCollection::collection($data);
     }
 }

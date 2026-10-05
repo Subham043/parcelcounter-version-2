@@ -55,7 +55,7 @@ export function useLegalContentForm() {
                 description_unfiltered: data?.description_unfiltered || "",
                 meta_title: data?.meta_title || undefined,
                 meta_description: data?.meta_description || undefined,
-                meta_keywords: data?.meta_keywords.split(",") || [] as unknown as string[],
+                meta_keywords: data?.meta_keywords?.split(",") || [] as unknown as string[],
                 is_active: data?.is_active || true,
             });
         }

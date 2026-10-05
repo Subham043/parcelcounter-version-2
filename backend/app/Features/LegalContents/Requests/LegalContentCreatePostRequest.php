@@ -29,7 +29,7 @@ class LegalContentCreatePostRequest extends InputRequest
         return [
             'name' => 'required|string|max:255',
             'slug' => 'required|string|max:255|unique:legal_contents',
-            'heading' => 'nullable|string|max:255',
+            'heading' => 'required|string|max:255',
             'description' => 'required|string',
             'description_unfiltered' => 'required|string',
             'is_active' => 'required|boolean',

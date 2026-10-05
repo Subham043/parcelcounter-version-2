@@ -18,9 +18,9 @@ class SubCategoryService implements SubCategoryServiceInterface
 
 	public function __construct(private SubCategoryRepositoryInterface $subCategoryRepository) {}
 
-	public function paginate(Int $total = 10, bool $withCategory = false): LengthAwarePaginator
+	public function paginate(Int $total = 10, bool $withCategory = false, bool $isSelect = false): LengthAwarePaginator
 	{
-		return $this->subCategoryRepository->paginate($total, $withCategory);
+		return $this->subCategoryRepository->paginate($total, $withCategory, $isSelect);
 	}
 
 	public function getById(Int $id, bool $withCategory = false): SubCategory

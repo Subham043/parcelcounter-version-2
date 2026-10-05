@@ -1,29 +1,29 @@
 import { useToast } from "@/hooks/useToast";
 import { useMutation } from "@tanstack/react-query";
-import type { CategoryFormValuesType } from "../schema/category";
-import { createCategoryHandler, deleteCategoryHandler, exportCategoriesHandler, toggleCategoryStatusHandler, updateCategoryHandler } from "../dal/category";
-import type { PaginationType, CategoryType } from "@/utils/types";
-import { CategoryQueryKey, CategoriesQueryKey } from "../query/category";
+import type { SubCategoryFormValuesType } from "../schema/sub_category";
+import { createSubCategoryHandler, deleteSubCategoryHandler, exportSubCategoriesHandler, toggleSubCategoryStatusHandler, updateSubCategoryHandler } from "../dal/sub_category";
+import type { PaginationType, SubCategoryType } from "@/utils/types";
+import { SubCategoryQueryKey, SubCategoriesQueryKey } from "../query/sub_category";
 import { useSearchParams } from "react-router";
 import { usePaginationQueryParam } from "@/hooks/usePaginationQueryParam";
 import { useSearchQueryParam } from "@/hooks/useSearchQueryParam";
 import { downloadExcel } from "@/utils/helper";
 
-export const useCategoryCreateMutation = () => {
+export const useSubCategoryCreateMutation = () => {
     const { toastSuccess } = useToast();
     const [params] = useSearchParams();
     const { page, total } = usePaginationQueryParam();
     const { search } = useSearchQueryParam();
 
     return useMutation({
-        mutationFn: async (val: CategoryFormValuesType) => {
-            return await createCategoryHandler(val);
+        mutationFn: async (val: SubCategoryFormValuesType) => {
+            return await createSubCategoryHandler(val);
         },
         onSuccess: (data, __, ___, context) => {
-            toastSuccess("Category created successfully");
-            // context.client.invalidateQueries({ queryKey: CategoriesQueryKey(params, false) });
+            toastSuccess("Sub-Category created successfully");
+            // context.client.invalidateQueries({ queryKey: SubCategoriesQueryKey(params) });
             if (page === 1 && !search) {
-                context.client.setQueryData(CategoriesQueryKey(params, false), (oldData: PaginationType<CategoryType> | undefined) => {
+                context.client.setQueryData(SubCategoriesQueryKey(params, true, false), (oldData: PaginationType<SubCategoryType> | undefined) => {
                     if (!oldData) return oldData;
                     if (oldData.data.length < total) {
                         return {
@@ -48,23 +48,23 @@ export const useCategoryCreateMutation = () => {
                     }
                 });
             } else {
-                context.client.invalidateQueries({ queryKey: CategoriesQueryKey(params, false) });
+                context.client.invalidateQueries({ queryKey: SubCategoriesQueryKey(params, true, false) });
             }
         },
     });
 };
 
-export const useCategoryUpdateMutation = (id: number) => {
+export const useSubCategoryUpdateMutation = (id: number) => {
     const { toastSuccess } = useToast();
     const [params] = useSearchParams();
 
     return useMutation({
-        mutationFn: async (val: CategoryFormValuesType) => {
-            return await updateCategoryHandler(id, val);
+        mutationFn: async (val: SubCategoryFormValuesType) => {
+            return await updateSubCategoryHandler(id, val);
         },
         onSuccess: (data, __, ___, context) => {
-            toastSuccess("Category updated successfully");
-            context.client.setQueryData(CategoriesQueryKey(params, false), (oldData: PaginationType<CategoryType> | undefined) => {
+            toastSuccess("Sub-Category updated successfully");
+            context.client.setQueryData(SubCategoriesQueryKey(params, true, false), (oldData: PaginationType<SubCategoryType> | undefined) => {
                 if (!oldData) return oldData;
                 const oldUserDataIndex = oldData.data.findIndex((user) => user.id === id);
                 if (oldUserDataIndex !== -1) {
@@ -77,28 +77,31 @@ export const useCategoryUpdateMutation = (id: number) => {
                 }
                 return oldData;
             });
-            context.client.setQueryData(CategoryQueryKey(id), data);
-            context.client.setQueryData(CategoryQueryKey(id, true), data);
+            context.client.setQueryData(SubCategoryQueryKey(id, true), data);
+            context.client.setQueryData(SubCategoryQueryKey(id, true, true), data);
         },
     });
 };
 
-export const useCategoryToggleStatusMutation = (id: number) => {
+export const useSubCategoryToggleStatusMutation = (id: number) => {
     const { toastSuccess, toastError } = useToast();
     const [params] = useSearchParams();
 
     return useMutation({
         mutationFn: async () => {
-            return await toggleCategoryStatusHandler(id);
+            return await toggleSubCategoryStatusHandler(id);
         },
         onSuccess: (data, __, ___, context) => {
-            toastSuccess("Category state toggled successfully");
-            context.client.setQueryData(CategoriesQueryKey(params, false), (oldData: PaginationType<CategoryType> | undefined) => {
+            toastSuccess("Sub-Category state toggled successfully");
+            context.client.setQueryData(SubCategoriesQueryKey(params, true, false), (oldData: PaginationType<SubCategoryType> | undefined) => {
                 if (!oldData) return oldData;
                 const oldUserDataIndex = oldData.data.findIndex((user) => user.id === id);
                 if (oldUserDataIndex !== -1) {
                     const newData = [...oldData.data];
-                    newData[oldUserDataIndex] = data;
+                    newData[oldUserDataIndex] = {
+                        ...newData[oldUserDataIndex],
+                        is_active: data.is_active
+                    }
                     return {
                         ...oldData,
                         data: newData,
@@ -106,8 +109,8 @@ export const useCategoryToggleStatusMutation = (id: number) => {
                 }
                 return oldData;
             });
-            context.client.setQueryData(CategoryQueryKey(id), data);
-            context.client.setQueryData(CategoryQueryKey(id, true), data);
+            context.client.setQueryData(SubCategoryQueryKey(id, true), data);
+            context.client.setQueryData(SubCategoryQueryKey(id, true, true), data);
         },
         onError: (error: any) => {
             toastError(error?.response?.data?.message || "Something went wrong, please try again later.");
@@ -116,19 +119,19 @@ export const useCategoryToggleStatusMutation = (id: number) => {
 };
 
 
-export const useCategoryDeleteMutation = (id: number) => {
+export const useSubCategoryDeleteMutation = (id: number) => {
     const { toastSuccess, toastError } = useToast();
     const [params] = useSearchParams();
 
     return useMutation({
         mutationFn: async () => {
-            return await deleteCategoryHandler(id);
+            return await deleteSubCategoryHandler(id);
         },
         onSuccess: (_, __, ___, context) => {
-            toastSuccess("Category deleted successfully");
-            context.client.invalidateQueries({ queryKey: CategoriesQueryKey(params, false) });
-            context.client.setQueryData(CategoryQueryKey(id), undefined);
-            context.client.setQueryData(CategoryQueryKey(id, true), undefined);
+            toastSuccess("Sub-Category deleted successfully");
+            context.client.invalidateQueries({ queryKey: SubCategoriesQueryKey(params, true, false) });
+            context.client.setQueryData(SubCategoryQueryKey(id, true), undefined);
+            context.client.setQueryData(SubCategoryQueryKey(id, true, true), undefined);
         },
         onError: (error: any) => {
             toastError(error?.response?.data?.message || "Something went wrong, please try again later.");
@@ -136,17 +139,17 @@ export const useCategoryDeleteMutation = (id: number) => {
     });
 };
 
-export const useCategoryExportMutation = () => {
+export const useSubCategoryExportMutation = () => {
     const { toastSuccess, toastError } = useToast();
     const [params] = useSearchParams();
 
     return useMutation({
         mutationFn: async () => {
-            return await exportCategoriesHandler(params);
+            return await exportSubCategoriesHandler(params);
         },
         onSuccess: (data) => {
-            toastSuccess("Category exported successfully");
-            downloadExcel(data, `category_${new Date().toISOString().slice(0, 10)}.xlsx`);
+            toastSuccess("Sub-Category exported successfully");
+            downloadExcel(data, `sub_category_${new Date().toISOString().slice(0, 10)}.xlsx`);
         },
         onError: (error: any) => {
             toastError(error?.response?.data?.message || "Something went wrong, please try again later.");

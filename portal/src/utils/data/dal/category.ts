@@ -34,7 +34,10 @@ export const getCategoryHandler = async (id: number, signal?: GenericAbortSignal
     return response.data.data;
 }
 
-export const getCategoriesHandler = async (params: URLSearchParams, signal?: GenericAbortSignal | undefined) => {
+export const getCategoriesHandler = async (params: URLSearchParams, signal?: GenericAbortSignal | undefined, isSelect: boolean = false) => {
+    if (isSelect) {
+        params.set("is-select", "yes");
+    }
     const response = await axios.get<PaginationType<CategoryType>>(api_routes.category.paginate, { params, signal });
     return response.data;
 }
