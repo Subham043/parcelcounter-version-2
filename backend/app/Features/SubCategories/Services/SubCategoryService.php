@@ -4,6 +4,7 @@ namespace App\Features\SubCategories\Services;
 
 use App\Features\SubCategories\DTO\CategoryIdDTO;
 use App\Features\SubCategories\DTO\SubCategoryDTO;
+use App\Features\SubCategories\DTO\SubCategoryFilterDTO;
 use App\Features\SubCategories\Exports\SubCategoryExport;
 use App\Features\SubCategories\Interfaces\SubCategoryRepositoryInterface;
 use App\Features\SubCategories\Interfaces\SubCategoryServiceInterface;
@@ -18,19 +19,19 @@ class SubCategoryService implements SubCategoryServiceInterface
 
 	public function __construct(private SubCategoryRepositoryInterface $subCategoryRepository) {}
 
-	public function paginate(Int $total = 10, bool $withCategory = false, bool $isSelect = false): LengthAwarePaginator
+	public function paginate(?SubCategoryFilterDTO $dto = null): LengthAwarePaginator
 	{
-		return $this->subCategoryRepository->paginate($total, $withCategory, $isSelect);
+		return $this->subCategoryRepository->paginate($dto);
 	}
 
-	public function getById(Int $id, bool $withCategory = false): SubCategory
+	public function getById(Int $id, ?SubCategoryFilterDTO $dto = null): SubCategory
 	{
-		return $this->subCategoryRepository->getById($id, $withCategory);
+		return $this->subCategoryRepository->getById($id, $dto);
 	}
 
-	public function getBySlug(string $slug, bool $withCategory = false): SubCategory
+	public function getBySlug(string $slug, ?SubCategoryFilterDTO $dto = null): SubCategory
 	{
-		return $this->subCategoryRepository->getByColumnOrFail('slug', $slug, $withCategory);
+		return $this->subCategoryRepository->getByColumnOrFail('slug', $slug, $dto);
 	}
 
 	public function create(SubCategoryDTO $data, CategoryIdDTO $categoryIdDTO): SubCategory
@@ -71,6 +72,6 @@ class SubCategoryService implements SubCategoryServiceInterface
 
 	public function exportSubCategories(): \Symfony\Component\HttpFoundation\BinaryFileResponse
 	{
-		return Excel::download(new SubCategoryExport($this->subCategoryRepository->query(true)), 'sub_categories.xlsx');
+		return Excel::download(new SubCategoryExport($this->subCategoryRepository->query(null)), 'sub_categories.xlsx');
 	}
 }

@@ -2,10 +2,11 @@
 
 namespace App\Features\SubCategories\Controllers;
 
+use App\Features\SubCategories\DTO\SubCategoryFilterDTO;
 use App\Features\SubCategories\Interfaces\SubCategoryServiceInterface;
+use App\Features\SubCategories\Requests\SubCategoryFilterRequest;
 use App\Http\Controllers\Controller;
 use App\Features\SubCategories\Resources\SubCategoryCollection;
-use Illuminate\Http\Request;
 
 class SubCategoryToggleStatusController extends Controller
 {
@@ -23,9 +24,9 @@ class SubCategoryToggleStatusController extends Controller
      * of an error, it returns a 400 status JSON response with an error message.
      */
 
-    public function index($id, Request $request)
+    public function index($id, SubCategoryFilterRequest $request)
     {
-        $subCategory = $this->subCategoryService->getById($id, $request->query('include-category') == 'yes');
+        $subCategory = $this->subCategoryService->getById($id, SubCategoryFilterDTO::fromRequest($request));
         try {
             //code...
             $updated_sub_category = $this->subCategoryService->toggleActive($subCategory);

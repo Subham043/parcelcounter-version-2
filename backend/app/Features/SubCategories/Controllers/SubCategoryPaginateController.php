@@ -2,10 +2,11 @@
 
 namespace App\Features\SubCategories\Controllers;
 
+use App\Features\SubCategories\DTO\SubCategoryFilterDTO;
 use App\Features\SubCategories\Interfaces\SubCategoryServiceInterface;
+use App\Features\SubCategories\Requests\SubCategoryFilterRequest;
 use App\Http\Controllers\Controller;
 use App\Features\SubCategories\Resources\SubCategoryCollection;
-use Illuminate\Http\Request;
 
 class SubCategoryPaginateController extends Controller
 {
@@ -14,12 +15,12 @@ class SubCategoryPaginateController extends Controller
     /**
      * Returns a paginated collection of subCategories.
      *
-     * @param Request $request
+     * @param SubCategoryFilterRequest $request
      * @return SubCategoryCollection
      */
-    public function index(Request $request)
+    public function index(SubCategoryFilterRequest $request)
     {
-        $data = $this->subCategoryService->paginate($request->total ?? 10, $request->query('include-category') == 'yes', $request->query('is-select') == 'yes');
+        $data = $this->subCategoryService->paginate(SubCategoryFilterDTO::fromRequest($request));
         return SubCategoryCollection::collection($data);
     }
 }

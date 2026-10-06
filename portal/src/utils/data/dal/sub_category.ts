@@ -45,6 +45,7 @@ export const getSubCategoriesHandler = async (params: URLSearchParams, signal?: 
     if (isSelect) {
         params.set("is-select", "yes");
     }
+    // params.set("filter[is_active]", "yes1");
     const response = await axios.get<PaginationType<SubCategoryType>>(api_routes.sub_category.paginate, { params, signal });
     return response.data;
 }

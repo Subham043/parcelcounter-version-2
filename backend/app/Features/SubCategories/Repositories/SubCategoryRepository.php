@@ -2,6 +2,7 @@
 
 namespace App\Features\SubCategories\Repositories;
 
+use App\Features\SubCategories\DTO\SubCategoryFilterDTO;
 use App\Features\SubCategories\Interfaces\SubCategoryRepositoryInterface;
 use App\Features\SubCategories\Models\SubCategory;
 use Illuminate\Database\Eloquent\Builder;
@@ -13,24 +14,24 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 class SubCategoryRepository implements SubCategoryRepositoryInterface
 {
-    public function model(bool $withCategory = false, bool $isSelect = false): Builder
+    public function model(?SubCategoryFilterDTO $dto = null): Builder
     {
         return SubCategory::
-        when($isSelect==true, function ($query) {
+        when($dto?->is_select==true, function ($query) {
             return $query->select('id', 'name', 'slug');
         })
-        ->when($isSelect==false, function ($query) {
+        ->when($dto?->is_select==false, function ($query) {
             return $query->select('id', 'name', 'heading', 'slug', 'description', 'description_unfiltered', 'image', 'meta_title', 'meta_description', 'meta_keywords', 'is_active', 'user_id', 'created_at', 'updated_at');
         })
-        ->when($withCategory, function ($query) {
+        ->when($dto?->include_category==true, function ($query) {
             return $query->with('categories:id,name,slug');
         });
     }
 
-    public function query(bool $withCategory = false, bool $isSelect = false): QueryBuilder
+    public function query(?SubCategoryFilterDTO $dto = null): QueryBuilder
     {
-        return QueryBuilder::for($this->model($withCategory, $isSelect))
-            ->defaultSort('-id')
+        return QueryBuilder::for($this->model($dto))
+            ->defaultSort($dto?->sort ?? '-id')
             ->allowedSorts('id', 'name')
             ->allowedFilters([
                 AllowedFilter::custom('search', new CommonFilter, null, false),
@@ -52,7 +53,7 @@ class SubCategoryRepository implements SubCategoryRepositoryInterface
 
     public function create(array $data): SubCategory
     {
-        return $this->model(false)->create($data);
+        return $this->model()->create($data);
     }
 
     public function update(SubCategory $subCategory, array $data): SubCategory
@@ -78,29 +79,29 @@ class SubCategoryRepository implements SubCategoryRepositoryInterface
         ]);
     }
 
-    public function getById(int $id, bool $withCategory = false): SubCategory
+    public function getById(int $id, ?SubCategoryFilterDTO $dto = null): SubCategory
     {
-        return $this->model($withCategory)->findOrFail($id);
+        return $this->model($dto)->findOrFail($id);
     }
 
-    public function getByColumn(string $column, mixed $value, bool $withCategory = false): ?SubCategory
+    public function getByColumn(string $column, mixed $value, ?SubCategoryFilterDTO $dto = null): ?SubCategory
     {
-        return $this->model($withCategory)->where($column, $value)->first();
+        return $this->model($dto)->where($column, $value)->first();
     }
 
-    public function getByColumnOrFail(string $column, mixed $value, bool $withCategory = false): SubCategory
+    public function getByColumnOrFail(string $column, mixed $value, ?SubCategoryFilterDTO $dto = null): SubCategory
     {
-        return $this->model($withCategory)->where($column, $value)->firstOrFail();
+        return $this->model($dto)->where($column, $value)->firstOrFail();
     }
 
-    public function paginate(int $total = 15, bool $withCategory = false, bool $isSelect = false): LengthAwarePaginator
+    public function paginate(?SubCategoryFilterDTO $dto = null): LengthAwarePaginator
     {
-        return $this->query($withCategory, $isSelect)->paginate($total)->appends(request()->query());
+        return $this->query($dto)->paginate($dto?->total ?? 10)->appends(request()->query());
     }
 
-    public function getAll(bool $withCategory = false, bool $isSelect = false): Collection
+    public function getAll(?SubCategoryFilterDTO $dto = null): Collection
     {
-        return $this->query($withCategory, $isSelect)->lazy(100)->collect();
+        return $this->query($dto)->lazy(100)->collect();
     }
 }
 
