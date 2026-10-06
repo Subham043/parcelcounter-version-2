@@ -12,7 +12,7 @@ interface UserServiceInterface
 {
     public function paginate(Int $total = 10): LengthAwarePaginator;
     public function create(UserCreateDTO $data, UserRoleDTO $role): User;
-    public function update(UserUpdateDTO $data, User $user): User;
+    public function update(UserUpdateDTO $data, UserRoleDTO $role, User $user): User;
     public function getById(int $id): User;
     public function delete(User $user): User;
     public function toggleBlock(User $user): User;

@@ -1,4 +1,5 @@
 
+export type RoleType = { id: number; name: AvailableRoles }
 
 export type AuthType = {
     id: number;
@@ -9,7 +10,7 @@ export type AuthType = {
     email_verified_at: string | null;
     phone_verified_at: string | null;
     is_blocked: boolean;
-    roles: AvailableRoles[];
+    roles: RoleType[];
     created_at: string;
     updated_at: string;
 }
@@ -202,6 +203,8 @@ export type TextEditorImageType = {
     created_at: string;
     updated_at: string;
 }
+
+export type UserType = AuthType;
 
 export type AxiosErrorResponseType = {
     message: string;

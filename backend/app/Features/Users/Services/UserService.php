@@ -49,14 +49,14 @@ class UserService implements UserServiceInterface
 		return $user;
 	}
 
-	public function update(UserUpdateDTO $data, User $user): User
+	public function update(UserUpdateDTO $data, UserRoleDTO $role, User $user): User
 	{
-		DB::transaction(function () use ($data, $user) {
-			// $this->userService->syncRoles($updated_user, [UserRoleDTO::fromRequest($request)]);
-			$user = $this->userRepository->update($user, $data->toArray());
-			return $user;
+		$updated_user = DB::transaction(function () use ($data, $role, $user) {
+			$updated_user = $this->userRepository->update($user, $data->toArray());
+			$this->syncRoles($updated_user, [$role]);
+			return $updated_user;
 		});
-		return $user;
+		return $updated_user;
 	}
 
 	public function toggleBlock(User $user): User

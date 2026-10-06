@@ -3,6 +3,8 @@
 namespace App\Features\Users\Controllers;
 
 // use App\Features\Users\DTO\UserRoleDTO;
+
+use App\Features\Users\DTO\UserRoleDTO;
 use App\Features\Users\DTO\UserUpdateDTO;
 use App\Features\Users\Interfaces\UserServiceInterface;
 use App\Http\Controllers\Controller;
@@ -28,6 +30,7 @@ class UserUpdateController extends Controller
             //code...
             $updated_user = $this->userService->update(
                 UserUpdateDTO::fromRequest($request),
+                UserRoleDTO::fromRequest($request),
                 $user
             );
             // $this->userService->syncRoles($updated_user, [UserRoleDTO::fromRequest($request)]);

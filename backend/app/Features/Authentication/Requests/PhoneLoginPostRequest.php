@@ -27,7 +27,7 @@ class PhoneLoginPostRequest extends InputRequest
         return [
             'phone' => 'required|numeric|digits:10',
             'password' => 'required|string',
-            // 'captcha' => 'required|captcha'
+            'captcha' => 'required|captcha'
         ];
     }
 

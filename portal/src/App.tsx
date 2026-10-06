@@ -51,6 +51,7 @@ const LegalContent = lazy(() => import("@/pages/LegalContent/index.tsx"));
 const Blog = lazy(() => import("@/pages/Blog/index.tsx"));
 const Category = lazy(() => import("@/pages/Category/index.tsx"));
 const SubCategory = lazy(() => import("@/pages/SubCategory/index.tsx"));
+const User = lazy(() => import("@/pages/User/index.tsx"));
 
 function App() {
   return (
@@ -101,6 +102,7 @@ function App() {
                     path={page_routes.sub_categories.link}
                     element={<SubCategory />}
                   />
+                  <Route path={page_routes.users.link} element={<User />} />
                 </Route>
               </Route>
             </Route>

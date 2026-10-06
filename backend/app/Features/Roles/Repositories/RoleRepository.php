@@ -34,7 +34,7 @@ class RoleRepository implements RoleRepositoryInterface
     public function query(): QueryBuilder
     {
         return QueryBuilder::for($this->model())
-            ->defaultSort('-id')
+            ->defaultSort('name')
             ->allowedSorts('id', 'name')
             ->allowedFilters([
                 AllowedFilter::custom('search', new CommonFilter, null, false),

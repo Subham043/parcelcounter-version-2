@@ -14,6 +14,7 @@ import {
   FilePenLine,
   ChartBarStacked,
   ChartColumnStacked,
+  Users,
 } from "lucide-react";
 import { cn } from "@/utils/lib/utils";
 import { useMemo, useState } from "react";
@@ -112,6 +113,11 @@ const navSections: NavSection[] = [
         label: page_routes.sub_categories.name,
         icon: <ChartColumnStacked size={17} />,
         to: page_routes.sub_categories.link,
+      },
+      {
+        label: page_routes.users.name,
+        icon: <Users size={17} />,
+        to: page_routes.users.link,
       },
     ],
     // allowedRolesAndPermission: [

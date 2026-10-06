@@ -45,10 +45,10 @@ export default function CategoryForm() {
       swipeDirection="right"
     >
       <DrawerContent className="w-[50vw] h-full flex flex-col">
-        <DrawerHeader className="shrink-0">
+        <DrawerHeader className="shrink-0 px-3.5">
           <DrawerTitle>{`${modal.type === "create" ? "Create" : "Update"} Category`}</DrawerTitle>
         </DrawerHeader>
-        <div className="min-h-0 flex-1 p-4">
+        <div className="min-h-0 flex-1 p-3">
           {isLoading ? (
             <Spinner className="size-6 mx-auto" />
           ) : (
@@ -56,7 +56,7 @@ export default function CategoryForm() {
               className="space-y-5 flex h-full min-h-0 flex-col"
               onSubmit={onSubmit}
             >
-              <div className="scroll-fade min-h-0 flex-1 overflow-y-auto">
+              <div className="scroll-fade min-h-0 flex-1 overflow-y-auto px-0.5">
                 <FieldGroup className="grid grid-cols-1 gap-4 md:grid-cols-3">
                   <Controller
                     name="name"
@@ -261,7 +261,7 @@ export default function CategoryForm() {
                   </div>
                 </FieldGroup>
               </div>
-              <DrawerFooter className="shrink-0 p-0">
+              <DrawerFooter className="shrink-0 p-0 px-0.5">
                 <div className="flex items-center gap-1">
                   <Button
                     type="submit"

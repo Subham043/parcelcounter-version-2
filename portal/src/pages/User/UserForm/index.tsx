@@ -1,5 +1,5 @@
 import { Controller } from "react-hook-form";
-import { useDeliverySlotForm } from "./useDeliverySlotForm";
+import { useUserForm } from "./useUserForm";
 import { Spinner } from "@/components/ui/spinner";
 import {
   Field,
@@ -18,13 +18,13 @@ import {
   DrawerTitle,
 } from "@/components/ui/drawer";
 import { Switch } from "@/components/ui/switch";
+import RoleSelect from "@/components/RoleSelect";
 
 /*
- * DeliverySlot Form Drawer
+ * User Form Drawer
  */
-export default function DeliverySlotForm() {
-  const { form, modal, isLoading, onSubmit, handleClose } =
-    useDeliverySlotForm();
+export default function UserForm() {
+  const { form, modal, isLoading, onSubmit, handleClose } = useUserForm();
   return (
     <Drawer
       open={modal.show}
@@ -37,9 +37,9 @@ export default function DeliverySlotForm() {
     >
       <DrawerContent className="h-full flex flex-col">
         <DrawerHeader className="shrink-0 px-3.5">
-          <DrawerTitle>{`${modal.type === "create" ? "Create" : "Update"} Delivery Slot`}</DrawerTitle>
+          <DrawerTitle>{`${modal.type === "create" ? "Create" : "Update"} User`}</DrawerTitle>
         </DrawerHeader>
-        <div className="min-h-0 flex-1 p-3">
+        <div className="min-h-0 flex-1 overflow-hidden p-3">
           {isLoading ? (
             <Spinner className="size-6 mx-auto" />
           ) : (
@@ -54,13 +54,13 @@ export default function DeliverySlotForm() {
                     control={form.control}
                     render={({ field, fieldState }) => (
                       <Field data-invalid={fieldState.invalid}>
-                        <FieldLabel htmlFor="charge-form-name">Name</FieldLabel>
+                        <FieldLabel htmlFor="user-form-name">Name</FieldLabel>
                         <Input
                           {...field}
                           aria-invalid={fieldState.invalid}
                           placeholder="Enter name"
                           autoComplete="off"
-                          id="charge-form-name"
+                          id="user-form-name"
                         />
                         {fieldState.invalid && (
                           <FieldError errors={[fieldState.error]} />
@@ -69,20 +69,75 @@ export default function DeliverySlotForm() {
                     )}
                   />
                   <Controller
-                    name="start_time"
+                    name="phone"
                     control={form.control}
                     render={({ field, fieldState }) => (
                       <Field data-invalid={fieldState.invalid}>
-                        <FieldLabel htmlFor="charge-form-start_time">
-                          Start Time
+                        <FieldLabel htmlFor="user-form-phone">Phone</FieldLabel>
+                        <Input
+                          {...field}
+                          aria-invalid={fieldState.invalid}
+                          placeholder="Enter phone"
+                          autoComplete="off"
+                          id="user-form-phone"
+                        />
+                        {fieldState.invalid && (
+                          <FieldError errors={[fieldState.error]} />
+                        )}
+                      </Field>
+                    )}
+                  />
+                  <Controller
+                    name="email"
+                    control={form.control}
+                    render={({ field, fieldState }) => (
+                      <Field data-invalid={fieldState.invalid}>
+                        <FieldLabel htmlFor="user-form-email">Email</FieldLabel>
+                        <Input
+                          {...field}
+                          aria-invalid={fieldState.invalid}
+                          placeholder="Enter email"
+                          autoComplete="off"
+                          id="user-form-email"
+                          type="email"
+                        />
+                        {fieldState.invalid && (
+                          <FieldError errors={[fieldState.error]} />
+                        )}
+                      </Field>
+                    )}
+                  />
+                  <Controller
+                    name="role"
+                    control={form.control}
+                    render={({ field, fieldState }) => (
+                      <Field data-invalid={fieldState.invalid}>
+                        <FieldLabel htmlFor="user-form-role">Role</FieldLabel>
+                        <RoleSelect
+                          value={field.value}
+                          onChange={(v) => field.onChange(v)}
+                        />
+                        {fieldState.invalid && (
+                          <FieldError errors={[fieldState.error]} />
+                        )}
+                      </Field>
+                    )}
+                  />
+                  <Controller
+                    name="password"
+                    control={form.control}
+                    render={({ field, fieldState }) => (
+                      <Field data-invalid={fieldState.invalid}>
+                        <FieldLabel htmlFor="user-form-password">
+                          Password
                         </FieldLabel>
                         <Input
                           {...field}
                           aria-invalid={fieldState.invalid}
-                          placeholder="Enter start time"
-                          type="time"
+                          placeholder="Enter password"
                           autoComplete="off"
-                          id="charge-form-start_time"
+                          id="user-form-password"
+                          type="password"
                         />
                         {fieldState.invalid && (
                           <FieldError errors={[fieldState.error]} />
@@ -91,20 +146,20 @@ export default function DeliverySlotForm() {
                     )}
                   />
                   <Controller
-                    name="end_time"
+                    name="confirm_password"
                     control={form.control}
                     render={({ field, fieldState }) => (
                       <Field data-invalid={fieldState.invalid}>
-                        <FieldLabel htmlFor="charge-form-end_time">
-                          End Time
+                        <FieldLabel htmlFor="user-form-confirm-password">
+                          Confirm Password
                         </FieldLabel>
                         <Input
                           {...field}
                           aria-invalid={fieldState.invalid}
-                          placeholder="Enter end time"
-                          type="time"
+                          placeholder="Enter confirm password"
                           autoComplete="off"
-                          id="charge-form-end_time"
+                          id="user-form-confirm-password"
+                          type="password"
                         />
                         {fieldState.invalid && (
                           <FieldError errors={[fieldState.error]} />
@@ -113,39 +168,18 @@ export default function DeliverySlotForm() {
                     )}
                   />
                   <Controller
-                    name="is_cod_allowed"
+                    name="is_blocked"
                     control={form.control}
                     render={({ field, fieldState }) => (
                       <Field data-invalid={fieldState.invalid}>
                         <div className="flex items-center space-x-2">
                           <Switch
-                            id="is_cod_allowed"
+                            id="is_blocked"
                             checked={field.value}
                             onCheckedChange={field.onChange}
                           />
-                          <FieldLabel htmlFor="is_cod_allowed">
-                            Is COD Allowed?
-                          </FieldLabel>
-                        </div>
-                        {fieldState.invalid && (
-                          <FieldError errors={[fieldState.error]} />
-                        )}
-                      </Field>
-                    )}
-                  />
-                  <Controller
-                    name="is_active"
-                    control={form.control}
-                    render={({ field, fieldState }) => (
-                      <Field data-invalid={fieldState.invalid}>
-                        <div className="flex items-center space-x-2">
-                          <Switch
-                            id="is_active"
-                            checked={field.value}
-                            onCheckedChange={field.onChange}
-                          />
-                          <FieldLabel htmlFor="is_active">
-                            Is Active?
+                          <FieldLabel htmlFor="is_blocked">
+                            Is Blocked?
                           </FieldLabel>
                         </div>
                         {fieldState.invalid && (
