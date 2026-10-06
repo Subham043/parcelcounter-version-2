@@ -10,6 +10,8 @@ import {
   useUserToggleVerificationMutation,
 } from "@/utils/data/mutation/user";
 import StatusToggleBadge from "@/components/StatusToggleBadge";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { getNameInitials } from "@/utils/helper";
 
 type UserTableProps = {
   users: UserType[];
@@ -53,13 +55,20 @@ const UserTableRow = memo(function UserTableRow({
   return (
     <tr>
       <td className="px-4 py-3 font-medium text-gray-900">
-        <p className="text-sm font-medium text-gray-800">{name}</p>
+        <div className="flex items-center gap-2 py-1 ">
+          <Avatar className="h-8 w-8 rounded-lg">
+            <AvatarFallback className="rounded-lg">
+              {getNameInitials(name)}
+            </AvatarFallback>
+          </Avatar>
+          <div className="px-1">
+            <p className="text-sm font-medium text-gray-800">{name}</p>
+            <p className="text-xs text-gray-500">{phone}</p>
+          </div>
+        </div>
       </td>
       <td className="px-4 py-3 ">
-        <p className="text-sm text-gray-500">{email}</p>
-      </td>
-      <td className="px-4 py-3 ">
-        <p className="text-sm text-gray-500">{phone}</p>
+        <p className="text-sm text-gray-500">{email ?? "-"}</p>
       </td>
       <td className="px-4 py-3 ">
         <p className="text-sm text-gray-500">
@@ -103,9 +112,8 @@ function UserTable({ loading, users }: UserTableProps) {
       <thead className="bg-gray-50 text-xs uppercase tracking-wide text-gray-500">
         <tr>
           {[
-            "Name",
+            "Profile",
             "Email",
-            "Phone",
             "Role",
             "Verified",
             "Is Active",
@@ -120,7 +128,7 @@ function UserTable({ loading, users }: UserTableProps) {
       </thead>
       <tbody className="divide-y divide-gray-100">
         {loading ? (
-          <TableRowLoading colSpan={8} />
+          <TableRowLoading colSpan={7} />
         ) : (
           users.map((item) => (
             <UserTableRow

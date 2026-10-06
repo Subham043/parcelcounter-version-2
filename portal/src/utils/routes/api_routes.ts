@@ -137,6 +137,15 @@ export const api_routes = {
     toggle_status: "/api/v1/banners/status",
     excel: "/api/v1/banners/excel",
   },
+  about_section: {
+    paginate: "/api/v1/about-sections/paginate",
+    view: "/api/v1/about-sections/view",
+    create: "/api/v1/about-sections/create",
+    update: "/api/v1/about-sections/update",
+    delete: "/api/v1/about-sections/delete",
+    toggle_status: "/api/v1/about-sections/status",
+    excel: "/api/v1/about-sections/excel",
+  },
   payment_option: {
     paginate: "/api/v1/payment-options/paginate",
     view: "/api/v1/payment-options/view",

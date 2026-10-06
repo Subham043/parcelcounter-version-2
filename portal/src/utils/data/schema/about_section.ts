@@ -1,0 +1,79 @@
+import { stripHtml } from "@/utils/helper";
+import * as yup from "yup";
+
+export const aboutSectionFormSchema = yup
+    .object()
+    .shape({
+        is_create: yup
+            .boolean()
+            .optional()
+            .default(true),
+        heading: yup
+            .string()
+            .typeError("Heading must contain characters only")
+            .max(255, "Heading is too Long!")
+            .required("Heading is required"),
+        description: yup
+            .string()
+            .typeError("Description must contain characters only")
+            .test(
+                "not-empty",
+                "Description is required",
+                (value) => {
+                    if (!value) return false;
+                    const text = stripHtml(value);
+                    return text.length > 0;
+                }
+            )
+            .required("Description is required"),
+        description_unfiltered: yup
+            .string()
+            .typeError("Description must contain characters only")
+            .required("Description is required"),
+        is_active: yup
+            .boolean()
+            .typeError("Is Active must contain boolean only")
+            .optional()
+            .default(true),
+        is_popular: yup
+            .boolean()
+            .typeError("Is Popular must contain boolean only")
+            .optional()
+            .default(false),
+        image: yup
+            .mixed()
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            .when("is_create", {
+                is: true,
+                then: (schema) => schema.test("required", "Image is required", (value: any) => {
+                    return value !== undefined;
+                }),
+            })
+
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            .test("fileSize", "File size should be less than 2MB", (value: any) => {
+                if (value !== undefined) {
+                    return value.size <= 2000000;
+                }
+                return true;
+            })
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            .test("fileFormat", "Please select a valid image", (value: any) => {
+                if (value !== undefined) {
+                    return ["image/png", "image/jpeg", "image/jpg", "image/webp"].includes(value.type);
+                }
+                return true;
+            })
+            .transform((value) => {
+                if (value !== undefined) {
+                    return value as Blob;
+                }
+                return undefined;
+            }),
+    })
+    .required();
+
+
+export type AboutSectionFormValuesType = yup.InferType<
+    typeof aboutSectionFormSchema
+>;

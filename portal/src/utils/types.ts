@@ -195,6 +195,19 @@ export type LegalContentType = {
     updated_at: string;
 }
 
+export type AboutSectionType = {
+    id: number;
+    heading: string;
+    description: string;
+    description_unfiltered: string;
+    image: string;
+    image_url: string;
+    is_active: boolean;
+    user_id: number;
+    created_at: string;
+    updated_at: string;
+}
+
 export type TextEditorImageType = {
     id: number;
     image: string;

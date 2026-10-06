@@ -52,6 +52,7 @@ const Blog = lazy(() => import("@/pages/Blog/index.tsx"));
 const Category = lazy(() => import("@/pages/Category/index.tsx"));
 const SubCategory = lazy(() => import("@/pages/SubCategory/index.tsx"));
 const User = lazy(() => import("@/pages/User/index.tsx"));
+const AboutSection = lazy(() => import("@/pages/AboutSection/index.tsx"));
 
 function App() {
   return (
@@ -103,6 +104,10 @@ function App() {
                     element={<SubCategory />}
                   />
                   <Route path={page_routes.users.link} element={<User />} />
+                  <Route
+                    path={page_routes.about_section.link}
+                    element={<AboutSection />}
+                  />
                 </Route>
               </Route>
             </Route>

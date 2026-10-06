@@ -25,5 +25,6 @@ export const page_routes = {
   categories: { link: "/categories", name: "Categories" },
   sub_categories: { link: "/sub-categories", name: "Sub-Categories" },
   users: { link: "/users", name: "Users" },
+  about_section: { link: "/about-section", name: "About Section" },
   dashboard: { link: "/", name: "Dashboard" },
 } as const;
