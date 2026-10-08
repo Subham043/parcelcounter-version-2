@@ -2,10 +2,11 @@
 
 namespace App\Features\ProductSpecifications\Controllers;
 
+use App\Features\ProductSpecifications\DTO\ProductSpecificationFilterDTO;
 use App\Features\ProductSpecifications\Interfaces\ProductSpecificationServiceInterface;
+use App\Features\ProductSpecifications\Requests\ProductSpecificationFilterRequest;
 use App\Http\Controllers\Controller;
 use App\Features\ProductSpecifications\Resources\ProductSpecificationCollection;
-use Illuminate\Http\Request;
 
 class ProductSpecificationPaginateController extends Controller
 {
@@ -15,12 +16,12 @@ class ProductSpecificationPaginateController extends Controller
      * Returns a paginated collection of specifications.
      *
      * @param int $product_id
-     * @param Request $request
+     * @param ProductSpecificationFilterRequest $request
      * @return ProductSpecificationCollection
      */
-    public function index($product_id, Request $request)
+    public function index($product_id, ProductSpecificationFilterRequest $request)
     {
-        $data = $this->specificationService->paginate($product_id, $request->total ?? 10);
+        $data = $this->specificationService->paginate($product_id, ProductSpecificationFilterDTO::fromRequest($request));
         return ProductSpecificationCollection::collection($data);
     }
 }

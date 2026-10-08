@@ -2,30 +2,54 @@
 
 namespace App\Features\ContactFormEnquiries\Repositories;
 
-
+use App\Features\ContactFormEnquiries\DTO\ContactFormEnquiryFilterDTO;
 use App\Features\ContactFormEnquiries\Models\ContactFormEnquiry;
 use App\Features\ContactFormEnquiries\Interfaces\ContactFormEnquiryRepositoryInterface;
+use App\Http\CommonFilters\SearchFilter;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Spatie\QueryBuilder\QueryBuilder;
 use Illuminate\Database\Eloquent\Builder;
 use Spatie\QueryBuilder\AllowedFilter;
-use Spatie\QueryBuilder\Filters\Filter;
 
 class ContactFormEnquiryRepository implements ContactFormEnquiryRepositoryInterface
 {
-    public function model(): Builder
+    private const SORT_COLUMNS = [
+        'id',
+        'name',
+        'created_at'
+    ];
+
+    private const SEARCH_COLUMNS = [
+        'name', 'email', 'phone', 'page_url', 'subject', 'message'
+    ];
+
+    private function getSelectColumns(): array
     {
-        return ContactFormEnquiry::select('id', 'name', 'email', 'phone', 'subject', 'message', 'page_url', 'created_at', 'updated_at');
+        return [
+            ...self::SORT_COLUMNS,
+            'name', 
+            'email', 
+            'phone', 
+            'subject', 
+            'message', 
+            'page_url',
+            'updated_at'
+        ];
     }
 
-    public function query(): QueryBuilder
+    public function model(?ContactFormEnquiryFilterDTO $dto = null): Builder
     {
-        return QueryBuilder::for($this->model())
-            ->defaultSort('-id')
-            ->allowedSorts('id', 'name', 'created_at')
+        return ContactFormEnquiry::select(...$this->getSelectColumns());
+    }
+
+    public function query(?ContactFormEnquiryFilterDTO $dto = null): QueryBuilder
+    {
+        return QueryBuilder::for($this->model($dto))
+            ->defaultSort($dto?->sort ?? '-id')
+            ->allowedSorts(...self::SORT_COLUMNS)
             ->allowedFilters([
-                AllowedFilter::custom('search', new CommonFilter, null, false)
+                AllowedFilter::custom('search', new SearchFilter(self::SEARCH_COLUMNS), null, false)
             ]);
     }
 
@@ -61,38 +85,13 @@ class ContactFormEnquiryRepository implements ContactFormEnquiryRepositoryInterf
         return $this->model()->where($column, $value)->firstOrFail();
     }
 
-    public function paginate(int $total = 15): LengthAwarePaginator
+    public function paginate(?ContactFormEnquiryFilterDTO $dto = null): LengthAwarePaginator
     {
-        return $this->query()->paginate($total)->appends(request()->query());
+        return $this->query($dto)->paginate($dto?->total ?? 10)->appends(request()->query());
     }
 
-    public function getAll(): Collection
+    public function getAll(?ContactFormEnquiryFilterDTO $dto = null): Collection
     {
-        return $this->query()->lazy(100)->collect();
-    }
-}
-
-class CommonFilter implements Filter
-{
-    public function __invoke(Builder $query, mixed $value, string $property): void
-    {
-        $query->where(function ($q) use ($value) {
-            $q->where('name', $value)
-                ->orWhere('email', $value)
-                ->orWhere('phone', $value)
-                ->orWhere('page_url', $value)
-                ->orWhere('subject', $value)
-                ->orWhere('message', $value);
-
-            $search = preg_replace('/[+\-<>()~*"@]/', ' ', $value);
-            $search = trim($search);
-
-            if ($search !== '') {
-                $q->orWhereRaw(
-                    'MATCH(name, email, phone, page_url, subject, message) AGAINST(? IN BOOLEAN MODE)',
-                    [$search . '*']
-                );
-            }
-        });
+        return $this->query($dto)->lazy(100)->collect();
     }
 }

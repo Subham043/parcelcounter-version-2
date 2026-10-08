@@ -4,6 +4,7 @@ namespace App\Features\Users\Services;
 
 use App\Features\Authentication\Services\AuthCache;
 use App\Features\Users\DTO\UserCreateDTO;
+use App\Features\Users\DTO\UserFilterDTO;
 use App\Features\Users\DTO\UserRoleDTO;
 use App\Features\Users\DTO\UserUpdateDTO;
 use App\Features\Users\Exports\UserExport;
@@ -19,9 +20,9 @@ class UserService implements UserServiceInterface
 
 	public function __construct(private UserRepositoryInterface $userRepository) {}
 
-	public function paginate(Int $total = 10): LengthAwarePaginator
+	public function paginate(?UserFilterDTO $dto = null): LengthAwarePaginator
 	{
-		return $this->userRepository->paginate($total);
+		return $this->userRepository->paginate($dto);
 	}
 
 	public function getById(Int $id): User
@@ -89,8 +90,8 @@ class UserService implements UserServiceInterface
 		return $user;
 	}
 
-	public function exportUsers(): \Symfony\Component\HttpFoundation\BinaryFileResponse
+	public function exportUsers(?UserFilterDTO $dto = null): \Symfony\Component\HttpFoundation\BinaryFileResponse
 	{
-		return Excel::download(new UserExport($this->userRepository->query()), 'users.xlsx');
+		return Excel::download(new UserExport($this->userRepository->query($dto)), 'users.xlsx');
 	}
 }

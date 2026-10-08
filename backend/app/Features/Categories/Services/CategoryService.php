@@ -3,6 +3,7 @@
 namespace App\Features\Categories\Services;
 
 use App\Features\Categories\DTO\CategoryDTO;
+use App\Features\Categories\DTO\CategoryFilterDTO;
 use App\Features\Categories\Exports\CategoryExport;
 use App\Features\Categories\Interfaces\CategoryRepositoryInterface;
 use App\Features\Categories\Interfaces\CategoryServiceInterface;
@@ -17,9 +18,9 @@ class CategoryService implements CategoryServiceInterface
 
 	public function __construct(private CategoryRepositoryInterface $categoryRepository) {}
 
-	public function paginate(Int $total = 10, bool $isSelect = false): LengthAwarePaginator
+	public function paginate(?CategoryFilterDTO $dto = null): LengthAwarePaginator
 	{
-		return $this->categoryRepository->paginate($total, $isSelect);
+		return $this->categoryRepository->paginate($dto);
 	}
 
 	public function getById(Int $id): Category
@@ -64,8 +65,8 @@ class CategoryService implements CategoryServiceInterface
 		});
 	}
 
-	public function exportCategories(): \Symfony\Component\HttpFoundation\BinaryFileResponse
+	public function exportCategories(?CategoryFilterDTO $dto = null): \Symfony\Component\HttpFoundation\BinaryFileResponse
 	{
-		return Excel::download(new CategoryExport($this->categoryRepository->query()), 'categorys.xlsx');
+		return Excel::download(new CategoryExport($this->categoryRepository->query($dto)), 'categorys.xlsx');
 	}
 }

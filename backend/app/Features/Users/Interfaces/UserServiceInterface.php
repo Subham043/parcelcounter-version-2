@@ -3,6 +3,7 @@
 namespace App\Features\Users\Interfaces;
 
 use App\Features\Users\DTO\UserCreateDTO;
+use App\Features\Users\DTO\UserFilterDTO;
 use App\Features\Users\DTO\UserRoleDTO;
 use App\Features\Users\DTO\UserUpdateDTO;
 use App\Features\Users\Models\User;
@@ -10,7 +11,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 interface UserServiceInterface
 {
-    public function paginate(Int $total = 10): LengthAwarePaginator;
+    public function paginate(?UserFilterDTO $dto = null): LengthAwarePaginator;
     public function create(UserCreateDTO $data, UserRoleDTO $role): User;
     public function update(UserUpdateDTO $data, UserRoleDTO $role, User $user): User;
     public function getById(int $id): User;
@@ -21,5 +22,5 @@ interface UserServiceInterface
      * @param UserRoleDTO[] $roles
      */
     public function syncRoles(User $user, array $roles = []): void;
-    public function exportUsers(): \Symfony\Component\HttpFoundation\BinaryFileResponse;
+    public function exportUsers(?UserFilterDTO $dto = null): \Symfony\Component\HttpFoundation\BinaryFileResponse;
 }

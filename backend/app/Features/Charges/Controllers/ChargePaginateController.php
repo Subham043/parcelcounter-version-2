@@ -2,10 +2,11 @@
 
 namespace App\Features\Charges\Controllers;
 
+use App\Features\Charges\DTO\ChargeFilterDTO;
 use App\Features\Charges\Interfaces\ChargeServiceInterface;
+use App\Features\Charges\Requests\ChargeFilterRequest;
 use App\Http\Controllers\Controller;
 use App\Features\Charges\Resources\ChargeCollection;
-use Illuminate\Http\Request;
 
 class ChargePaginateController extends Controller
 {
@@ -14,12 +15,12 @@ class ChargePaginateController extends Controller
     /**
      * Returns a paginated collection of charges.
      *
-     * @param Request $request
+     * @param ChargeFilterRequest $request
      * @return ChargeCollection
      */
-    public function index(Request $request)
+    public function index(ChargeFilterRequest $request)
     {
-        $data = $this->chargeService->paginate($request->total ?? 10);
+        $data = $this->chargeService->paginate(ChargeFilterDTO::fromRequest($request));
         return ChargeCollection::collection($data);
     }
 }

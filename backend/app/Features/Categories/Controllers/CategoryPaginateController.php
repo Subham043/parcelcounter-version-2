@@ -2,10 +2,11 @@
 
 namespace App\Features\Categories\Controllers;
 
+use App\Features\Categories\DTO\CategoryFilterDTO;
 use App\Features\Categories\Interfaces\CategoryServiceInterface;
+use App\Features\Categories\Requests\CategoryFilterRequest;
 use App\Http\Controllers\Controller;
 use App\Features\Categories\Resources\CategoryCollection;
-use Illuminate\Http\Request;
 
 class CategoryPaginateController extends Controller
 {
@@ -14,12 +15,12 @@ class CategoryPaginateController extends Controller
     /**
      * Returns a paginated collection of categorys.
      *
-     * @param Request $request
+     * @param CategoryFilterRequest $request
      * @return CategoryCollection
      */
-    public function index(Request $request)
+    public function index(CategoryFilterRequest $request)
     {
-        $data = $this->categoryService->paginate($request->total ?? 10, $request->query('is-select') == 'yes');
+        $data = $this->categoryService->paginate(CategoryFilterDTO::fromRequest($request));
         return CategoryCollection::collection($data);
     }
 }

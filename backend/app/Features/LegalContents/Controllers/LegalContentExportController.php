@@ -2,8 +2,10 @@
 
 namespace App\Features\LegalContents\Controllers;
 
+use App\Features\LegalContents\DTO\LegalContentFilterDTO;
 use App\Http\Controllers\Controller;
 use App\Features\LegalContents\Interfaces\LegalContentServiceInterface;
+use App\Features\LegalContents\Requests\LegalContentFilterRequest;
 
 class LegalContentExportController extends Controller
 {
@@ -14,10 +16,10 @@ class LegalContentExportController extends Controller
      *
      * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
      */
-    public function index()
+    public function index(LegalContentFilterRequest $request)
     {
         ini_set('memory_limit', '-1');
         ini_set('max_execution_time', 300);
-        return $this->legalContentService->exportLegalContents();
+        return $this->legalContentService->exportLegalContents(LegalContentFilterDTO::fromRequest($request));
     }
 }

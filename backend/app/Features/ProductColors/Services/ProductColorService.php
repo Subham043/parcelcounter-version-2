@@ -3,6 +3,7 @@
 namespace App\Features\ProductColors\Services;
 
 use App\Features\ProductColors\DTO\ProductColorDTO;
+use App\Features\ProductColors\DTO\ProductColorFilterDTO;
 use App\Features\ProductColors\Interfaces\ProductColorRepositoryInterface;
 use App\Features\ProductColors\Interfaces\ProductColorServiceInterface;
 use App\Features\ProductColors\Models\ProductColor;
@@ -14,9 +15,9 @@ class ProductColorService implements ProductColorServiceInterface
 
 	public function __construct(private ProductColorRepositoryInterface $colorRepository) {}
 
-	public function paginate(int $product_id, int $total = 10): LengthAwarePaginator
+	public function paginate(int $product_id, ?ProductColorFilterDTO $dto = null): LengthAwarePaginator
 	{
-		return $this->colorRepository->paginate($product_id, $total);
+		return $this->colorRepository->paginate($product_id, $dto);
 	}
 
 	public function getById(int $product_id, int $id): ProductColor

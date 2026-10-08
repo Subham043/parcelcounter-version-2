@@ -2,43 +2,81 @@
 
 namespace App\Features\Categories\Repositories;
 
-
+use App\Features\Categories\DTO\CategoryFilterDTO;
 use App\Features\Categories\Models\Category;
 use App\Features\Categories\Interfaces\CategoryRepositoryInterface;
+use App\Http\CommonFilters\BooleanFilter;
+use App\Http\CommonFilters\SearchFilter;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Spatie\QueryBuilder\QueryBuilder;
 use Illuminate\Database\Eloquent\Builder;
 use Spatie\QueryBuilder\AllowedFilter;
-use Spatie\QueryBuilder\Filters\Filter;
 
 class CategoryRepository implements CategoryRepositoryInterface
 {
-    public function model(bool $isSelect = false): Builder
+    private const SORT_COLUMNS = [
+        'id',
+        'name',
+    ];
+
+    private const SEARCH_COLUMNS = [
+        'name',
+        'slug',
+        'heading',
+        'description_unfiltered',
+        'meta_title',
+        'meta_description',
+        'meta_keywords',
+    ];
+
+    private function getSelectColumns(): array
     {
-        return Category::when($isSelect==true, function ($query) {
-            return $query->select('id', 'name', 'slug');
-        })
-        ->when($isSelect==false, function ($query) {
-            return $query->select('id', 'name', 'heading', 'slug', 'description', 'description_unfiltered', 'image', 'meta_title', 'meta_description', 'meta_keywords', 'is_active', 'user_id', 'created_at', 'updated_at');
-        });
+        return [
+            ...self::SORT_COLUMNS,
+            'slug',
+        ];
     }
 
-    public function query(bool $isSelect = false): QueryBuilder
+    private function getAllColumns(): array
     {
-        return QueryBuilder::for($this->model($isSelect))
-            ->defaultSort('-id')
-            ->allowedSorts('id', 'name')
+        return [
+            ...$this->getSelectColumns(),
+            'heading',
+            'description',
+            'description_unfiltered',
+            'image',
+            'meta_title',
+            'meta_description',
+            'meta_keywords',
+            'is_active',
+            'user_id',
+            'created_at',
+            'updated_at',
+        ];
+    }
+    
+    public function model(?CategoryFilterDTO $dto = null): Builder
+    {
+        return Category::query()
+        ->when(
+            $dto?->is_select !== null,
+            fn ($query) => $query->select(
+                ...($dto?->is_select === true
+                    ? $this->getSelectColumns()
+                    : $this->getAllColumns())
+            )
+        );
+    }
+
+    public function query(?CategoryFilterDTO $dto = null): QueryBuilder
+    {
+        return QueryBuilder::for($this->model($dto))
+            ->defaultSort($dto?->sort ?? '-id')
+            ->allowedSorts(...self::SORT_COLUMNS)
             ->allowedFilters([
-                AllowedFilter::custom('search', new CommonFilter, null, false),
-                AllowedFilter::callback('is_active', function (Builder $query, $value) {
-                    if (strtolower($value) == "yes") {
-                        $query->where('is_active', true);
-                    }
-                    if (strtolower($value) == "no") {
-                        $query->where('is_active', false);
-                    }
-                }),
+                AllowedFilter::custom('search', new SearchFilter(self::SEARCH_COLUMNS), null, false),
+                AllowedFilter::callback('is_active', new BooleanFilter),
             ]);
     }
 
@@ -74,30 +112,13 @@ class CategoryRepository implements CategoryRepositoryInterface
         return $this->model()->where($column, $value)->firstOrFail();
     }
 
-    public function paginate(int $total = 15, bool $isSelect = false): LengthAwarePaginator
+    public function paginate(?CategoryFilterDTO $dto = null): LengthAwarePaginator
     {
-        return $this->query($isSelect)->paginate($total)->appends(request()->query());
+        return $this->query($dto)->paginate($dto?->total ?? 10)->appends(request()->query());
     }
 
-    public function getAll(bool $isSelect = false): Collection
+    public function getAll(?CategoryFilterDTO $dto = null): Collection
     {
-        return $this->query($isSelect)->lazy(100)->collect();
-    }
-}
-
-class CommonFilter implements Filter
-{
-    public function __invoke(Builder $query, mixed $value, string $property): void
-    {
-        $query->where(function ($q) use ($value) {
-            $q->where('name', $value)
-                ->orWhere('slug', $value)
-                ->orWhere('heading', $value)
-                ->orWhere('description_unfiltered', $value)
-                ->orWhere('meta_title', $value)
-                ->orWhere('meta_description', $value)
-                ->orWhere('meta_keywords', $value)
-                ->orWhereRaw('MATCH(name, slug, heading, description_unfiltered, meta_title, meta_description, meta_keywords) AGAINST(? IN BOOLEAN MODE)', [$value . '*']);
-        });
+        return $this->query($dto)->lazy(100)->collect();
     }
 }

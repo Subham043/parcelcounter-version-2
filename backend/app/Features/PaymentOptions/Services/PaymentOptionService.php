@@ -3,6 +3,7 @@
 namespace App\Features\PaymentOptions\Services;
 
 use App\Features\PaymentOptions\DTO\PaymentOptionDTO;
+use App\Features\PaymentOptions\DTO\PaymentOptionFilterDTO;
 use App\Features\PaymentOptions\Exports\PaymentOptionExport;
 use App\Features\PaymentOptions\Interfaces\PaymentOptionRepositoryInterface;
 use App\Features\PaymentOptions\Interfaces\PaymentOptionServiceInterface;
@@ -17,9 +18,9 @@ class PaymentOptionService implements PaymentOptionServiceInterface
 
 	public function __construct(private PaymentOptionRepositoryInterface $optionRepository) {}
 
-	public function paginate(Int $total = 10): LengthAwarePaginator
+	public function paginate(?PaymentOptionFilterDTO $dto = null): LengthAwarePaginator
 	{
-		return $this->optionRepository->paginate($total);
+		return $this->optionRepository->paginate($dto);
 	}
 
 	public function getById(Int $id): PaymentOption
@@ -64,8 +65,8 @@ class PaymentOptionService implements PaymentOptionServiceInterface
 		});
 	}
 
-	public function exportPaymentOptions(): \Symfony\Component\HttpFoundation\BinaryFileResponse
+	public function exportPaymentOptions(?PaymentOptionFilterDTO $dto = null): \Symfony\Component\HttpFoundation\BinaryFileResponse
 	{
-		return Excel::download(new PaymentOptionExport($this->optionRepository->query()), 'payment-options.xlsx');
+		return Excel::download(new PaymentOptionExport($this->optionRepository->query($dto)), 'payment-options.xlsx');
 	}
 }

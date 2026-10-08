@@ -2,10 +2,11 @@
 
 namespace App\Features\ProductVideos\Controllers;
 
+use App\Features\ProductVideos\DTO\ProductVideoFilterDTO;
 use App\Features\ProductVideos\Interfaces\ProductVideoServiceInterface;
+use App\Features\ProductVideos\Requests\ProductVideoFilterRequest;
 use App\Http\Controllers\Controller;
 use App\Features\ProductVideos\Resources\ProductVideoCollection;
-use Illuminate\Http\Request;
 
 class ProductVideoPaginateController extends Controller
 {
@@ -15,12 +16,12 @@ class ProductVideoPaginateController extends Controller
      * Returns a paginated collection of videos.
      *
      * @param int $product_id
-     * @param Request $request
+     * @param ProductVideoFilterRequest $request
      * @return ProductVideoCollection
      */
-    public function index($product_id, Request $request)
+    public function index($product_id, ProductVideoFilterRequest $request)
     {
-        $data = $this->videoService->paginate($product_id, $request->total ?? 10);
+        $data = $this->videoService->paginate($product_id, ProductVideoFilterDTO::fromRequest($request));
         return ProductVideoCollection::collection($data);
     }
 }

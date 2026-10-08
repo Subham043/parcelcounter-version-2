@@ -3,6 +3,7 @@
 namespace App\Features\ProductVideos\Services;
 
 use App\Features\ProductVideos\DTO\ProductVideoDTO;
+use App\Features\ProductVideos\DTO\ProductVideoFilterDTO;
 use App\Features\ProductVideos\Interfaces\ProductVideoRepositoryInterface;
 use App\Features\ProductVideos\Interfaces\ProductVideoServiceInterface;
 use App\Features\ProductVideos\Models\ProductVideo;
@@ -14,9 +15,9 @@ class ProductVideoService implements ProductVideoServiceInterface
 
 	public function __construct(private ProductVideoRepositoryInterface $videoRepository) {}
 
-	public function paginate(int $product_id, int $total = 10): LengthAwarePaginator
+	public function paginate(int $product_id, ?ProductVideoFilterDTO $dto = null): LengthAwarePaginator
 	{
-		return $this->videoRepository->paginate($product_id, $total);
+		return $this->videoRepository->paginate($product_id, $dto);
 	}
 
 	public function getById(int $product_id, int $id): ProductVideo

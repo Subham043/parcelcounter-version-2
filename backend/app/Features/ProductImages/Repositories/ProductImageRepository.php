@@ -2,30 +2,46 @@
 
 namespace App\Features\ProductImages\Repositories;
 
-
+use App\Features\ProductImages\DTO\ProductImageFilterDTO;
 use App\Features\ProductImages\Models\ProductImage;
 use App\Features\ProductImages\Interfaces\ProductImageRepositoryInterface;
+use App\Http\CommonFilters\SearchFilter;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Spatie\QueryBuilder\QueryBuilder;
 use Illuminate\Database\Eloquent\Builder;
 use Spatie\QueryBuilder\AllowedFilter;
-use Spatie\QueryBuilder\Filters\Filter;
 
 class ProductImageRepository implements ProductImageRepositoryInterface
 {
-    public function model(int $product_id): Builder
+    private const SORT_COLUMNS = [
+        'id',
+    ];
+
+    private const SEARCH_COLUMNS = [
+        'image_title', 'image_alt'
+    ];
+
+    private function getSelectColumns(): array
     {
-        return ProductImage::where('product_id', $product_id)->select('id', 'image_title', 'image_alt', 'image', 'product_id', 'created_at', 'updated_at');
+        return [
+            ...self::SORT_COLUMNS,
+            ...self::SEARCH_COLUMNS,
+            'image', 'product_id', 'created_at', 'updated_at'
+        ];
+    }
+    public function model(int $product_id, ?ProductImageFilterDTO $dto = null): Builder
+    {
+        return ProductImage::where('product_id', $product_id)->select(...$this->getSelectColumns());
     }
 
-    public function query(int $product_id): QueryBuilder
+    public function query(int $product_id, ?ProductImageFilterDTO $dto = null): QueryBuilder
     {
-        return QueryBuilder::for($this->model($product_id))
-            ->defaultSort('-id')
-            ->allowedSorts('id')
+        return QueryBuilder::for($this->model($product_id, $dto))
+            ->defaultSort($dto?->sort ?? '-id')
+            ->allowedSorts(...self::SORT_COLUMNS)
             ->allowedFilters([
-                AllowedFilter::custom('search', new CommonFilter, null, false),
+                AllowedFilter::custom('search', new SearchFilter(self::SEARCH_COLUMNS), null, false),
             ]);
     }
 
@@ -61,25 +77,13 @@ class ProductImageRepository implements ProductImageRepositoryInterface
         return $this->model($product_id)->where($column, $value)->firstOrFail();
     }
 
-    public function paginate(int $product_id, int $total = 15): LengthAwarePaginator
+    public function paginate(int $product_id, ?ProductImageFilterDTO $dto = null): LengthAwarePaginator
     {
-        return $this->query($product_id)->paginate($total)->appends(request()->query());
+        return $this->query($product_id, $dto)->paginate($dto?->total ?? 10)->appends(request()->query());
     }
 
-    public function getAll(int $product_id): Collection
+    public function getAll(int $product_id, ?ProductImageFilterDTO $dto = null): Collection
     {
-        return $this->query($product_id)->lazy(100)->collect();
-    }
-}
-
-class CommonFilter implements Filter
-{
-    public function __invoke(Builder $query, mixed $value, string $property): void
-    {
-        $query->where(function ($q) use ($value) {
-            $q->where('image_title', $value)
-                ->orWhere('image_alt', $value)
-                ->orWhereRaw('MATCH(image_title, image_alt) AGAINST(? IN BOOLEAN MODE)', [$value . '*']);
-        });
+        return $this->query($product_id, $dto)->lazy(100)->collect();
     }
 }

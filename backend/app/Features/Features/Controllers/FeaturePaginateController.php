@@ -2,10 +2,11 @@
 
 namespace App\Features\Features\Controllers;
 
+use App\Features\Features\DTO\FeatureFilterDTO;
 use App\Features\Features\Interfaces\FeatureServiceInterface;
+use App\Features\Features\Requests\FeatureFilterRequest;
 use App\Http\Controllers\Controller;
 use App\Features\Features\Resources\FeatureCollection;
-use Illuminate\Http\Request;
 
 class FeaturePaginateController extends Controller
 {
@@ -14,12 +15,12 @@ class FeaturePaginateController extends Controller
     /**
      * Returns a paginated collection of features.
      *
-     * @param Request $request
+     * @param FeatureFilterRequest $request
      * @return FeatureCollection
      */
-    public function index(Request $request)
+    public function index(FeatureFilterRequest $request)
     {
-        $data = $this->featureService->paginate($request->total ?? 10);
+        $data = $this->featureService->paginate(FeatureFilterDTO::fromRequest($request));
         return FeatureCollection::collection($data);
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Features\Features\Services;
 
 use App\Features\Features\DTO\FeatureDTO;
+use App\Features\Features\DTO\FeatureFilterDTO;
 use App\Features\Features\Exports\FeatureExport;
 use App\Features\Features\Interfaces\FeatureRepositoryInterface;
 use App\Features\Features\Interfaces\FeatureServiceInterface;
@@ -17,9 +18,9 @@ class FeatureService implements FeatureServiceInterface
 
 	public function __construct(private FeatureRepositoryInterface $featureRepository) {}
 
-	public function paginate(Int $total = 10): LengthAwarePaginator
+	public function paginate(?FeatureFilterDTO $dto = null): LengthAwarePaginator
 	{
-		return $this->featureRepository->paginate($total);
+		return $this->featureRepository->paginate($dto);
 	}
 
 	public function getById(Int $id): Feature
@@ -59,8 +60,8 @@ class FeatureService implements FeatureServiceInterface
 		});
 	}
 
-	public function exportFeatures(): \Symfony\Component\HttpFoundation\BinaryFileResponse
+	public function exportFeatures(?FeatureFilterDTO $dto = null): \Symfony\Component\HttpFoundation\BinaryFileResponse
 	{
-		return Excel::download(new FeatureExport($this->featureRepository->query()), 'features.xlsx');
+		return Excel::download(new FeatureExport($this->featureRepository->query($dto)), 'features.xlsx');
 	}
 }

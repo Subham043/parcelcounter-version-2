@@ -2,10 +2,11 @@
 
 namespace App\Features\PaymentOptions\Controllers;
 
+use App\Features\PaymentOptions\DTO\PaymentOptionFilterDTO;
 use App\Features\PaymentOptions\Interfaces\PaymentOptionServiceInterface;
+use App\Features\PaymentOptions\Requests\PaymentOptionFilterRequest;
 use App\Http\Controllers\Controller;
 use App\Features\PaymentOptions\Resources\PaymentOptionCollection;
-use Illuminate\Http\Request;
 
 class PaymentOptionPaginateController extends Controller
 {
@@ -14,12 +15,12 @@ class PaymentOptionPaginateController extends Controller
     /**
      * Returns a paginated collection of options.
      *
-     * @param Request $request
+     * @param PaymentOptionFilterRequest $request
      * @return PaymentOptionCollection
      */
-    public function index(Request $request)
+    public function index(PaymentOptionFilterRequest $request)
     {
-        $data = $this->optionService->paginate($request->total ?? 10);
+        $data = $this->optionService->paginate(PaymentOptionFilterDTO::fromRequest($request));
         return PaymentOptionCollection::collection($data);
     }
 }

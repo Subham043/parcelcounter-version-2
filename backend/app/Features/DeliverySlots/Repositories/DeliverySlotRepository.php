@@ -2,46 +2,56 @@
 
 namespace App\Features\DeliverySlots\Repositories;
 
-
+use App\Features\DeliverySlots\DTO\DeliverySlotFilterDTO;
 use App\Features\DeliverySlots\Models\DeliverySlot;
 use App\Features\DeliverySlots\Interfaces\DeliverySlotRepositoryInterface;
+use App\Http\CommonFilters\BooleanFilter;
+use App\Http\CommonFilters\SearchFilter;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Spatie\QueryBuilder\QueryBuilder;
 use Illuminate\Database\Eloquent\Builder;
 use Spatie\QueryBuilder\AllowedFilter;
-use Spatie\QueryBuilder\Filters\Filter;
 
 class DeliverySlotRepository implements DeliverySlotRepositoryInterface
 {
-    public function model(): Builder
+    private const SORT_COLUMNS = [
+        'id',
+        'start_time',
+    ];
+
+    private const SEARCH_COLUMNS = [
+        'name',
+    ];
+
+    private function getSelectColumns(): array
     {
-        return DeliverySlot::select('id', 'name', 'start_time', 'end_time', 'is_cod_allowed', 'is_active', 'user_id', 'created_at', 'updated_at');
+        return [
+            ...self::SORT_COLUMNS,
+            ...self::SEARCH_COLUMNS,
+            'end_time', 
+            'is_cod_allowed', 
+            'is_active', 
+            'user_id', 
+            'created_at', 
+            'updated_at'
+        ];
     }
 
-    public function query(): QueryBuilder
+    public function model(?DeliverySlotFilterDTO $dto = null): Builder
     {
-        return QueryBuilder::for($this->model())
-            ->defaultSort('-id')
-            ->allowedSorts('id', 'start_time')
+        return DeliverySlot::select(...$this->getSelectColumns());
+    }
+
+    public function query(?DeliverySlotFilterDTO $dto = null): QueryBuilder
+    {
+        return QueryBuilder::for($this->model($dto))
+            ->defaultSort($dto?->sort ?? '-id')
+            ->allowedSorts(...self::SORT_COLUMNS)
             ->allowedFilters([
-                AllowedFilter::custom('search', new CommonFilter, null, false),
-                AllowedFilter::callback('is_active', function (Builder $query, $value) {
-                    if (strtolower($value) == "yes") {
-                        $query->where('is_active', true);
-                    }
-                    if (strtolower($value) == "no") {
-                        $query->where('is_active', false);
-                    }
-                }),
-                AllowedFilter::callback('is_cod_allowed', function (Builder $query, $value) {
-                    if (strtolower($value) == "yes") {
-                        $query->where('is_cod_allowed', true);
-                    }
-                    if (strtolower($value) == "no") {
-                        $query->where('is_cod_allowed', false);
-                    }
-                }),
+                AllowedFilter::custom('search', new SearchFilter(self::SEARCH_COLUMNS), null, false),
+                AllowedFilter::callback('is_active', new BooleanFilter),
+                AllowedFilter::callback('is_cod_allowed', new BooleanFilter),
             ]);
     }
 
@@ -77,24 +87,13 @@ class DeliverySlotRepository implements DeliverySlotRepositoryInterface
         return $this->model()->where($column, $value)->firstOrFail();
     }
 
-    public function paginate(int $total = 15): LengthAwarePaginator
+    public function paginate(?DeliverySlotFilterDTO $dto = null): LengthAwarePaginator
     {
-        return $this->query()->paginate($total)->appends(request()->query());
+        return $this->query($dto)->paginate($dto?->total ?? 10)->appends(request()->query());
     }
 
-    public function getAll(): Collection
+    public function getAll(?DeliverySlotFilterDTO $dto = null): Collection
     {
-        return $this->query()->lazy(100)->collect();
-    }
-}
-
-class CommonFilter implements Filter
-{
-    public function __invoke(Builder $query, mixed $value, string $property): void
-    {
-        $query->where(function ($q) use ($value) {
-            $q->where('name', $value)
-                ->orWhereRaw('MATCH(name) AGAINST(? IN BOOLEAN MODE)', [$value . '*']);
-        });
+        return $this->query($dto)->lazy(100)->collect();
     }
 }

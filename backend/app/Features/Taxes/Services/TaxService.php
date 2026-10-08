@@ -3,6 +3,7 @@
 namespace App\Features\Taxes\Services;
 
 use App\Features\Taxes\DTO\TaxDTO;
+use App\Features\Taxes\DTO\TaxFilterDTO;
 use App\Features\Taxes\Exports\TaxExport;
 use App\Features\Taxes\Interfaces\TaxRepositoryInterface;
 use App\Features\Taxes\Interfaces\TaxServiceInterface;
@@ -17,9 +18,9 @@ class TaxService implements TaxServiceInterface
 
 	public function __construct(private TaxRepositoryInterface $taxRepository) {}
 
-	public function paginate(Int $total = 10): LengthAwarePaginator
+	public function paginate(?TaxFilterDTO $dto = null): LengthAwarePaginator
 	{
-		return $this->taxRepository->paginate($total);
+		return $this->taxRepository->paginate($dto);
 	}
 
 	public function getById(Int $id): Tax
@@ -60,8 +61,8 @@ class TaxService implements TaxServiceInterface
 		});
 	}
 
-	public function exportTaxes(): \Symfony\Component\HttpFoundation\BinaryFileResponse
+	public function exportTaxes(?TaxFilterDTO $dto = null): \Symfony\Component\HttpFoundation\BinaryFileResponse
 	{
-		return Excel::download(new TaxExport($this->taxRepository->query()), 'taxes.xlsx');
+		return Excel::download(new TaxExport($this->taxRepository->query($dto)), 'taxes.xlsx');
 	}
 }

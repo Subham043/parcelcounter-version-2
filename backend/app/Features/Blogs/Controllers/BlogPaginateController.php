@@ -2,10 +2,11 @@
 
 namespace App\Features\Blogs\Controllers;
 
+use App\Features\Blogs\DTO\BlogFilterDTO;
 use App\Features\Blogs\Interfaces\BlogServiceInterface;
+use App\Features\Blogs\Requests\BlogFilterRequest;
 use App\Http\Controllers\Controller;
 use App\Features\Blogs\Resources\BlogCollection;
-use Illuminate\Http\Request;
 
 class BlogPaginateController extends Controller
 {
@@ -14,12 +15,12 @@ class BlogPaginateController extends Controller
     /**
      * Returns a paginated collection of blogs.
      *
-     * @param Request $request
+     * @param BlogFilterRequest $request
      * @return BlogCollection
      */
-    public function index(Request $request)
+    public function index(BlogFilterRequest $request)
     {
-        $data = $this->blogService->paginate($request->total ?? 10);
+        $data = $this->blogService->paginate(BlogFilterDTO::fromRequest($request));
         return BlogCollection::collection($data);
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Features\Blogs\Services;
 
 use App\Features\Blogs\DTO\BlogDTO;
+use App\Features\Blogs\DTO\BlogFilterDTO;
 use App\Features\Blogs\Exports\BlogExport;
 use App\Features\Blogs\Interfaces\BlogRepositoryInterface;
 use App\Features\Blogs\Interfaces\BlogServiceInterface;
@@ -17,9 +18,9 @@ class BlogService implements BlogServiceInterface
 
 	public function __construct(private BlogRepositoryInterface $blogRepository) {}
 
-	public function paginate(Int $total = 10): LengthAwarePaginator
+	public function paginate(?BlogFilterDTO $dto = null): LengthAwarePaginator
 	{
-		return $this->blogRepository->paginate($total);
+		return $this->blogRepository->paginate($dto);
 	}
 
 	public function getById(Int $id): Blog
@@ -64,8 +65,8 @@ class BlogService implements BlogServiceInterface
 		});
 	}
 
-	public function exportBlogs(): \Symfony\Component\HttpFoundation\BinaryFileResponse
+	public function exportBlogs(?BlogFilterDTO $dto = null): \Symfony\Component\HttpFoundation\BinaryFileResponse
 	{
-		return Excel::download(new BlogExport($this->blogRepository->query()), 'blogs.xlsx');
+		return Excel::download(new BlogExport($this->blogRepository->query($dto)), 'blogs.xlsx');
 	}
 }

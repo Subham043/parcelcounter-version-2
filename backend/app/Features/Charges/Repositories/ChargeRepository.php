@@ -2,46 +2,58 @@
 
 namespace App\Features\Charges\Repositories;
 
-
+use App\Features\Charges\DTO\ChargeFilterDTO;
 use App\Features\Charges\Models\Charge;
 use App\Features\Charges\Interfaces\ChargeRepositoryInterface;
+use App\Http\CommonFilters\BooleanFilter;
+use App\Http\CommonFilters\SearchFilter;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Spatie\QueryBuilder\QueryBuilder;
 use Illuminate\Database\Eloquent\Builder;
 use Spatie\QueryBuilder\AllowedFilter;
-use Spatie\QueryBuilder\Filters\Filter;
 
 class ChargeRepository implements ChargeRepositoryInterface
 {
-    public function model(): Builder
+    private const SORT_COLUMNS = [
+        'id',
+        'name',
+    ];
+
+    private const SEARCH_COLUMNS = [
+        'name',
+        'slug',
+    ];
+
+    private function getSelectColumns(): array
     {
-        return Charge::select('id', 'name', 'slug', 'value', 'is_percentage', 'include_charges_for_cart_price_below', 'is_active', 'user_id', 'created_at', 'updated_at');
+        return [
+            ...self::SORT_COLUMNS,
+            'slug',
+            'value', 
+            'is_percentage', 
+            'include_charges_for_cart_price_below', 
+            'is_active', 
+            'user_id', 
+            'created_at', 
+            'updated_at'
+        ];
     }
 
-    public function query(): QueryBuilder
+    public function model(?ChargeFilterDTO $dto = null): Builder
     {
-        return QueryBuilder::for($this->model())
-            ->defaultSort('-id')
-            ->allowedSorts('id', 'name')
+        return Charge::select(...$this->getSelectColumns());
+    }
+
+    public function query(?ChargeFilterDTO $dto = null): QueryBuilder
+    {
+        return QueryBuilder::for($this->model($dto))
+            ->defaultSort($dto?->sort ?? '-id')
+            ->allowedSorts(...self::SORT_COLUMNS)
             ->allowedFilters([
-                AllowedFilter::custom('search', new CommonFilter, null, false),
-                AllowedFilter::callback('is_active', function (Builder $query, $value) {
-                    if (strtolower($value) == "yes") {
-                        $query->where('is_active', true);
-                    }
-                    if (strtolower($value) == "no") {
-                        $query->where('is_active', false);
-                    }
-                }),
-                AllowedFilter::callback('is_percentage', function (Builder $query, $value) {
-                    if (strtolower($value) == "yes") {
-                        $query->where('is_percentage', true);
-                    }
-                    if (strtolower($value) == "no") {
-                        $query->where('is_percentage', false);
-                    }
-                }),
+                AllowedFilter::custom('search', new SearchFilter(self::SEARCH_COLUMNS), null, false),
+                AllowedFilter::callback('is_active', new BooleanFilter),
+                AllowedFilter::callback('is_percentage', new BooleanFilter),
             ]);
     }
 
@@ -77,25 +89,13 @@ class ChargeRepository implements ChargeRepositoryInterface
         return $this->model()->where($column, $value)->firstOrFail();
     }
 
-    public function paginate(int $total = 15): LengthAwarePaginator
+    public function paginate(?ChargeFilterDTO $dto = null): LengthAwarePaginator
     {
-        return $this->query()->paginate($total)->appends(request()->query());
+        return $this->query($dto)->paginate($dto?->total ?? 10)->appends(request()->query());
     }
 
-    public function getAll(): Collection
+    public function getAll(?ChargeFilterDTO $dto = null): Collection
     {
-        return $this->query()->lazy(100)->collect();
-    }
-}
-
-class CommonFilter implements Filter
-{
-    public function __invoke(Builder $query, mixed $value, string $property): void
-    {
-        $query->where(function ($q) use ($value) {
-            $q->where('name', $value)
-                ->orWhere('slug', $value)
-                ->orWhereRaw('MATCH(name, slug) AGAINST(? IN BOOLEAN MODE)', [$value . '*']);
-        });
+        return $this->query($dto)->lazy(100)->collect();
     }
 }

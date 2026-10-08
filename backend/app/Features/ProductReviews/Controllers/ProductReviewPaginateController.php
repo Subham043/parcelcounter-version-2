@@ -2,10 +2,11 @@
 
 namespace App\Features\ProductReviews\Controllers;
 
+use App\Features\ProductReviews\DTO\ProductReviewFilterDTO;
 use App\Features\ProductReviews\Interfaces\ProductReviewServiceInterface;
+use App\Features\ProductReviews\Requests\ProductReviewFilterRequest;
 use App\Http\Controllers\Controller;
 use App\Features\ProductReviews\Resources\ProductReviewCollection;
-use Illuminate\Http\Request;
 
 class ProductReviewPaginateController extends Controller
 {
@@ -15,12 +16,12 @@ class ProductReviewPaginateController extends Controller
      * Returns a paginated collection of reviews.
      *
      * @param int $product_id
-     * @param Request $request
+     * @param ProductReviewFilterRequest $request
      * @return ProductReviewCollection
      */
-    public function index($product_id, Request $request)
+    public function index($product_id, ProductReviewFilterRequest $request)
     {
-        $data = $this->reviewService->paginate($product_id, $request->total ?? 10);
+        $data = $this->reviewService->paginate($product_id, ProductReviewFilterDTO::fromRequest($request));
         return ProductReviewCollection::collection($data);
     }
 }

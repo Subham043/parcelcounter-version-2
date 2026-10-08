@@ -2,10 +2,11 @@
 
 namespace App\Features\GlobalSearch\Controllers;
 
+use App\Features\GlobalSearch\DTO\GlobalSearchFilterDTO;
 use App\Features\GlobalSearch\Interfaces\GlobalSearchServiceInterface;
+use App\Features\GlobalSearch\Requests\GlobalSearchFilterRequest;
 use App\Http\Controllers\Controller;
 use App\Features\GlobalSearch\Resources\GlobalSearchCollection;
-use Illuminate\Http\Request;
 
 class GlobalSearchPaginateController extends Controller
 {
@@ -14,18 +15,19 @@ class GlobalSearchPaginateController extends Controller
     /**
      * Returns a paginated collection of search.
      *
-     * @param Request $request
+     * @param GlobalSearchFilterRequest $request
      * @return GlobalSearchCollection
      */
-    public function index(Request $request)
+    public function index(GlobalSearchFilterRequest $request)
     {
-        $search = $request->query('filter')['search'] ?? '';
+        $dto = GlobalSearchFilterDTO::fromRequest($request);
+        $search = $dto?->search ?? '';
         if(strlen($search) < 1) {
             return response()->json([
                 'message' => 'Please provide a search term.',
             ], 422);
         }
-        $data = $this->searchService->paginate($request->total ?? 10);
+        $data = $this->searchService->paginate($dto);
         return GlobalSearchCollection::collection($data);
     }
 }

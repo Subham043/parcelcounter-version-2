@@ -3,6 +3,7 @@
 namespace App\Features\ProductReviews\Services;
 
 use App\Features\ProductReviews\DTO\ProductReviewDTO;
+use App\Features\ProductReviews\DTO\ProductReviewFilterDTO;
 use App\Features\ProductReviews\Interfaces\ProductReviewRepositoryInterface;
 use App\Features\ProductReviews\Interfaces\ProductReviewServiceInterface;
 use App\Features\ProductReviews\Models\ProductReview;
@@ -15,9 +16,9 @@ class ProductReviewService implements ProductReviewServiceInterface
 
 	public function __construct(private ProductReviewRepositoryInterface $reviewRepository) {}
 
-	public function paginate(int $product_id, int $total = 10): LengthAwarePaginator
+	public function paginate(int $product_id, ?ProductReviewFilterDTO $dto = null): LengthAwarePaginator
 	{
-		return $this->reviewRepository->paginate($product_id, $total);
+		return $this->reviewRepository->paginate($product_id, $dto);
 	}
 
 	public function getById(int $product_id, int $id): ProductReview

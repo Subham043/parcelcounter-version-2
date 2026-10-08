@@ -3,6 +3,7 @@
 namespace App\Features\ProductSpecifications\Services;
 
 use App\Features\ProductSpecifications\DTO\ProductSpecificationDTO;
+use App\Features\ProductSpecifications\DTO\ProductSpecificationFilterDTO;
 use App\Features\ProductSpecifications\Interfaces\ProductSpecificationRepositoryInterface;
 use App\Features\ProductSpecifications\Interfaces\ProductSpecificationServiceInterface;
 use App\Features\ProductSpecifications\Models\ProductSpecification;
@@ -14,9 +15,9 @@ class ProductSpecificationService implements ProductSpecificationServiceInterfac
 
 	public function __construct(private ProductSpecificationRepositoryInterface $specificationRepository) {}
 
-	public function paginate(int $product_id, int $total = 10): LengthAwarePaginator
+	public function paginate(int $product_id, ?ProductSpecificationFilterDTO $dto = null): LengthAwarePaginator
 	{
-		return $this->specificationRepository->paginate($product_id, $total);
+		return $this->specificationRepository->paginate($product_id, $dto);
 	}
 
 	public function getById(int $product_id, int $id): ProductSpecification

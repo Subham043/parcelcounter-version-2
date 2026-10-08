@@ -3,6 +3,7 @@
 namespace App\Features\DeliverySlots\Services;
 
 use App\Features\DeliverySlots\DTO\DeliverySlotDTO;
+use App\Features\DeliverySlots\DTO\DeliverySlotFilterDTO;
 use App\Features\DeliverySlots\Exports\DeliverySlotExport;
 use App\Features\DeliverySlots\Interfaces\DeliverySlotRepositoryInterface;
 use App\Features\DeliverySlots\Interfaces\DeliverySlotServiceInterface;
@@ -17,9 +18,9 @@ class DeliverySlotService implements DeliverySlotServiceInterface
 
 	public function __construct(private DeliverySlotRepositoryInterface $slotRepository) {}
 
-	public function paginate(Int $total = 10): LengthAwarePaginator
+	public function paginate(?DeliverySlotFilterDTO $dto = null): LengthAwarePaginator
 	{
-		return $this->slotRepository->paginate($total);
+		return $this->slotRepository->paginate($dto);
 	}
 
 	public function getById(Int $id): DeliverySlot
@@ -55,8 +56,8 @@ class DeliverySlotService implements DeliverySlotServiceInterface
 		});
 	}
 
-	public function exportDeliverySlots(): \Symfony\Component\HttpFoundation\BinaryFileResponse
+	public function exportDeliverySlots(?DeliverySlotFilterDTO $dto = null): \Symfony\Component\HttpFoundation\BinaryFileResponse
 	{
-		return Excel::download(new DeliverySlotExport($this->slotRepository->query()), 'slots.xlsx');
+		return Excel::download(new DeliverySlotExport($this->slotRepository->query($dto)), 'slots.xlsx');
 	}
 }

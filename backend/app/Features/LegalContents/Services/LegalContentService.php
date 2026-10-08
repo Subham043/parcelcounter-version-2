@@ -3,6 +3,7 @@
 namespace App\Features\LegalContents\Services;
 
 use App\Features\LegalContents\DTO\LegalContentDTO;
+use App\Features\LegalContents\DTO\LegalContentFilterDTO;
 use App\Features\LegalContents\Exports\LegalContentExport;
 use App\Features\LegalContents\Interfaces\LegalContentRepositoryInterface;
 use App\Features\LegalContents\Interfaces\LegalContentServiceInterface;
@@ -17,9 +18,9 @@ class LegalContentService implements LegalContentServiceInterface
 
 	public function __construct(private LegalContentRepositoryInterface $legalContentRepository) {}
 
-	public function paginate(Int $total = 10): LengthAwarePaginator
+	public function paginate(?LegalContentFilterDTO $dto = null): LengthAwarePaginator
 	{
-		return $this->legalContentRepository->paginate($total);
+		return $this->legalContentRepository->paginate($dto);
 	}
 
 	public function getById(Int $id): LegalContent
@@ -60,8 +61,8 @@ class LegalContentService implements LegalContentServiceInterface
 		});
 	}
 
-	public function exportLegalContents(): \Symfony\Component\HttpFoundation\BinaryFileResponse
+	public function exportLegalContents(?LegalContentFilterDTO $dto = null): \Symfony\Component\HttpFoundation\BinaryFileResponse
 	{
-		return Excel::download(new LegalContentExport($this->legalContentRepository->query()), 'legal_contents.xlsx');
+		return Excel::download(new LegalContentExport($this->legalContentRepository->query($dto)), 'legal_contents.xlsx');
 	}
 }

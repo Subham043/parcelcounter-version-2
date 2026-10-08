@@ -3,6 +3,7 @@
 namespace App\Features\Banners\Services;
 
 use App\Features\Banners\DTO\BannerDTO;
+use App\Features\Banners\DTO\BannerFilterDTO;
 use App\Features\Banners\Exports\BannerExport;
 use App\Features\Banners\Interfaces\BannerRepositoryInterface;
 use App\Features\Banners\Interfaces\BannerServiceInterface;
@@ -17,9 +18,9 @@ class BannerService implements BannerServiceInterface
 
 	public function __construct(private BannerRepositoryInterface $bannerRepository) {}
 
-	public function paginate(Int $total = 10): LengthAwarePaginator
+	public function paginate(?BannerFilterDTO $dto = null): LengthAwarePaginator
 	{
-		return $this->bannerRepository->paginate($total);
+		return $this->bannerRepository->paginate($dto);
 	}
 
 	public function getById(Int $id): Banner
@@ -63,8 +64,8 @@ class BannerService implements BannerServiceInterface
 		});
 	}
 
-	public function exportBanners(): \Symfony\Component\HttpFoundation\BinaryFileResponse
+	public function exportBanners(?BannerFilterDTO $dto = null): \Symfony\Component\HttpFoundation\BinaryFileResponse
 	{
-		return Excel::download(new BannerExport($this->bannerRepository->query()), 'banners.xlsx');
+		return Excel::download(new BannerExport($this->bannerRepository->query($dto)), 'banners.xlsx');
 	}
 }

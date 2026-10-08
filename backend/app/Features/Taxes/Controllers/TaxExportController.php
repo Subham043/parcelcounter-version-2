@@ -2,8 +2,10 @@
 
 namespace App\Features\Taxes\Controllers;
 
+use App\Features\Taxes\DTO\TaxFilterDTO;
 use App\Http\Controllers\Controller;
 use App\Features\Taxes\Interfaces\TaxServiceInterface;
+use App\Features\Taxes\Requests\TaxFilterRequest;
 
 class TaxExportController extends Controller
 {
@@ -14,10 +16,10 @@ class TaxExportController extends Controller
      *
      * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
      */
-    public function index()
+    public function index(TaxFilterRequest $request)
     {
         ini_set('memory_limit', '-1');
         ini_set('max_execution_time', 300);
-        return $this->taxService->exportTaxes();
+        return $this->taxService->exportTaxes(TaxFilterDTO::fromRequest($request));
     }
 }

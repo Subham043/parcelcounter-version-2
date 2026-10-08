@@ -2,10 +2,11 @@
 
 namespace App\Features\Users\Controllers;
 
+use App\Features\Users\DTO\UserFilterDTO;
 use App\Features\Users\Interfaces\UserServiceInterface;
+use App\Features\Users\Requests\UserFilterRequest;
 use App\Http\Controllers\Controller;
 use App\Features\Users\Resources\UserCollection;
-use Illuminate\Http\Request;
 
 class UserPaginateController extends Controller
 {
@@ -14,12 +15,12 @@ class UserPaginateController extends Controller
     /**
      * Returns a paginated collection of users.
      *
-     * @param Request $request
+     * @param UserFilterRequest $request
      * @return UserCollection
      */
-    public function index(Request $request)
+    public function index(UserFilterRequest $request)
     {
-        $data = $this->userService->paginate($request->total ?? 10);
+        $data = $this->userService->paginate(UserFilterDTO::fromRequest($request));
         return UserCollection::collection($data);
     }
 }

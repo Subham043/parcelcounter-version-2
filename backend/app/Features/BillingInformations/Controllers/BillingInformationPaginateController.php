@@ -2,7 +2,9 @@
 
 namespace App\Features\BillingInformations\Controllers;
 
+use App\Features\BillingInformations\DTO\BillingInformationFilterDTO;
 use App\Features\BillingInformations\Interfaces\BillingInformationServiceInterface;
+use App\Features\BillingInformations\Requests\BillingInformationFilterRequest;
 use App\Http\Controllers\Controller;
 use App\Features\BillingInformations\Resources\BillingInformationCollection;
 use Illuminate\Http\Request;
@@ -14,12 +16,12 @@ class BillingInformationPaginateController extends Controller
     /**
      * Returns a paginated collection of enquiries.
      *
-     * @param Request $request
+     * @param BillingInformationFilterRequest $request
      * @return BillingInformationCollection
      */
-    public function index(Request $request)
+    public function index(BillingInformationFilterRequest $request)
     {
-        $data = $this->informationService->paginate($request->total ?? 10);
+        $data = $this->informationService->paginate(BillingInformationFilterDTO::fromRequest($request));
         return BillingInformationCollection::collection($data);
     }
 }

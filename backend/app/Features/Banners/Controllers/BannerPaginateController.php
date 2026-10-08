@@ -2,10 +2,11 @@
 
 namespace App\Features\Banners\Controllers;
 
+use App\Features\Banners\DTO\BannerFilterDTO;
 use App\Features\Banners\Interfaces\BannerServiceInterface;
+use App\Features\Banners\Requests\BannerFilterRequest;
 use App\Http\Controllers\Controller;
 use App\Features\Banners\Resources\BannerCollection;
-use Illuminate\Http\Request;
 
 class BannerPaginateController extends Controller
 {
@@ -14,12 +15,12 @@ class BannerPaginateController extends Controller
     /**
      * Returns a paginated collection of banners.
      *
-     * @param Request $request
+     * @param BannerFilterRequest $request
      * @return BannerCollection
      */
-    public function index(Request $request)
+    public function index(BannerFilterRequest $request)
     {
-        $data = $this->bannerService->paginate($request->total ?? 10);
+        $data = $this->bannerService->paginate(BannerFilterDTO::fromRequest($request));
         return BannerCollection::collection($data);
     }
 }

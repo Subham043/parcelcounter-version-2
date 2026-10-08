@@ -2,30 +2,55 @@
 
 namespace App\Features\BillingInformations\Repositories;
 
-
+use App\Features\BillingInformations\DTO\BillingInformationFilterDTO;
 use App\Features\BillingInformations\Models\BillingInformation;
 use App\Features\BillingInformations\Interfaces\BillingInformationRepositoryInterface;
+use App\Http\CommonFilters\SearchFilter;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Spatie\QueryBuilder\QueryBuilder;
 use Illuminate\Database\Eloquent\Builder;
 use Spatie\QueryBuilder\AllowedFilter;
-use Spatie\QueryBuilder\Filters\Filter;
 
 class BillingInformationRepository implements BillingInformationRepositoryInterface
 {
-    public function model(int $user_id): Builder
+    private const SORT_COLUMNS = [
+        'id',
+        'name', 
+        'created_at'
+    ];
+
+    private const SEARCH_COLUMNS = [
+        'name',
+        'email',
+        'phone',
+        'gst',
+    ];
+
+    private function getSelectColumns(): array
     {
-        return BillingInformation::select('id', 'name', 'email', 'phone', 'gst', 'user_id', 'created_at', 'updated_at')->where('user_id', $user_id);
+        return [
+            ...self::SORT_COLUMNS,
+            'email', 
+            'phone', 
+            'gst', 
+            'user_id',
+            'updated_at'
+        ];
     }
 
-    public function query(int $user_id): QueryBuilder
+    public function model(int $user_id, ?BillingInformationFilterDTO $dto = null): Builder
     {
-        return QueryBuilder::for($this->model($user_id))
-            ->defaultSort('-id')
-            ->allowedSorts('id', 'name', 'created_at')
+        return BillingInformation::select(...$this->getSelectColumns())->where('user_id', $user_id);
+    }
+
+    public function query(int $user_id, ?BillingInformationFilterDTO $dto = null): QueryBuilder
+    {
+        return QueryBuilder::for($this->model($user_id, $dto))
+            ->defaultSort($dto?->sort ?? '-id')
+            ->allowedSorts(...self::SORT_COLUMNS)
             ->allowedFilters([
-                AllowedFilter::custom('search', new CommonFilter, null, false)
+                AllowedFilter::custom('search', new SearchFilter(self::SEARCH_COLUMNS), null, false),
             ]);
     }
 
@@ -61,27 +86,13 @@ class BillingInformationRepository implements BillingInformationRepositoryInterf
         return $this->model($user_id)->where($column, $value)->firstOrFail();
     }
 
-    public function paginate(int $user_id, int $total = 15): LengthAwarePaginator
+    public function paginate(int $user_id, ?BillingInformationFilterDTO $dto = null): LengthAwarePaginator
     {
-        return $this->query($user_id)->paginate($total)->appends(request()->query());
+        return $this->query($user_id, $dto)->paginate($dto?->total ?? 10)->appends(request()->query());
     }
 
-    public function getAll(int $user_id): Collection
+    public function getAll(int $user_id, ?BillingInformationFilterDTO $dto = null): Collection
     {
-        return $this->query($user_id)->lazy(100)->collect();
-    }
-}
-
-class CommonFilter implements Filter
-{
-    public function __invoke(Builder $query, mixed $value, string $property): void
-    {
-        $query->where(function ($q) use ($value) {
-            $q->where('name', $value)
-                ->orWhere('email', $value)
-                ->orWhere('phone', $value)
-                ->orWhere('gst', $value)
-                ->orWhereRaw('MATCH(name, email, phone, gst) AGAINST(? IN BOOLEAN MODE)', [$value . '*']);
-        });
+        return $this->query($user_id, $dto)->lazy(100)->collect();
     }
 }

@@ -2,9 +2,10 @@
 
 namespace App\Features\ProductSpecifications\Repositories;
 
-
+use App\Features\ProductSpecifications\DTO\ProductSpecificationFilterDTO;
 use App\Features\ProductSpecifications\Models\ProductSpecification;
 use App\Features\ProductSpecifications\Interfaces\ProductSpecificationRepositoryInterface;
+use App\Http\CommonFilters\SearchFilter;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -14,18 +15,36 @@ use Spatie\QueryBuilder\Filters\Filter;
 
 class ProductSpecificationRepository implements ProductSpecificationRepositoryInterface
 {
-    public function model(int $product_id): Builder
+    private const SORT_COLUMNS = [
+        'id',
+        'title',
+    ];
+
+    private const SEARCH_COLUMNS = [
+        'title',
+        'description',
+    ];
+
+    private function getSelectColumns(): array
     {
-        return ProductSpecification::where('product_id', $product_id)->select('id', 'title', 'description', 'product_id', 'created_at', 'updated_at');
+        return [
+            ...self::SORT_COLUMNS,
+            'description', 'product_id', 'created_at', 'updated_at'
+        ];
     }
 
-    public function query(int $product_id): QueryBuilder
+    public function model(int $product_id, ?ProductSpecificationFilterDTO $dto = null): Builder
     {
-        return QueryBuilder::for($this->model($product_id))
-            ->defaultSort('-id')
-            ->allowedSorts('id', 'title')
+        return ProductSpecification::where('product_id', $product_id)->select(...$this->getSelectColumns());
+    }
+
+    public function query(int $product_id, ?ProductSpecificationFilterDTO $dto = null): QueryBuilder
+    {
+        return QueryBuilder::for($this->model($product_id, $dto))
+            ->defaultSort($dto?->sort ?? '-id')
+            ->allowedSorts(...self::SORT_COLUMNS)
             ->allowedFilters([
-                AllowedFilter::custom('search', new CommonFilter, null, false),
+                AllowedFilter::custom('search', new SearchFilter(self::SEARCH_COLUMNS), null, false),
             ]);
     }
 
@@ -61,25 +80,13 @@ class ProductSpecificationRepository implements ProductSpecificationRepositoryIn
         return $this->model($product_id)->where($column, $value)->firstOrFail();
     }
 
-    public function paginate(int $product_id, int $total = 15): LengthAwarePaginator
+    public function paginate(int $product_id, ?ProductSpecificationFilterDTO $dto = null): LengthAwarePaginator
     {
-        return $this->query($product_id)->paginate($total)->appends(request()->query());
+        return $this->query($product_id, $dto)->paginate($dto?->total ?? 10)->appends(request()->query());
     }
 
-    public function getAll(int $product_id): Collection
+    public function getAll(int $product_id, ?ProductSpecificationFilterDTO $dto = null): Collection
     {
-        return $this->query($product_id)->lazy(100)->collect();
-    }
-}
-
-class CommonFilter implements Filter
-{
-    public function __invoke(Builder $query, mixed $value, string $property): void
-    {
-        $query->where(function ($q) use ($value) {
-            $q->where('title', $value)
-                ->orWhere('description', $value)
-                ->orWhereRaw('MATCH(title, description) AGAINST(? IN BOOLEAN MODE)', [$value . '*']);
-        });
+        return $this->query($product_id, $dto)->lazy(100)->collect();
     }
 }

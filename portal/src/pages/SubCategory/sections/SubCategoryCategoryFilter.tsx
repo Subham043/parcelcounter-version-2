@@ -8,7 +8,7 @@ type PropType = {
 };
 
 const SubCategoryCategoryFilter = (props: PropType) => {
-  const { key = "filter[has_categories]", placeholder = "Category" } = props;
+  const { key = "filter[category]", placeholder = "Category" } = props;
   const { paramValue, setQueryParams } = useCustomQueryParam(key);
   const { paramValue: categoryName } = useCustomQueryParam("category_name");
 

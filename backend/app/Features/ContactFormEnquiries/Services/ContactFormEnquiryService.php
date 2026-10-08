@@ -3,6 +3,7 @@
 namespace App\Features\ContactFormEnquiries\Services;
 
 use App\Features\ContactFormEnquiries\DTO\ContactFormEnquiryDTO;
+use App\Features\ContactFormEnquiries\DTO\ContactFormEnquiryFilterDTO;
 use App\Features\ContactFormEnquiries\Exports\ContactFormEnquiryExport;
 use App\Features\ContactFormEnquiries\Interfaces\ContactFormEnquiryRepositoryInterface;
 use App\Features\ContactFormEnquiries\Interfaces\ContactFormEnquiryServiceInterface;
@@ -16,9 +17,9 @@ class ContactFormEnquiryService implements ContactFormEnquiryServiceInterface
 
 	public function __construct(private ContactFormEnquiryRepositoryInterface $enquiryRepository) {}
 
-	public function paginate(Int $total = 10): LengthAwarePaginator
+	public function paginate(?ContactFormEnquiryFilterDTO $dto = null): LengthAwarePaginator
 	{
-		return $this->enquiryRepository->paginate($total);
+		return $this->enquiryRepository->paginate($dto);
 	}
 
 	public function getById(Int $id): ContactFormEnquiry
@@ -54,8 +55,8 @@ class ContactFormEnquiryService implements ContactFormEnquiryServiceInterface
 		});
 	}
 
-	public function exportContactFormEnquiries(): \Symfony\Component\HttpFoundation\BinaryFileResponse
+	public function exportContactFormEnquiries(?ContactFormEnquiryFilterDTO $dto = null): \Symfony\Component\HttpFoundation\BinaryFileResponse
 	{
-		return Excel::download(new ContactFormEnquiryExport($this->enquiryRepository->query()), 'enquiries.xlsx');
+		return Excel::download(new ContactFormEnquiryExport($this->enquiryRepository->query($dto)), 'enquiries.xlsx');
 	}
 }

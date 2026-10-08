@@ -70,8 +70,8 @@ class SubCategoryService implements SubCategoryServiceInterface
 		});
 	}
 
-	public function exportSubCategories(): \Symfony\Component\HttpFoundation\BinaryFileResponse
+	public function exportSubCategories(?SubCategoryFilterDTO $dto = null): \Symfony\Component\HttpFoundation\BinaryFileResponse
 	{
-		return Excel::download(new SubCategoryExport($this->subCategoryRepository->query(null)), 'sub_categories.xlsx');
+		return Excel::download(new SubCategoryExport($this->subCategoryRepository->query($dto)), 'sub_categories.xlsx');
 	}
 }

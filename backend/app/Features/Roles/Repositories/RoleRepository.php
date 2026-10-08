@@ -2,13 +2,14 @@
 
 namespace App\Features\Roles\Repositories;
 
+use App\Features\Roles\DTO\RoleFilterDTO;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Spatie\QueryBuilder\QueryBuilder;
 use Illuminate\Database\Eloquent\Builder;
 use Spatie\QueryBuilder\AllowedFilter;
-use Spatie\QueryBuilder\Filters\Filter;
 use App\Features\Roles\Enums\Roles;
 use App\Features\Roles\Interfaces\RoleRepositoryInterface;
+use App\Http\CommonFilters\SearchFilter;
 use Spatie\Permission\Models\Role;
 
 class RoleRepository implements RoleRepositoryInterface
@@ -26,31 +27,32 @@ class RoleRepository implements RoleRepositoryInterface
         Roles::ReferralRockstars
     ];
 
-    public function model(): Builder
+    private const SEARCH_COLUMNS = [
+        'name',
+    ];
+
+    private const SORT_COLUMNS = [
+        'id',
+        ...self::SEARCH_COLUMNS,
+    ];
+
+    public function model(?RoleFilterDTO $dto = null): Builder
     {
-        return Role::select('id', 'name')->whereIn('name', $this->employee_roles);
+        return Role::select(...self::SORT_COLUMNS)->whereIn('name', $this->employee_roles);
     }
 
-    public function query(): QueryBuilder
+    public function query(?RoleFilterDTO $dto = null): QueryBuilder
     {
-        return QueryBuilder::for($this->model())
-            ->defaultSort('name')
-            ->allowedSorts('id', 'name')
+        return QueryBuilder::for($this->model($dto))
+            ->defaultSort($dto?->sort ?? 'name')
+            ->allowedSorts(...self::SORT_COLUMNS)
             ->allowedFilters([
-                AllowedFilter::custom('search', new CommonFilter, null, false),
+                AllowedFilter::custom('search', new SearchFilter(self::SEARCH_COLUMNS), null, false),
             ]);
     }
 
-    public function paginate(int $total = 15): LengthAwarePaginator
+    public function paginate(?RoleFilterDTO $dto = null): LengthAwarePaginator
     {
-        return $this->query()->paginate($total)->appends(request()->query());
-    }
-}
-
-class CommonFilter implements Filter
-{
-    public function __invoke(Builder $query, mixed $value, string $property): void
-    {
-        $query->where('name', 'LIKE', '%' . $value . '%');
+        return $this->query($dto)->paginate($dto?->total ?? 10)->appends(request()->query());
     }
 }

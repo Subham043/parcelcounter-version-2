@@ -2,40 +2,52 @@
 
 namespace App\Features\Users\Repositories;
 
-
+use App\Features\Users\DTO\UserFilterDTO;
 use App\Features\Users\Models\User;
 use App\Features\Users\Interfaces\UserRepositoryInterface;
+use App\Http\CommonFilters\BooleanFilter;
+use App\Http\CommonFilters\SearchFilter;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Spatie\QueryBuilder\QueryBuilder;
 use Illuminate\Database\Eloquent\Builder;
 use Spatie\QueryBuilder\AllowedFilter;
-use Spatie\QueryBuilder\Filters\Filter;
 
 class UserRepository implements UserRepositoryInterface
 {
-    public function model(): Builder
+    private const SORT_COLUMNS = [
+        'id',
+        'name',
+    ];
+
+    private const SEARCH_COLUMNS = [
+        'name',
+        'email',
+        'phone',
+    ];
+
+    private function getSelectColumns(): array
     {
-        return User::select('id', 'name', 'email', 'phone', 'email_verified_at', 'phone_verified_at', 'is_blocked', 'created_at', 'updated_at')->with(['roles' => function ($query) {
-            $query->select('id', 'name');
+        return [
+            ...self::SORT_COLUMNS,
+            'email', 'phone', 'email_verified_at', 'phone_verified_at', 'is_blocked', 'created_at', 'updated_at'
+        ];
+    }
+    public function model(?UserFilterDTO $dto = null): Builder
+    {
+        return User::select(...$this->getSelectColumns())->with(['roles' => function ($query) {
+            $query->select(...self::SORT_COLUMNS);
         }]);
     }
 
-    public function query(): QueryBuilder
+    public function query(?UserFilterDTO $dto = null): QueryBuilder
     {
-        return QueryBuilder::for($this->model())
-            ->defaultSort('-id')
-            ->allowedSorts('id', 'name')
+        return QueryBuilder::for($this->model($dto))
+            ->defaultSort($dto?->sort ?? '-id')
+            ->allowedSorts(...self::SORT_COLUMNS)
             ->allowedFilters([
-                AllowedFilter::custom('search', new CommonFilter, null, false),
-                AllowedFilter::callback('is_blocked', function (Builder $query, $value) {
-                    if (strtolower($value) == "yes") {
-                        $query->where('is_blocked', true);
-                    }
-                    if (strtolower($value) == "no") {
-                        $query->where('is_blocked', false);
-                    }
-                }),
+                AllowedFilter::custom('search', new SearchFilter(self::SEARCH_COLUMNS), null, false),
+                AllowedFilter::callback('is_blocked', new BooleanFilter),
                 AllowedFilter::callback('is_verified', function (Builder $query, $value) {
                     if (strtolower($value) == "yes") {
                         $query->whereNotNull('phone_verified_at');
@@ -84,25 +96,13 @@ class UserRepository implements UserRepositoryInterface
         return $this->model()->where($column, $value)->firstOrFail();
     }
 
-    public function paginate(int $total = 15): LengthAwarePaginator
+    public function paginate(?UserFilterDTO $dto = null): LengthAwarePaginator
     {
-        return $this->query()->paginate($total)->appends(request()->query());
+        return $this->query($dto)->paginate($dto?->total ?? 10)->appends(request()->query());
     }
 
-    public function getAll(): Collection
+    public function getAll(?UserFilterDTO $dto = null): Collection
     {
-        return $this->query()->lazy(100)->collect();
-    }
-}
-
-class CommonFilter implements Filter
-{
-    public function __invoke(Builder $query, mixed $value, string $property): void
-    {
-        $query->where(function ($q) use ($value) {
-            $q->where('email', $value)
-                ->orWhere('phone', $value)
-                ->orWhereRaw('MATCH(name, email, phone) AGAINST(? IN BOOLEAN MODE)', [$value . '*']);
-        });
+        return $this->query($dto)->lazy(100)->collect();
     }
 }

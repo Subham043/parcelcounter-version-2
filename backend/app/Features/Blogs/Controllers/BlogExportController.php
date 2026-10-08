@@ -4,6 +4,8 @@ namespace App\Features\Blogs\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Features\Blogs\Interfaces\BlogServiceInterface;
+use App\Features\Blogs\Requests\BlogFilterRequest;
+use App\Features\Blogs\DTO\BlogFilterDTO;
 
 class BlogExportController extends Controller
 {
@@ -14,10 +16,10 @@ class BlogExportController extends Controller
      *
      * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
      */
-    public function index()
+    public function index(BlogFilterRequest $request)
     {
         ini_set('memory_limit', '-1');
         ini_set('max_execution_time', 300);
-        return $this->blogService->exportBlogs();
+        return $this->blogService->exportBlogs(BlogFilterDTO::fromRequest($request));
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Features\ProductStocks\Services;
 
 use App\Features\ProductStocks\DTO\ProductStockDTO;
+use App\Features\ProductStocks\DTO\ProductStockFilterDTO;
 use App\Features\ProductStocks\Interfaces\ProductStockRepositoryInterface;
 use App\Features\ProductStocks\Interfaces\ProductStockServiceInterface;
 use App\Features\ProductStocks\Models\ProductStock;
@@ -14,9 +15,9 @@ class ProductStockService implements ProductStockServiceInterface
 
 	public function __construct(private ProductStockRepositoryInterface $stockRepository) {}
 
-	public function paginate(int $product_id, int $total = 10): LengthAwarePaginator
+	public function paginate(int $product_id, ?ProductStockFilterDTO $dto = null): LengthAwarePaginator
 	{
-		return $this->stockRepository->paginate($product_id, $total);
+		return $this->stockRepository->paginate($product_id, $dto);
 	}
 
 	public function getById(int $product_id, int $id): ProductStock

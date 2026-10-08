@@ -11,9 +11,10 @@ final class SubCategoryFilterDTO
         public readonly ?string $search,
         public readonly int $total,
         public readonly string $sort,
-        public readonly ?int $has_categories,
+        public readonly ?int $category,
         public readonly bool $include_category,
         public readonly bool $is_select,
+        public readonly bool $is_active,
     ) {}
 
     /**
@@ -26,9 +27,10 @@ final class SubCategoryFilterDTO
             search: $request->validated('filter.search') ?? null,
             total: $request->validated('total') ?? 10,
             sort: $request->validated('sort') ?? '-id',
-            has_categories: $request->validated('filter.has_categories') ?? null,
+            category: $request->validated('filter.category') ?? null,
             include_category: $request->query('include-category') == 'yes',
             is_select: $request->query('is-select') == 'yes',
+            is_active: $request->validated('filter.is_active') == 'yes',
         );
     }
 
@@ -41,9 +43,10 @@ final class SubCategoryFilterDTO
             'total' => $this->total,
             'search' => $this->search,
             'sort' => $this->sort,
-            'has_categories' => $this->has_categories,
+            'category' => $this->category,
             'include_category' => $this->include_category,
             'is_select' => $this->is_select,
+            'is_active' => $this->is_active,
         ];
 
         return $data;

@@ -17,5 +17,5 @@ interface SubCategoryServiceInterface
     public function getBySlug(string $slug, ?SubCategoryFilterDTO $dto = null): SubCategory;
     public function delete(SubCategory $subCategory): SubCategory;
     public function toggleActive(SubCategory $subCategory): SubCategory;
-    public function exportSubCategories(): \Symfony\Component\HttpFoundation\BinaryFileResponse;
+    public function exportSubCategories(?SubCategoryFilterDTO $dto = null): \Symfony\Component\HttpFoundation\BinaryFileResponse;
 }

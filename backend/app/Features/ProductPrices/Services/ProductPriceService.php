@@ -3,6 +3,7 @@
 namespace App\Features\ProductPrices\Services;
 
 use App\Features\ProductPrices\DTO\ProductPriceDTO;
+use App\Features\ProductPrices\DTO\ProductPriceFilterDTO;
 use App\Features\ProductPrices\Interfaces\ProductPriceRepositoryInterface;
 use App\Features\ProductPrices\Interfaces\ProductPriceServiceInterface;
 use App\Features\ProductPrices\Models\ProductPrice;
@@ -14,9 +15,9 @@ class ProductPriceService implements ProductPriceServiceInterface
 
 	public function __construct(private ProductPriceRepositoryInterface $priceRepository) {}
 
-	public function paginate(int $product_id, int $total = 10): LengthAwarePaginator
+	public function paginate(int $product_id, ?ProductPriceFilterDTO $dto = null): LengthAwarePaginator
 	{
-		return $this->priceRepository->paginate($product_id, $total);
+		return $this->priceRepository->paginate($product_id, $dto);
 	}
 
 	public function getById(int $product_id, int $id): ProductPrice

@@ -3,6 +3,7 @@
 namespace App\Features\BillingInformations\Services;
 
 use App\Features\BillingInformations\DTO\BillingInformationDTO;
+use App\Features\BillingInformations\DTO\BillingInformationFilterDTO;
 use App\Features\BillingInformations\Exports\BillingInformationExport;
 use App\Features\BillingInformations\Interfaces\BillingInformationRepositoryInterface;
 use App\Features\BillingInformations\Interfaces\BillingInformationServiceInterface;
@@ -17,9 +18,9 @@ class BillingInformationService implements BillingInformationServiceInterface
 
 	public function __construct(private BillingInformationRepositoryInterface $informationRepository) {}
 
-	public function paginate(Int $total = 10): LengthAwarePaginator
+	public function paginate(?BillingInformationFilterDTO $dto = null): LengthAwarePaginator
 	{
-		return $this->informationRepository->paginate(auth(Guards::API->value())->user()->id, $total);
+		return $this->informationRepository->paginate(auth(Guards::API->value())->user()->id, $dto);
 	}
 
 	public function getById(Int $id): BillingInformation
@@ -48,8 +49,8 @@ class BillingInformationService implements BillingInformationServiceInterface
 		});
 	}
 
-	public function exportBillingInformations(): \Symfony\Component\HttpFoundation\BinaryFileResponse
+	public function exportBillingInformations(?BillingInformationFilterDTO $dto = null): \Symfony\Component\HttpFoundation\BinaryFileResponse
 	{
-		return Excel::download(new BillingInformationExport($this->informationRepository->query(auth(Guards::API->value())->user()->id)), 'billing_informations.xlsx');
+		return Excel::download(new BillingInformationExport($this->informationRepository->query(auth(Guards::API->value())->user()->id, $dto)), 'billing_informations.xlsx');
 	}
 }

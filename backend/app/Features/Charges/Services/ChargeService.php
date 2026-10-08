@@ -3,6 +3,7 @@
 namespace App\Features\Charges\Services;
 
 use App\Features\Charges\DTO\ChargeDTO;
+use App\Features\Charges\DTO\ChargeFilterDTO;
 use App\Features\Charges\Exports\ChargeExport;
 use App\Features\Charges\Interfaces\ChargeRepositoryInterface;
 use App\Features\Charges\Interfaces\ChargeServiceInterface;
@@ -17,9 +18,9 @@ class ChargeService implements ChargeServiceInterface
 
 	public function __construct(private ChargeRepositoryInterface $chargeRepository) {}
 
-	public function paginate(Int $total = 10): LengthAwarePaginator
+	public function paginate(?ChargeFilterDTO $dto = null): LengthAwarePaginator
 	{
-		return $this->chargeRepository->paginate($total);
+		return $this->chargeRepository->paginate($dto);
 	}
 
 	public function getById(Int $id): Charge
@@ -60,8 +61,8 @@ class ChargeService implements ChargeServiceInterface
 		});
 	}
 
-	public function exportCharges(): \Symfony\Component\HttpFoundation\BinaryFileResponse
+	public function exportCharges(?ChargeFilterDTO $dto = null): \Symfony\Component\HttpFoundation\BinaryFileResponse
 	{
-		return Excel::download(new ChargeExport($this->chargeRepository->query()), 'charges.xlsx');
+		return Excel::download(new ChargeExport($this->chargeRepository->query($dto)), 'charges.xlsx');
 	}
 }

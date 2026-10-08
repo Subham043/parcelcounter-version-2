@@ -2,30 +2,48 @@
 
 namespace App\Features\ProductReviews\Repositories;
 
-
+use App\Features\ProductReviews\DTO\ProductReviewFilterDTO;
 use App\Features\ProductReviews\Models\ProductReview;
 use App\Features\ProductReviews\Interfaces\ProductReviewRepositoryInterface;
+use App\Http\CommonFilters\SearchFilter;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Spatie\QueryBuilder\QueryBuilder;
 use Illuminate\Database\Eloquent\Builder;
 use Spatie\QueryBuilder\AllowedFilter;
-use Spatie\QueryBuilder\Filters\Filter;
 
 class ProductReviewRepository implements ProductReviewRepositoryInterface
 {
-    public function model(int $product_id): Builder
+    private const SORT_COLUMNS = [
+        'id',
+        'rating',
+    ];
+
+    private const SEARCH_COLUMNS = [
+        'comment',
+    ];
+
+    private function getSelectColumns(): array
     {
-        return ProductReview::where('product_id', $product_id)->select('id', 'rating', 'comment', 'product_id', 'user_id', 'is_active', 'created_at', 'updated_at');
+        return [
+            ...self::SORT_COLUMNS,
+            ...self::SEARCH_COLUMNS,
+            'product_id', 'user_id', 'is_active', 'created_at', 'updated_at'
+        ];
     }
 
-    public function query(int $product_id): QueryBuilder
+    public function model(int $product_id, ?ProductReviewFilterDTO $dto = null): Builder
     {
-        return QueryBuilder::for($this->model($product_id))
-            ->defaultSort('-id')
-            ->allowedSorts('id', 'rating')
+        return ProductReview::where('product_id', $product_id)->select(...$this->getSelectColumns());
+    }
+
+    public function query(int $product_id, ?ProductReviewFilterDTO $dto = null): QueryBuilder
+    {
+        return QueryBuilder::for($this->model($product_id, $dto))
+            ->defaultSort($dto?->sort ?? '-id')
+            ->allowedSorts(...self::SORT_COLUMNS)
             ->allowedFilters([
-                AllowedFilter::custom('search', new CommonFilter, null, false),
+                AllowedFilter::custom('search', new SearchFilter(self::SEARCH_COLUMNS), null, false),
             ]);
     }
 
@@ -61,24 +79,13 @@ class ProductReviewRepository implements ProductReviewRepositoryInterface
         return $this->model($product_id)->where($column, $value)->firstOrFail();
     }
 
-    public function paginate(int $product_id, int $total = 15): LengthAwarePaginator
+    public function paginate(int $product_id, ?ProductReviewFilterDTO $dto = null): LengthAwarePaginator
     {
-        return $this->query($product_id)->paginate($total)->appends(request()->query());
+        return $this->query($product_id, $dto)->paginate($dto?->total ?? 10)->appends(request()->query());
     }
 
-    public function getAll(int $product_id): Collection
+    public function getAll(int $product_id, ?ProductReviewFilterDTO $dto = null): Collection
     {
-        return $this->query($product_id)->lazy(100)->collect();
-    }
-}
-
-class CommonFilter implements Filter
-{
-    public function __invoke(Builder $query, mixed $value, string $property): void
-    {
-        $query->where(function ($q) use ($value) {
-            $q->where('comment', $value)
-                ->orWhereRaw('MATCH(comment) AGAINST(? IN BOOLEAN MODE)', [$value . '*']);
-        });
+        return $this->query($product_id, $dto)->lazy(100)->collect();
     }
 }

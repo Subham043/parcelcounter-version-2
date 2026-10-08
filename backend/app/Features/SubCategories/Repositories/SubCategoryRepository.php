@@ -5,24 +5,69 @@ namespace App\Features\SubCategories\Repositories;
 use App\Features\SubCategories\DTO\SubCategoryFilterDTO;
 use App\Features\SubCategories\Interfaces\SubCategoryRepositoryInterface;
 use App\Features\SubCategories\Models\SubCategory;
+use App\Http\CommonFilters\BooleanFilter;
+use App\Http\CommonFilters\CategoryFilter;
+use App\Http\CommonFilters\SearchFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Spatie\QueryBuilder\AllowedFilter;
-use Spatie\QueryBuilder\Filters\Filter;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class SubCategoryRepository implements SubCategoryRepositoryInterface
 {
+    private const SORT_COLUMNS = [
+        'id',
+        'name',
+    ];
+
+    private const SEARCH_COLUMNS = [
+        'name',
+        'slug',
+        'heading',
+        'description_unfiltered',
+        'meta_title',
+        'meta_description',
+        'meta_keywords',
+    ];
+
+    private function getSelectColumns(): array
+    {
+        return [
+            ...self::SORT_COLUMNS,
+            'slug',
+        ];
+    }
+
+    private function getAllColumns(): array
+    {
+        return [
+            ...$this->getSelectColumns(),
+            'heading',
+            'description',
+            'description_unfiltered',
+            'image',
+            'meta_title',
+            'meta_description',
+            'meta_keywords',
+            'is_active',
+            'user_id',
+            'created_at',
+            'updated_at',
+        ];
+    }
+
     public function model(?SubCategoryFilterDTO $dto = null): Builder
     {
-        return SubCategory::
-        when($dto?->is_select==true, function ($query) {
-            return $query->select('id', 'name', 'slug');
-        })
-        ->when($dto?->is_select==false, function ($query) {
-            return $query->select('id', 'name', 'heading', 'slug', 'description', 'description_unfiltered', 'image', 'meta_title', 'meta_description', 'meta_keywords', 'is_active', 'user_id', 'created_at', 'updated_at');
-        })
+        return SubCategory::query()
+        ->when(
+            $dto?->is_select !== null,
+            fn ($query) => $query->select(
+                ...($dto?->is_select === true
+                    ? $this->getSelectColumns()
+                    : $this->getAllColumns())
+            )
+        )
         ->when($dto?->include_category==true, function ($query) {
             return $query->with('categories:id,name,slug');
         });
@@ -32,22 +77,11 @@ class SubCategoryRepository implements SubCategoryRepositoryInterface
     {
         return QueryBuilder::for($this->model($dto))
             ->defaultSort($dto?->sort ?? '-id')
-            ->allowedSorts('id', 'name')
+            ->allowedSorts(...self::SORT_COLUMNS)
             ->allowedFilters([
-                AllowedFilter::custom('search', new CommonFilter, null, false),
-                AllowedFilter::callback('is_active', function (Builder $query, $value) {
-                    if (strtolower($value) == 'yes') {
-                        $query->where('is_active', true);
-                    }
-                    if (strtolower($value) == 'no') {
-                        $query->where('is_active', false);
-                    }
-                }),
-                AllowedFilter::callback('has_categories', function (Builder $query, $value) {
-                    $query->whereHas('categories', function($q) use($value) {
-                        $q->where('category_id', $value);
-                    });
-                }),
+                AllowedFilter::custom('search', new SearchFilter(self::SEARCH_COLUMNS), null, false),
+                AllowedFilter::callback('is_active', new BooleanFilter),
+                AllowedFilter::callback('category', new CategoryFilter),
             ]);
     }
 
@@ -102,22 +136,5 @@ class SubCategoryRepository implements SubCategoryRepositoryInterface
     public function getAll(?SubCategoryFilterDTO $dto = null): Collection
     {
         return $this->query($dto)->lazy(100)->collect();
-    }
-}
-
-class CommonFilter implements Filter
-{
-    public function __invoke(Builder $query, mixed $value, string $property): void
-    {
-        $query->where(function ($q) use ($value) {
-            $q->where('name', $value)
-                ->orWhere('slug', $value)
-                ->orWhere('heading', $value)
-                ->orWhere('description_unfiltered', $value)
-                ->orWhere('meta_title', $value)
-                ->orWhere('meta_description', $value)
-                ->orWhere('meta_keywords', $value)
-                ->orWhereRaw('MATCH(name, slug, heading, description_unfiltered, meta_title, meta_description, meta_keywords) AGAINST(? IN BOOLEAN MODE)', [$value.'*']);
-        });
     }
 }

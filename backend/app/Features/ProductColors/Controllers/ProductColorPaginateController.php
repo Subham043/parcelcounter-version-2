@@ -2,10 +2,11 @@
 
 namespace App\Features\ProductColors\Controllers;
 
+use App\Features\ProductColors\DTO\ProductColorFilterDTO;
 use App\Features\ProductColors\Interfaces\ProductColorServiceInterface;
+use App\Features\ProductColors\Requests\ProductColorFilterRequest;
 use App\Http\Controllers\Controller;
 use App\Features\ProductColors\Resources\ProductColorCollection;
-use Illuminate\Http\Request;
 
 class ProductColorPaginateController extends Controller
 {
@@ -15,12 +16,12 @@ class ProductColorPaginateController extends Controller
      * Returns a paginated collection of colors.
      *
      * @param int $product_id
-     * @param Request $request
+     * @param ProductColorFilterRequest $request
      * @return ProductColorCollection
      */
-    public function index($product_id, Request $request)
+    public function index($product_id, ProductColorFilterRequest $request)
     {
-        $data = $this->colorService->paginate($product_id, $request->total ?? 10);
+        $data = $this->colorService->paginate($product_id, ProductColorFilterDTO::fromRequest($request));
         return ProductColorCollection::collection($data);
     }
 }

@@ -2,46 +2,51 @@
 
 namespace App\Features\Taxes\Repositories;
 
-
+use App\Features\Taxes\DTO\TaxFilterDTO;
 use App\Features\Taxes\Models\Tax;
 use App\Features\Taxes\Interfaces\TaxRepositoryInterface;
+use App\Http\CommonFilters\BooleanFilter;
+use App\Http\CommonFilters\SearchFilter;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Spatie\QueryBuilder\QueryBuilder;
 use Illuminate\Database\Eloquent\Builder;
 use Spatie\QueryBuilder\AllowedFilter;
-use Spatie\QueryBuilder\Filters\Filter;
 
 class TaxRepository implements TaxRepositoryInterface
 {
-    public function model(): Builder
+    private const SORT_COLUMNS = [
+        'id',
+        'name',
+    ];
+
+    private const SEARCH_COLUMNS = [
+        'name',
+        'slug',
+    ];
+
+    private function getSelectColumns(): array
     {
-        return Tax::select('id', 'name', 'slug', 'value', 'is_inter_state_tax', 'is_active', 'user_id', 'created_at', 'updated_at');
+        return [
+            ...self::SORT_COLUMNS,
+            'slug', 'value', 'is_inter_state_tax', 'is_active', 'user_id', 'created_at', 'updated_at'
+        ];
     }
 
-    public function query(): QueryBuilder
+    public function model(?TaxFilterDTO $dto = null): Builder
     {
-        return QueryBuilder::for($this->model())
-            ->defaultSort('-id')
-            ->allowedSorts('id', 'name')
+        return Tax::select(...$this->getSelectColumns());
+    }
+
+    public function query(?TaxFilterDTO $dto = null): QueryBuilder
+    {
+        return QueryBuilder::for($this->model($dto))
+            ->defaultSort($dto?->sort ?? '-id')
+            ->allowedSorts(...self::SORT_COLUMNS)
             ->allowedFilters([
-                AllowedFilter::custom('search', new CommonFilter, null, false),
-                AllowedFilter::callback('is_active', function (Builder $query, $value) {
-                    if (strtolower($value) == "yes") {
-                        $query->where('is_active', true);
-                    }
-                    if (strtolower($value) == "no") {
-                        $query->where('is_active', false);
-                    }
-                }),
-                AllowedFilter::callback('is_inter_state_tax', function (Builder $query, $value) {
-                    if (strtolower($value) == "yes") {
-                        $query->where('is_inter_state_tax', true);
-                    }
-                    if (strtolower($value) == "no") {
-                        $query->where('is_inter_state_tax', false);
-                    }
-                }),
+                AllowedFilter::custom('search', new SearchFilter(self::SEARCH_COLUMNS), null, false),
+                AllowedFilter::callback('is_active', new BooleanFilter),
+                AllowedFilter::callback('is_inter_state_tax', new BooleanFilter),
             ]);
     }
 
@@ -77,25 +82,13 @@ class TaxRepository implements TaxRepositoryInterface
         return $this->model()->where($column, $value)->firstOrFail();
     }
 
-    public function paginate(int $total = 15): LengthAwarePaginator
+    public function paginate(?TaxFilterDTO $dto = null): LengthAwarePaginator
     {
-        return $this->query()->paginate($total)->appends(request()->query());
+        return $this->query($dto)->paginate($dto?->total ?? 10)->appends(request()->query());
     }
 
-    public function getAll(): Collection
+    public function getAll(?TaxFilterDTO $dto = null): Collection
     {
-        return $this->query()->lazy(100)->collect();
-    }
-}
-
-class CommonFilter implements Filter
-{
-    public function __invoke(Builder $query, mixed $value, string $property): void
-    {
-        $query->where(function ($q) use ($value) {
-            $q->where('name', $value)
-                ->orWhere('slug', $value)
-                ->orWhereRaw('MATCH(name, slug) AGAINST(? IN BOOLEAN MODE)', [$value . '*']);
-        });
+        return $this->query($dto)->lazy(100)->collect();
     }
 }

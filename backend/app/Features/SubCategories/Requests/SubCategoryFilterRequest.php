@@ -35,13 +35,13 @@ class SubCategoryFilterRequest extends InputRequest
             
             'is-select' => 'nullable|string|in:yes,no',
             
-            'filter' => 'nullable|array:search,is_active,has_categories',
+            'filter' => 'nullable|array:search,is_active,category',
 
             'filter.search' => 'nullable|string|max:255',
 
             'filter.is_active' => 'nullable|string|in:yes,no',
             
-            'filter.has_categories' => 'nullable|integer|gt:0',
+            'filter.category' => 'nullable|integer|gt:0',
         ];
     }
 }

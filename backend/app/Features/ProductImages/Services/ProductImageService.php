@@ -3,6 +3,7 @@
 namespace App\Features\ProductImages\Services;
 
 use App\Features\ProductImages\DTO\ProductImageDTO;
+use App\Features\ProductImages\DTO\ProductImageFilterDTO;
 use App\Features\ProductImages\Interfaces\ProductImageRepositoryInterface;
 use App\Features\ProductImages\Interfaces\ProductImageServiceInterface;
 use App\Features\ProductImages\Models\ProductImage;
@@ -14,9 +15,9 @@ class ProductImageService implements ProductImageServiceInterface
 
 	public function __construct(private ProductImageRepositoryInterface $imageRepository) {}
 
-	public function paginate(int $product_id, int $total = 10): LengthAwarePaginator
+	public function paginate(int $product_id, ?ProductImageFilterDTO $dto = null): LengthAwarePaginator
 	{
-		return $this->imageRepository->paginate($product_id, $total);
+		return $this->imageRepository->paginate($product_id, $dto);
 	}
 
 	public function getById(int $product_id, int $id): ProductImage

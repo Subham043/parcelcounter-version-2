@@ -3,6 +3,7 @@
 namespace App\Features\Testimonials\Services;
 
 use App\Features\Testimonials\DTO\TestimonialDTO;
+use App\Features\Testimonials\DTO\TestimonialFilterDTO;
 use App\Features\Testimonials\Exports\TestimonialExport;
 use App\Features\Testimonials\Interfaces\TestimonialRepositoryInterface;
 use App\Features\Testimonials\Interfaces\TestimonialServiceInterface;
@@ -17,9 +18,9 @@ class TestimonialService implements TestimonialServiceInterface
 
 	public function __construct(private TestimonialRepositoryInterface $testimonialRepository) {}
 
-	public function paginate(Int $total = 10): LengthAwarePaginator
+	public function paginate(?TestimonialFilterDTO $dto = null): LengthAwarePaginator
 	{
-		return $this->testimonialRepository->paginate($total);
+		return $this->testimonialRepository->paginate($dto);
 	}
 
 	public function getById(Int $id): Testimonial
@@ -59,8 +60,8 @@ class TestimonialService implements TestimonialServiceInterface
 		});
 	}
 
-	public function exportTestimonials(): \Symfony\Component\HttpFoundation\BinaryFileResponse
+	public function exportTestimonials(?TestimonialFilterDTO $dto = null): \Symfony\Component\HttpFoundation\BinaryFileResponse
 	{
-		return Excel::download(new TestimonialExport($this->testimonialRepository->query()), 'testimonials.xlsx');
+		return Excel::download(new TestimonialExport($this->testimonialRepository->query($dto)), 'testimonials.xlsx');
 	}
 }
