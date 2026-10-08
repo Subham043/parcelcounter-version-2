@@ -3,6 +3,7 @@
 namespace App\Features\AboutSections\Services;
 
 use App\Features\AboutSections\DTO\AboutSectionDTO;
+use App\Features\AboutSections\DTO\AboutSectionFilterDTO;
 use App\Features\AboutSections\Exports\AboutSectionExport;
 use App\Features\AboutSections\Interfaces\AboutSectionRepositoryInterface;
 use App\Features\AboutSections\Interfaces\AboutSectionServiceInterface;
@@ -17,9 +18,9 @@ class AboutSectionService implements AboutSectionServiceInterface
 
 	public function __construct(private AboutSectionRepositoryInterface $sectionRepository) {}
 
-	public function paginate(Int $total = 10): LengthAwarePaginator
+	public function paginate(?AboutSectionFilterDTO $dto = null): LengthAwarePaginator
 	{
-		return $this->sectionRepository->paginate($total);
+		return $this->sectionRepository->paginate($dto);
 	}
 
 	public function getById(Int $id): AboutSection
@@ -59,8 +60,8 @@ class AboutSectionService implements AboutSectionServiceInterface
 		});
 	}
 
-	public function exportAboutSections(): \Symfony\Component\HttpFoundation\BinaryFileResponse
+	public function exportAboutSections(?AboutSectionFilterDTO $dto = null): \Symfony\Component\HttpFoundation\BinaryFileResponse
 	{
-		return Excel::download(new AboutSectionExport($this->sectionRepository->query()), 'sections.xlsx');
+		return Excel::download(new AboutSectionExport($this->sectionRepository->query($dto)), 'sections.xlsx');
 	}
 }

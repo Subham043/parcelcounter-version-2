@@ -71,7 +71,7 @@ export default function CategorySelect({
         isSearchable
         className={className}
         placeholder={placeholder}
-        closeMenuOnSelect={false}
+        closeMenuOnSelect={true}
       />
     </div>
   );
