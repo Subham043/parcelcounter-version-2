@@ -2,7 +2,7 @@
 import { useSubCategoriesQuery } from "@/utils/data/query/sub_category";
 
 export function useSubCategoryTable() {
-    const query = useSubCategoriesQuery(true, false);
+    const query = useSubCategoriesQuery({ includeCategory: true });
     return {
         ...query,
     };

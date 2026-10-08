@@ -30,7 +30,7 @@ export function useSubCategoryForm() {
     const { data, isLoading, isFetching, isRefetching } = useSubCategoryQuery(
         modal.type === "update" ? modal.id : 0,
         modal.show && modal.type === "update",
-        true,
+        { includeCategory: true },
         true,
     );
 

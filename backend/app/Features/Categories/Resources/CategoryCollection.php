@@ -7,6 +7,13 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class CategoryCollection extends JsonResource
 {
+
+	private function showData(\Illuminate\Http\Request $request, string $key) {
+		return $this->when(
+				$request->query('is-select') != 'yes',
+				$this->$key
+			);
+	}
 	/**
 	 * Transform the resource collection into an array.
 	 *
@@ -18,19 +25,22 @@ class CategoryCollection extends JsonResource
 		return [
 			'id' => $this->id,
 			'name' => $this->name,
-			'heading' => $this->heading,
 			'slug' => $this->slug,
-			'description' => $this->description,
-			'description_unfiltered' => $this->description_unfiltered,
-			'image' => $this->image,
-			'image_url' => $this->image ? (new FileStorageService)->publicUrl($this->image) : null,
-			'is_active' => $this->is_active,
-			'meta_title' => $this->meta_title,
-			'meta_description' => $this->meta_description,
-			'meta_keywords' => $this->meta_keywords,
-			'user_id' => $this->user_id,
-			'created_at' => $this->created_at,
-			'updated_at' => $this->updated_at,
+			'heading' => $this->showData($request, 'heading'),
+			'description' => $this->showData($request, 'description'),
+			'description_unfiltered' => $this->showData($request, 'description_unfiltered'),
+			'image' => $this->showData($request, 'image'),
+			'image_url' => $this->when(
+				$request->query('is-select') != 'yes',
+				$this->image ? (new FileStorageService)->publicUrl($this->image) : null
+			),
+			'is_active' => $this->showData($request, 'is_active'),
+			'meta_title' => $this->showData($request, 'meta_title'),
+			'meta_description' => $this->showData($request, 'meta_description'),
+			'meta_keywords' => $this->showData($request, 'meta_keywords'),
+			'user_id' => $this->showData($request, 'user_id'),
+			'created_at' => $this->showData($request, 'created_at'),
+			'updated_at' => $this->showData($request, 'updated_at'),
 		];
 	}
 }

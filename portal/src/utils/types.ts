@@ -179,6 +179,94 @@ export type SubCategoryType = {
     updated_at: string;
 }
 
+export type ProductType = {
+    id: number;
+    name: string;
+    slug: string;
+    hsn?: string;
+    description: string;
+    description_unfiltered: string;
+    brief_description: string;
+    image: string;
+    image_url: string;
+    is_active: boolean;
+    is_new: boolean;
+    is_on_sale: boolean;
+    is_featured: boolean;
+    min_cart_quantity: number;
+    cart_quantity_interval: number;
+    cart_quantity_specification: string;
+    meta_title?: string;
+    meta_description?: string;
+    meta_keywords?: string;
+    categories?: {
+        id: number;
+        name: string;
+        slug: string;
+    }[];
+    sub_categories?: {
+        id: number;
+        name: string;
+        slug: string;
+    }[];
+    taxes?: {
+        id: number;
+        name: string;
+        slug: string;
+        value: number;
+        is_inter_state_tax: boolean;
+    }[];
+    specifications?: {
+        id: number;
+        title: string;
+        description: string;
+    }[];
+    images?: {
+        id: number;
+        image_title?: string;
+        image_alt?: string;
+        image: string;
+        image_url: string;
+    }[];
+    videos?: {
+        id: number;
+        video: string;
+    }[];
+    colors?: {
+        id: number;
+        name: string;
+        code: string;
+    }[];
+    prices?: {
+        id: number;
+        price: number;
+        min_quantity: number;
+    }[];
+    stocks?: {
+        id: number;
+        purchase_stock: number;
+        quantity: number;
+        remaining_quantity: number;
+        purchased_at: number;
+    }[];
+    latest_stock?: {
+        id: number;
+        purchase_stock: number;
+        quantity: number;
+        remaining_quantity: number;
+        purchased_at: number;
+    };
+    reviews?: {
+        id: number;
+        rating: number;
+        comment: string;
+        is_active: boolean;
+    }[];
+    user_id: number;
+    created_at: string;
+    updated_at: string;
+}
+
 export type LegalContentType = {
     id: number;
     name: string;
