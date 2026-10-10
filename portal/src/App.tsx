@@ -54,6 +54,8 @@ const SubCategory = lazy(() => import("@/pages/SubCategory/index.tsx"));
 const User = lazy(() => import("@/pages/User/index.tsx"));
 const AboutSection = lazy(() => import("@/pages/AboutSection/index.tsx"));
 const Profile = lazy(() => import("@/pages/Profile/index.tsx"));
+const Product = lazy(() => import("@/pages/Product/index.tsx"));
+const ModifyProduct = lazy(() => import("@/pages/ModifyProduct/index.tsx"));
 
 function App() {
   return (
@@ -112,6 +114,18 @@ function App() {
                   <Route
                     path={page_routes.profile.link}
                     element={<Profile />}
+                  />
+                  <Route
+                    path={page_routes.products.link}
+                    element={<Product />}
+                  />
+                  <Route
+                    path={page_routes.add_product.link}
+                    element={<ModifyProduct />}
+                  />
+                  <Route
+                    path={`${page_routes.edit_product.link}/:id`}
+                    element={<ModifyProduct />}
                   />
                 </Route>
               </Route>

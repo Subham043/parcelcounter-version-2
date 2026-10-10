@@ -64,13 +64,15 @@ export default function SubCategoryForm() {
                     control={form.control}
                     render={({ field, fieldState }) => (
                       <Field data-invalid={fieldState.invalid}>
-                        <FieldLabel htmlFor="blog-form-name">Name</FieldLabel>
+                        <FieldLabel htmlFor="sub-category-form-name">
+                          Name
+                        </FieldLabel>
                         <Input
                           {...field}
                           aria-invalid={fieldState.invalid}
                           placeholder="Enter name"
                           autoComplete="off"
-                          id="blog-form-name"
+                          id="sub-category-form-name"
                         />
                         {fieldState.invalid && (
                           <FieldError errors={[fieldState.error]} />
@@ -83,13 +85,15 @@ export default function SubCategoryForm() {
                     control={form.control}
                     render={({ field, fieldState }) => (
                       <Field data-invalid={fieldState.invalid}>
-                        <FieldLabel htmlFor="blog-form-slug">Slug</FieldLabel>
+                        <FieldLabel htmlFor="sub-category-form-slug">
+                          Slug
+                        </FieldLabel>
                         <Input
                           {...field}
                           aria-invalid={fieldState.invalid}
                           placeholder="Enter slug"
                           autoComplete="off"
-                          id="blog-form-slug"
+                          id="sub-category-form-slug"
                         />
                         {fieldState.invalid && (
                           <FieldError errors={[fieldState.error]} />
@@ -102,7 +106,7 @@ export default function SubCategoryForm() {
                     control={form.control}
                     render={({ field, fieldState }) => (
                       <Field data-invalid={fieldState.invalid}>
-                        <FieldLabel htmlFor="blog-form-heading">
+                        <FieldLabel htmlFor="sub-category-form-heading">
                           Heading
                         </FieldLabel>
                         <Input
@@ -110,7 +114,7 @@ export default function SubCategoryForm() {
                           aria-invalid={fieldState.invalid}
                           placeholder="Enter heading"
                           autoComplete="off"
-                          id="blog-form-heading"
+                          id="sub-category-form-heading"
                         />
                         {fieldState.invalid && (
                           <FieldError errors={[fieldState.error]} />
@@ -123,8 +127,8 @@ export default function SubCategoryForm() {
                     control={form.control}
                     render={({ field, fieldState }) => (
                       <Field data-invalid={fieldState.invalid}>
-                        <FieldLabel htmlFor="blog-form-category">
-                          Heading
+                        <FieldLabel htmlFor="sub-category-form-category">
+                          Category
                         </FieldLabel>
                         <CategoryMultiSelect
                           value={
@@ -144,7 +148,7 @@ export default function SubCategoryForm() {
                       control={form.control}
                       render={({ field, fieldState }) => (
                         <Field data-invalid={fieldState.invalid}>
-                          <FieldLabel htmlFor="blog-form-description">
+                          <FieldLabel htmlFor="sub-category-form-description">
                             Description
                           </FieldLabel>
                           <RichTextEditor
@@ -173,7 +177,7 @@ export default function SubCategoryForm() {
                           data-invalid={fieldState.invalid}
                           className="max-w-full min-w-0"
                         >
-                          <FieldLabel htmlFor="blog-form-image">
+                          <FieldLabel htmlFor="sub-category-form-image">
                             Image
                           </FieldLabel>
                           <SingleImageInput
@@ -193,7 +197,7 @@ export default function SubCategoryForm() {
                     control={form.control}
                     render={({ field, fieldState }) => (
                       <Field data-invalid={fieldState.invalid}>
-                        <FieldLabel htmlFor="blog-form-meta-title">
+                        <FieldLabel htmlFor="sub-category-form-meta-title">
                           Meta Title
                         </FieldLabel>
                         <Input
@@ -201,7 +205,7 @@ export default function SubCategoryForm() {
                           aria-invalid={fieldState.invalid}
                           placeholder="Enter meta title"
                           autoComplete="off"
-                          id="blog-form-meta-title"
+                          id="sub-category-form-meta-title"
                         />
                         {fieldState.invalid && (
                           <FieldError errors={[fieldState.error]} />
@@ -214,7 +218,7 @@ export default function SubCategoryForm() {
                     control={form.control}
                     render={({ field, fieldState }) => (
                       <Field data-invalid={fieldState.invalid}>
-                        <FieldLabel htmlFor="blog-form-meta-keywords">
+                        <FieldLabel htmlFor="sub-category-form-meta-keywords">
                           Meta Keywords
                         </FieldLabel>
                         <TagInput
@@ -233,13 +237,13 @@ export default function SubCategoryForm() {
                       control={form.control}
                       render={({ field, fieldState }) => (
                         <Field data-invalid={fieldState.invalid}>
-                          <FieldLabel htmlFor="blog-form-meta-description">
+                          <FieldLabel htmlFor="sub-category-form-meta-description">
                             Meta Description
                           </FieldLabel>
                           <InputGroup>
                             <InputGroupTextarea
                               {...field}
-                              id="blog-form-meta-description"
+                              id="sub-category-form-meta-description"
                               placeholder="Enter meta description"
                               rows={6}
                               className="min-h-24 resize-none"

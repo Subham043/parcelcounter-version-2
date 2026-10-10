@@ -16,6 +16,7 @@ import {
   ChartColumnStacked,
   Users,
   LayoutTemplate,
+  ShoppingBasket,
 } from "lucide-react";
 import { cn } from "@/utils/lib/utils";
 import { useMemo, useState } from "react";
@@ -124,6 +125,11 @@ const navSections: NavSection[] = [
         label: page_routes.about_section.name,
         icon: <LayoutTemplate size={17} />,
         to: page_routes.about_section.link,
+      },
+      {
+        label: page_routes.products.name,
+        icon: <ShoppingBasket size={17} />,
+        to: page_routes.products.link,
       },
     ],
     // allowedRolesAndPermission: [

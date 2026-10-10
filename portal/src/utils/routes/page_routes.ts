@@ -26,5 +26,8 @@ export const page_routes = {
   sub_categories: { link: "/sub-categories", name: "Sub-Categories" },
   users: { link: "/users", name: "Users" },
   about_section: { link: "/about-section", name: "About Section" },
+  products: { link: "/products", name: "Products" },
+  add_product: { link: "/products/add", name: "Add Product" },
+  edit_product: { link: "/products/edit", name: "Edit Product" },
   dashboard: { link: "/", name: "Dashboard" },
 } as const;

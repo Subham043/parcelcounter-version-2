@@ -247,7 +247,7 @@ export type ProductType = {
         purchase_stock: number;
         quantity: number;
         remaining_quantity: number;
-        purchased_at: number;
+        purchased_at: string;
     }[];
     latest_stock?: {
         id: number;

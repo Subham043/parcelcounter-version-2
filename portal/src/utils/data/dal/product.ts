@@ -3,6 +3,7 @@ import type { ProductFormValuesType } from "../schema/product";
 import axios from "@/utils/axios";
 import type { ProductType, PaginationType } from "@/utils/types";
 import { api_routes } from "@/utils/routes/api_routes";
+import { format } from "date-fns";
 
 const setProductValues = (val: ProductFormValuesType) => {
     return {
@@ -16,11 +17,14 @@ const setProductValues = (val: ProductFormValuesType) => {
         sub_category: val.sub_category.map((sub_category) => sub_category.value) ?? [],
         tax: val.tax.map((tax) => tax.value) ?? [],
         specifications: val.specifications.map((specification) => specification) ?? [],
-        prices: val.prices.map((price) => price) ?? [],
-        stocks: val.stocks.map((stock) => stock) ?? [],
-        colors: val.colors.map((color) => color) ?? [],
-        videos: val.videos.map((video) => video) ?? [],
-        images: val.images.map((image) => image) ?? [],
+        prices: val.prices ?? [],
+        stocks: val.stocks?.map((stock) => ({
+            ...stock,
+            purchased_at: format(stock.purchased_at, "yyyy-MM-dd")
+        })) ?? [],
+        colors: val.colors ?? [],
+        videos: val.videos ?? [],
+        images: val.images ?? [],
     }
 }
 

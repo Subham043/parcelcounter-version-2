@@ -16,7 +16,7 @@ export const useProductCreateMutation = () => {
         },
         onSuccess: (_, __, ___, context) => {
             toastSuccess("Product created successfully");
-            context.client.invalidateQueries({ queryKey: ProductsQueryKey(params) });
+            context.client.invalidateQueries({ queryKey: ProductsQueryKey(params, { includeCategory: true, includeSubCategory: true }) });
         },
     });
 };
@@ -31,7 +31,7 @@ export const useProductUpdateMutation = (id: number) => {
         },
         onSuccess: (data, __, ___, context) => {
             toastSuccess("Product updated successfully");
-            context.client.invalidateQueries({ queryKey: ProductsQueryKey(params) });
+            context.client.invalidateQueries({ queryKey: ProductsQueryKey(params, { includeCategory: true, includeSubCategory: true }) });
             context.client.setQueryData(ProductQueryKey(id), data);
             context.client.setQueryData(ProductQueryKey(id, undefined, true), data);
         },
@@ -48,7 +48,7 @@ export const useProductToggleStatusMutation = (id: number) => {
         },
         onSuccess: (data, __, ___, context) => {
             toastSuccess("Product state toggled successfully");
-            context.client.invalidateQueries({ queryKey: ProductsQueryKey(params) });
+            context.client.invalidateQueries({ queryKey: ProductsQueryKey(params, { includeCategory: true, includeSubCategory: true }) });
             context.client.setQueryData(ProductQueryKey(id), data);
             context.client.setQueryData(ProductQueryKey(id, undefined, true), data);
         },
@@ -69,7 +69,7 @@ export const useProductDeleteMutation = (id: number) => {
         },
         onSuccess: (_, __, ___, context) => {
             toastSuccess("Product deleted successfully");
-            context.client.invalidateQueries({ queryKey: ProductsQueryKey(params) });
+            context.client.invalidateQueries({ queryKey: ProductsQueryKey(params, { includeCategory: true, includeSubCategory: true }) });
             context.client.setQueryData(ProductQueryKey(id), undefined);
             context.client.setQueryData(ProductQueryKey(id, undefined, true), undefined);
         },
