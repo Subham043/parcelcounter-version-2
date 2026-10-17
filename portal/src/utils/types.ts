@@ -298,6 +298,16 @@ export type ProductVideoType = {
     updated_at: string;
 }
 
+export type ProductImageType = {
+    id: number;
+    image_title?: string;
+    image_alt?: string;
+    image: string;
+    image_url: string;
+    created_at: string;
+    updated_at: string;
+}
+
 export type LegalContentType = {
     id: number;
     name: string;

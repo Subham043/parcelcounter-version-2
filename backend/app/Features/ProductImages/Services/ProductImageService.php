@@ -35,7 +35,11 @@ class ProductImageService implements ProductImageServiceInterface
 	public function update(ProductImageDTO $data, ProductImage $image): ProductImage
 	{
 		return DB::transaction(function () use ($data, $image) {
-			return $this->imageRepository->update($image, $data->toArray());
+			$image = $image->image;
+			if($data->image){
+				$image = $data->image;
+			}
+			return $this->imageRepository->update($image, [...$data->toArray(), 'image' => $image]);
 		});
 	}
 
