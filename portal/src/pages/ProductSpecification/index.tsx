@@ -80,8 +80,8 @@ function ProductSpecification() {
           </div>
         ) : (
           <EmptyDataBlock
-            title="No ProductSpecification Found"
-            description="No features are available as of now. Please add now to get started."
+            title="No Product Specification Found"
+            description="No specifications are available as of now. Please add now to get started."
           />
         )}
       </Card>

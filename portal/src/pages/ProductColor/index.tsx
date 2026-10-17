@@ -80,8 +80,8 @@ function ProductColor() {
           </div>
         ) : (
           <EmptyDataBlock
-            title="No ProductColor Found"
-            description="No features are available as of now. Please add now to get started."
+            title="No Product Color Found"
+            description="No colors are available as of now. Please add now to get started."
           />
         )}
       </Card>

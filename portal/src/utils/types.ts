@@ -283,6 +283,13 @@ export type ProductColorType = {
     updated_at: string;
 }
 
+export type ProductVideoType = {
+    id: number;
+    video: string;
+    created_at: string;
+    updated_at: string;
+}
+
 export type LegalContentType = {
     id: number;
     name: string;

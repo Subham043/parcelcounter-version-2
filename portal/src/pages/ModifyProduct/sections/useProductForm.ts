@@ -154,8 +154,6 @@ export function useProductForm() {
         [isUpdate, form.handleSubmit, createProductMutation.mutateAsync, updateProductMutation.mutateAsync, handleClose],
     );
 
-    console.log(form.getValues())
-
     return {
         form,
         isUpdate,

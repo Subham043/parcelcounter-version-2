@@ -58,15 +58,15 @@ export default function ProductColorForm({
                     control={form.control}
                     render={({ field, fieldState }) => (
                       <Field data-invalid={fieldState.invalid}>
-                        <FieldLabel htmlFor="product-specification-form-name">
-                          Title
+                        <FieldLabel htmlFor="product-color-form-name">
+                          Name
                         </FieldLabel>
                         <Input
                           {...field}
                           aria-invalid={fieldState.invalid}
                           placeholder="Enter name"
                           autoComplete="off"
-                          id="product-specification-form-name"
+                          id="product-color-form-name"
                         />
                         {fieldState.invalid && (
                           <FieldError errors={[fieldState.error]} />
@@ -79,14 +79,14 @@ export default function ProductColorForm({
                     control={form.control}
                     render={({ field, fieldState }) => (
                       <Field data-invalid={fieldState.invalid}>
-                        <FieldLabel htmlFor="product-specification-form-code">
-                          Title
+                        <FieldLabel htmlFor="product-color-form-code">
+                          Code
                         </FieldLabel>
                         <Input
                           {...field}
                           aria-invalid={fieldState.invalid}
                           placeholder="Enter code"
-                          id="product-specification-form-code"
+                          id="product-color-form-code"
                           type="color"
                         />
                         {fieldState.invalid && (

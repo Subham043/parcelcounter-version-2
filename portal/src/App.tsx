@@ -60,6 +60,7 @@ const ProductSpecification = lazy(
   () => import("@/pages/ProductSpecification/index.tsx"),
 );
 const ProductColor = lazy(() => import("@/pages/ProductColor/index.tsx"));
+const ProductVideo = lazy(() => import("@/pages/ProductVideo/index.tsx"));
 
 function App() {
   return (
@@ -138,6 +139,10 @@ function App() {
                   <Route
                     path={`${page_routes.product_colors.link}/:product_id`}
                     element={<ProductColor />}
+                  />
+                  <Route
+                    path={`${page_routes.product_videos.link}/:product_id`}
+                    element={<ProductVideo />}
                   />
                 </Route>
               </Route>
