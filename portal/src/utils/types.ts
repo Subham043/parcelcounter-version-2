@@ -275,6 +275,14 @@ export type ProductSpecificationType = {
     updated_at: string;
 }
 
+export type ProductPriceType = {
+    id: number;
+    price: number;
+    min_quantity: number;
+    created_at: string;
+    updated_at: string;
+}
+
 export type ProductColorType = {
     id: number;
     name: string;
