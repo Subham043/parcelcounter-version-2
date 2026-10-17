@@ -64,6 +64,7 @@ const ProductVideo = lazy(() => import("@/pages/ProductVideo/index.tsx"));
 const ProductPrice = lazy(() => import("@/pages/ProductPrice/index.tsx"));
 const ProductImage = lazy(() => import("@/pages/ProductImage/index.tsx"));
 const ProductStock = lazy(() => import("@/pages/ProductStock/index.tsx"));
+const ProductReview = lazy(() => import("@/pages/ProductReview/index.tsx"));
 
 function App() {
   return (
@@ -158,6 +159,10 @@ function App() {
                   <Route
                     path={`${page_routes.product_stocks.link}/:product_id`}
                     element={<ProductStock />}
+                  />
+                  <Route
+                    path={`${page_routes.product_reviews.link}/:product_id`}
+                    element={<ProductReview />}
                   />
                 </Route>
               </Route>

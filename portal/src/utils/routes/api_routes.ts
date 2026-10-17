@@ -150,6 +150,14 @@ export const api_routes = {
       update: (product_id: number, id: number) => `/api/v1/products/product-stocks/${product_id}/update/${id}`,
       delete: (product_id: number, id: number) => `/api/v1/products/product-stocks/${product_id}/delete/${id}`,
     },
+    reviews: {
+      paginate: (product_id: number) => `/api/v1/products/product-reviews/${product_id}/paginate`,
+      view: (product_id: number, id: number) => `/api/v1/products/product-reviews/${product_id}/view/${id}`,
+      create: (product_id: number) => `/api/v1/products/product-reviews/${product_id}/create`,
+      update: (product_id: number, id: number) => `/api/v1/products/product-reviews/${product_id}/update/${id}`,
+      toggle_status: (product_id: number, id: number) => `/api/v1/products/product-reviews/${product_id}/status/${id}`,
+      delete: (product_id: number, id: number) => `/api/v1/products/product-reviews/${product_id}/delete/${id}`,
+    },
   },
   legal_content: {
     paginate: "/api/v1/legal-contents/paginate",
