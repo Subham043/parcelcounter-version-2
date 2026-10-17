@@ -50,7 +50,7 @@ export function useChargeForm() {
                 is_percentage: data?.is_percentage || false,
                 value: data?.value || 0,
                 include_charges_for_cart_price_below: data?.include_charges_for_cart_price_below || undefined,
-                is_active: data?.is_active || true,
+                is_active: data?.is_active,
             });
         }
     }, [modal.show, modal.type, data, form]);

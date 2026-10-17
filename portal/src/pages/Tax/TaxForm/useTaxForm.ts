@@ -47,8 +47,8 @@ export function useTaxForm() {
                 name: data?.name || "",
                 slug: data?.slug || "",
                 value: data?.value || 0,
-                is_inter_state_tax: data?.is_inter_state_tax || false,
-                is_active: data?.is_active || true,
+                is_inter_state_tax: data?.is_inter_state_tax,
+                is_active: data?.is_active,
             });
         }
     }, [modal.show, modal.type, data, form]);

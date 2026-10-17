@@ -48,7 +48,7 @@ export function useAboutSectionForm() {
                 heading: data?.heading || "",
                 description: data?.description || "",
                 description_unfiltered: data?.description_unfiltered || "",
-                is_active: data?.is_active || true,
+                is_active: data?.is_active,
                 is_create: false
             });
         }

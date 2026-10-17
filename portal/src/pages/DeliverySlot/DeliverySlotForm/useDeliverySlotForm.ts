@@ -48,8 +48,8 @@ export function useDeliverySlotForm() {
                 name: data?.name || "",
                 start_time: data?.start_time ? format(parse(data.start_time, "HH:mm:ss", new Date()), "HH:mm") : "",
                 end_time: data?.end_time ? format(parse(data.end_time, "HH:mm:ss", new Date()), "HH:mm") : "",
-                is_cod_allowed: data?.is_cod_allowed || false,
-                is_active: data?.is_active || true,
+                is_cod_allowed: data?.is_cod_allowed,
+                is_active: data?.is_active,
             });
         }
     }, [modal.show, modal.type, data, form]);

@@ -58,8 +58,8 @@ export function useBlogForm() {
                 meta_title: data?.meta_title || undefined,
                 meta_description: data?.meta_description || undefined,
                 meta_keywords: data?.meta_keywords?.split(",") || [] as unknown as string[],
-                is_active: data?.is_active || true,
-                is_popular: data?.is_popular || false,
+                is_active: data?.is_active,
+                is_popular: data?.is_popular,
             });
         }
     }, [modal.show, modal.type, data, form]);

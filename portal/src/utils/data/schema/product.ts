@@ -115,6 +115,7 @@ export const productFormSchema = yup
                 yup.object({
                     title: yup.string().max(255, "Specification title is too Long!").required("Specification title is required"),
                     description: yup.string().max(500, "Specification description is too Long!").required("Specification description is required"),
+                    id: yup.number().optional()
                 }).required("Specification is required")
             )
             .min(1, "Specification is required")
@@ -125,6 +126,7 @@ export const productFormSchema = yup
                 yup.object({
                     min_quantity: yup.number().min(1, "Min Quantity must be at least 1").required("Min Quantity is required"),
                     price: yup.number().min(1, "Price must be at least 1").required("Price is required"),
+                    id: yup.number().optional()
                 }).required("Price is required")
             )
             .min(1, "Price is required")
@@ -136,6 +138,7 @@ export const productFormSchema = yup
                     purchase_stock: yup.number().min(1, "Purchase Stock must be at least 1").required("Purchase Stock is required"),
                     quantity: yup.number().min(1, "Quantity must be at least 1").required("Quantity is required"),
                     purchased_at: yup.date().required("Purchased At is required"),
+                    id: yup.number().optional()
                 }).required("Stock is required")
             )
             .min(1, "Stock is required")
@@ -146,6 +149,7 @@ export const productFormSchema = yup
                 yup.object({
                     name: yup.string().max(255, "Color name is too Long!").required("Color name is required"),
                     code: yup.string().max(255, "Color code is too Long!").required("Color code is required"),
+                    id: yup.number().optional()
                 }).required("Color is required")
             )
             .optional()
@@ -155,6 +159,7 @@ export const productFormSchema = yup
             .of(
                 yup.object({
                     video: yup.string().url("Video URL is invalid").max(255, "Video URL is too Long!").required("Video URL is required"),
+                    id: yup.number().optional()
                 }).required("Video is required")
             )
             .optional()
@@ -188,6 +193,7 @@ export const productFormSchema = yup
                             }
                             return undefined;
                         }),
+                    id: yup.number().optional()
                 }).required("Image is required")
             )
             .optional()

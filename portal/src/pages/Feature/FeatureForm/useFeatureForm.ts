@@ -46,7 +46,7 @@ export function useFeatureForm() {
             form.reset({
                 title: data?.title || "",
                 description: data?.description || "",
-                is_active: data?.is_active || true,
+                is_active: data?.is_active,
                 image: undefined,
                 is_create: false
             });

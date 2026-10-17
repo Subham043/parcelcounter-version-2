@@ -60,7 +60,7 @@ export function useSubCategoryForm() {
                 meta_title: data?.meta_title || undefined,
                 meta_description: data?.meta_description || undefined,
                 meta_keywords: data?.meta_keywords?.split(",") || [] as unknown as string[],
-                is_active: data?.is_active || true,
+                is_active: data?.is_active,
                 category: data?.categories?.map((category) => ({
                     label: category.name,
                     value: category.id,

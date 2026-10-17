@@ -79,10 +79,10 @@ export function useProductForm() {
                 meta_title: data?.meta_title || undefined,
                 meta_description: data?.meta_description || undefined,
                 meta_keywords: data?.meta_keywords?.split(",") || [] as unknown as string[],
-                is_active: data?.is_active || true,
-                is_new: data?.is_new || true,
-                is_on_sale: data?.is_on_sale || true,
-                is_featured: data?.is_featured || true,
+                is_active: data?.is_active,
+                is_new: data?.is_new,
+                is_on_sale: data?.is_on_sale,
+                is_featured: data?.is_featured,
                 category: data?.categories?.map((category) => ({
                     label: category.name,
                     value: category.id,
@@ -98,22 +98,27 @@ export function useProductForm() {
                 specifications: data?.specifications?.map((specification) => ({
                     title: specification.title,
                     description: specification.description,
+                    id: specification.id,
                 })) || [],
                 prices: data?.prices?.map((price) => ({
                     min_quantity: price.min_quantity,
                     price: price.price,
+                    id: price.id,
                 })) || [],
                 stocks: data?.stocks?.map((stock) => ({
                     purchase_stock: stock.purchase_stock,
                     quantity: stock.quantity,
                     purchased_at: new Date(stock.purchased_at),
+                    id: stock.id,
                 })) || [],
                 colors: data?.colors?.map((color) => ({
                     name: color.name,
                     code: color.code,
+                    id: color.id,
                 })) || [],
                 videos: data?.videos?.map((video) => ({
                     video: video.video,
+                    id: video.id,
                 })) || [],
                 images: [],
                 is_create: false
@@ -130,9 +135,6 @@ export function useProductForm() {
             form.handleSubmit(async (values) => {
                 if (isUpdate) {
                     await updateProductMutation.mutateAsync(values, {
-                        onSuccess: () => {
-                            handleClose();
-                        },
                         onError: (error) => {
                             handleFormServerErrors(error, form as UseFormReturn<ProductFormValuesType>);
                         },
@@ -151,6 +153,8 @@ export function useProductForm() {
         },
         [isUpdate, form.handleSubmit, createProductMutation.mutateAsync, updateProductMutation.mutateAsync, handleClose],
     );
+
+    console.log(form.getValues())
 
     return {
         form,

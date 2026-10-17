@@ -34,6 +34,7 @@ export const useProductUpdateMutation = (id: number) => {
             context.client.invalidateQueries({ queryKey: ProductsQueryKey(params, { includeCategory: true, includeSubCategory: true }) });
             context.client.setQueryData(ProductQueryKey(id), data);
             context.client.setQueryData(ProductQueryKey(id, undefined, true), data);
+            context.client.setQueryData(ProductQueryKey(id, { includeCategory: true, includeSubCategory: true, includeTax: true, includeSpecification: true, includeImage: true, includeVideo: true, includeColor: true, includePrice: true, includeStock: true, includeLatestStock: false, includeReview: false }, true), data);
         },
     });
 };

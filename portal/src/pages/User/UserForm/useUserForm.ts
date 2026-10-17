@@ -51,7 +51,7 @@ export function useUserForm() {
                 name: data?.name || "",
                 phone: data?.phone || "",
                 email: data?.email || undefined,
-                is_blocked: data?.is_blocked || false,
+                is_blocked: data?.is_blocked,
                 role: role || undefined,
                 password: undefined,
                 confirm_password: undefined,

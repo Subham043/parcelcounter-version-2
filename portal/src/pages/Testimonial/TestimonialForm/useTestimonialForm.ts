@@ -50,7 +50,7 @@ export function useTestimonialForm() {
                 designation: data?.designation || "",
                 message: data?.message || "",
                 star: data?.star || 5,
-                is_active: data?.is_active || true,
+                is_active: data?.is_active,
                 image: undefined,
                 is_create: false
             });

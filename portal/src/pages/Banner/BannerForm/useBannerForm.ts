@@ -49,7 +49,7 @@ export function useBannerForm() {
                 alt: data?.alt || undefined,
                 desktop_image: undefined,
                 mobile_image: undefined,
-                is_active: data?.is_active || true,
+                is_active: data?.is_active,
                 is_create: false
             });
         }
