@@ -267,6 +267,14 @@ export type ProductType = {
     updated_at: string;
 }
 
+export type ProductSpecificationType = {
+    id: number;
+    title: string;
+    description: string;
+    created_at: string;
+    updated_at: string;
+}
+
 export type LegalContentType = {
     id: number;
     name: string;

@@ -56,6 +56,9 @@ const AboutSection = lazy(() => import("@/pages/AboutSection/index.tsx"));
 const Profile = lazy(() => import("@/pages/Profile/index.tsx"));
 const Product = lazy(() => import("@/pages/Product/index.tsx"));
 const ModifyProduct = lazy(() => import("@/pages/ModifyProduct/index.tsx"));
+const ProductSpecification = lazy(
+  () => import("@/pages/ProductSpecification/index.tsx"),
+);
 
 function App() {
   return (
@@ -126,6 +129,10 @@ function App() {
                   <Route
                     path={`${page_routes.edit_product.link}/:id`}
                     element={<ModifyProduct />}
+                  />
+                  <Route
+                    path={`${page_routes.product_specifications.link}/:product_id`}
+                    element={<ProductSpecification />}
                   />
                 </Route>
               </Route>
