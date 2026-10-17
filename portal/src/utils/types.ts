@@ -308,6 +308,16 @@ export type ProductImageType = {
     updated_at: string;
 }
 
+export type ProductStockType = {
+    id: number;
+    purchase_stock: number;
+    quantity: number;
+    remaining_quantity: number;
+    purchased_at: string;
+    created_at: string;
+    updated_at: string;
+}
+
 export type LegalContentType = {
     id: number;
     name: string;

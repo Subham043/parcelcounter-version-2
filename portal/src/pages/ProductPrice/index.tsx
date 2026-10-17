@@ -6,7 +6,6 @@ import type { ProductPriceType } from "@/utils/types";
 import { useProductPriceTable } from "./sections/useProductPriceTable";
 import { useProductPriceModalStore } from "./store/product-price-modal.store";
 import { useEffect } from "react";
-import ProductPriceFilters from "./sections/ProductPriceFilters";
 import ProductPriceTable from "./sections/ProductPriceTable";
 import EmptyDataBlock from "@/components/EmptyDataBlock";
 import CustomPagination from "@/components/CustomPagination";
@@ -60,12 +59,7 @@ function ProductPrice() {
             </div>
           </div>
         </CardHeader>
-        <div>
-          <Separator orientation="horizontal" className="bg-gray-100" />
-          <div className="px-4 py-3">
-            <ProductPriceFilters />
-          </div>
-        </div>
+        <Separator orientation="horizontal" className="bg-gray-100" />
         {(data && data.meta.total > 0) || isLoading || isFetching ? (
           <div className="overflow-x-auto">
             <ProductPriceTable
