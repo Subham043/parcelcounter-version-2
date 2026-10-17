@@ -275,6 +275,14 @@ export type ProductSpecificationType = {
     updated_at: string;
 }
 
+export type ProductColorType = {
+    id: number;
+    name: string;
+    code: string;
+    created_at: string;
+    updated_at: string;
+}
+
 export type LegalContentType = {
     id: number;
     name: string;

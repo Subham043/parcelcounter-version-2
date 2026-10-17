@@ -30,5 +30,6 @@ export const page_routes = {
   add_product: { link: "/products/add", name: "Add Product" },
   edit_product: { link: "/products/edit", name: "Edit Product" },
   product_specifications: { link: "/products/specifications", name: "Product Specifications" },
+  product_colors: { link: "/products/colors", name: "Product Colors" },
   dashboard: { link: "/", name: "Dashboard" },
 } as const;
