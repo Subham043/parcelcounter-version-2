@@ -1,22 +1,21 @@
 <?php
 
-namespace App\Features\Products\DTO;
+namespace App\Features\Taxes\DTO;
 
-use App\Features\Products\Requests\ProductCreatePostRequest;
-use App\Features\Products\Requests\ProductUpdatePostRequest;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Collection;
 
-final class ProductTaxIdDTO
+final class TaxIdDTO
 {
     public function __construct(
         public readonly array $tax,
     ) {}
 
     /**
-     * @param ProductCreatePostRequest|ProductUpdatePostRequest $request
+     * @param FormRequest $request
      * @return self
      */
-    public static function fromRequest(ProductCreatePostRequest|ProductUpdatePostRequest $request): self
+    public static function fromRequest(FormRequest $request): self
     {
         return new self(
             tax: $request->validated('tax') ?? [],
@@ -32,7 +31,7 @@ final class ProductTaxIdDTO
     }
 
     /**
-     * @extends \Illuminate\Support\Collection<int, ProductDTO>
+     * @extends \Illuminate\Support\Collection<int, TaxIdDTO>
      */
     public function toCollection(): Collection
     {

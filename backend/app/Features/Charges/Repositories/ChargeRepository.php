@@ -17,18 +17,18 @@ class ChargeRepository implements ChargeRepositoryInterface
 {
     private const SORT_COLUMNS = [
         'id',
-        'name',
     ];
-
+    
     private const SEARCH_COLUMNS = [
         'name',
         'slug',
     ];
-
+    
     private function getSelectColumns(): array
     {
         return [
             ...self::SORT_COLUMNS,
+            'name',
             'slug',
             'value', 
             'is_percentage', 
@@ -51,9 +51,9 @@ class ChargeRepository implements ChargeRepositoryInterface
             ->defaultSort($dto?->sort ?? '-id')
             ->allowedSorts(...self::SORT_COLUMNS)
             ->allowedFilters([
-                AllowedFilter::custom('search', new SearchFilter(self::SEARCH_COLUMNS), null, false),
                 AllowedFilter::callback('is_active', new BooleanFilter),
                 AllowedFilter::callback('is_percentage', new BooleanFilter),
+                AllowedFilter::custom('search', new SearchFilter(self::SEARCH_COLUMNS), null, false),
             ]);
     }
 

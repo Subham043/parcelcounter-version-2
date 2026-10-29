@@ -29,8 +29,8 @@ class BannerCreatePostRequest extends InputRequest
         return [
             'title' => 'nullable|string|max:255',
             'alt' => 'nullable|string|max:255',
-            'desktop_image' => 'required|image|mimes:jpeg,png,jpg,webp|max:2048',
-            'mobile_image' => 'required|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'desktop_image' => 'required|file|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'mobile_image' => 'required|file|image|mimes:jpeg,png,jpg,webp|max:2048',
             'is_active' => 'required|boolean',
         ];
     }

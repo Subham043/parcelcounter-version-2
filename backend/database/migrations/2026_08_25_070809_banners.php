@@ -21,12 +21,10 @@ return new class extends Migration
             $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete();
             $table->timestamps();
 
-            // Main index for active banner listing
-            $table->index(
-                ['is_active', 'created_at'],
-                'banners_active_created_at_index'
-            );
+            // Optimized Indexes for Filters & Sorts
+            $table->index('is_active', 'banners_is_active_index');
 
+            // FullText index for Spatie SearchFilter
             $table->fullText(['title', 'alt']);
 
         });

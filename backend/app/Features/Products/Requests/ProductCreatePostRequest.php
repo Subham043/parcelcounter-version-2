@@ -33,7 +33,7 @@ class ProductCreatePostRequest extends InputRequest
             'description' => 'required|string',
             'description_unfiltered' => 'required|string',
             'brief_description' => 'required|string|max:500',
-            'image' => 'required|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'image' => 'required|file|image|mimes:jpeg,png,jpg,webp|max:2048',
             'is_active' => 'required|boolean',
             'is_new' => 'required|boolean',
             'is_on_sale' => 'required|boolean',
@@ -66,7 +66,7 @@ class ProductCreatePostRequest extends InputRequest
             'videos' => 'nullable|array',
             'videos.*.video' => 'required|url|max:255',
             'images' => 'nullable|array',
-            'images.*.image' => 'required|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'images.*.image' => 'required|file|image|mimes:jpeg,png,jpg,webp|max:2048',
         ];
     }
 }

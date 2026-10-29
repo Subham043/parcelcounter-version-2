@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Features\SubCategories\Resources;
+namespace App\Features\ProductStocks\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class CategoryCollection extends JsonResource
+class RelatedProductStockCollection extends JsonResource
 {
 	/**
 	 * Transform the resource collection into an array.
@@ -16,8 +16,10 @@ class CategoryCollection extends JsonResource
 	{
 		return [
 			'id' => $this->id,
-			'name' => $this->name,
-			'slug' => $this->slug,
+			'purchase_stock' => $this->purchase_stock,
+			'quantity' => $this->quantity,
+			'remaining_quantity' => $this->remaining_quantity,
+			'purchased_at' => $this->purchased_at,
 		];
 	}
 }

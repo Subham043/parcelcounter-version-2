@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Features\Products\Resources;
+namespace App\Features\ProductSpecifications\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ProductReviewCollection extends JsonResource
+class RelatedProductSpecificationCollection extends JsonResource
 {
 	/**
 	 * Transform the resource collection into an array.
@@ -16,9 +16,8 @@ class ProductReviewCollection extends JsonResource
 	{
 		return [
 			'id' => $this->id,
-			'rating' => $this->rating,
-			'comment' => $this->comment,
-			'is_active' => $this->is_active,
+			'title' => $this->title,
+			'description' => $this->description,
 		];
 	}
 }

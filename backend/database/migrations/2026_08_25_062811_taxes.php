@@ -21,12 +21,12 @@ return new class extends Migration
             $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete();
             $table->timestamps();
 
-            $table->index(['name', 'slug'], 'taxes_name_slug_index');
-            $table->index(['is_active', 'name', 'slug'], 'taxes_is_active_name_slug_index');
-            $table->index(['is_inter_state_tax', 'name', 'slug'], 'taxes_inter_state_tax_name_slug_index');
-            $table->index(['is_active', 'is_inter_state_tax', 'name', 'slug'], 'taxes_is_active_inter_state_tax_name_slug_index');
-
-            $table->fullText(['name', 'slug']);
+            // Optimized Indexes for Filters & Sorts
+            $table->index('is_active', 'taxes_is_active_index');
+            $table->index('is_inter_state_tax', 'taxes_is_inter_state_tax_index');
+            
+            // FullText index for Spatie SearchFilter
+            $table->fullText(['name', 'slug'], 'taxes_name_slug_fulltext');
 
         });
     }

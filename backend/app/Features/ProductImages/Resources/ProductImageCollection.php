@@ -2,10 +2,8 @@
 
 namespace App\Features\ProductImages\Resources;
 
-use App\Http\Services\FileStorageService;
-use Illuminate\Http\Resources\Json\JsonResource;
 
-class ProductImageCollection extends JsonResource
+class ProductImageCollection extends RelatedProductImageCollection
 {
 	/**
 	 * Transform the resource collection into an array.
@@ -15,14 +13,10 @@ class ProductImageCollection extends JsonResource
 	 */
 	public function toArray($request)
 	{
-		return [
-			'id' => $this->id,
-			'image_title' => $this->image_title,
-			'image_alt' => $this->image_alt,
-			'image' => $this->image,
-			'image_url' => $this->image ? (new FileStorageService)->publicUrl($this->image) : null,
-			'created_at' => $this->created_at,
+		$parentToArray = parent::toArray($request);
+        return array_merge($parentToArray, [
+            'created_at' => $this->created_at,
 			'updated_at' => $this->updated_at,
-		];
+        ]);
 	}
 }

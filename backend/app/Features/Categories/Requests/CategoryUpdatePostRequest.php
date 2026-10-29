@@ -15,7 +15,7 @@ class CategoryUpdatePostRequest extends CategoryCreatePostRequest
     {
         $parentRules = parent::rules();
         return array_merge($parentRules, [
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'image' => 'nullable|file|image|mimes:jpeg,png,jpg,webp|max:2048',
             'slug' => 'required|string|max:255|unique:categories,slug,' . $this->route('id'),
         ]);
     }

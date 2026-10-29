@@ -31,7 +31,7 @@ class TestimonialCreatePostRequest extends InputRequest
             'designation' => 'required|string|max:255',
             'star' => 'required|integer|min:1|max:5',
             'message' => 'required|string|max:500',
-            'image' => 'required|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'image' => 'required|file|image|mimes:jpeg,png,jpg,webp|max:2048',
             'is_active' => 'required|boolean',
         ];
     }

@@ -9,6 +9,7 @@ import StatusToggleBadge from "@/components/StatusToggleBadge";
 import { useSubCategoryToggleStatusMutation } from "@/utils/data/mutation/sub_category";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { getNameInitials } from "@/utils/helper";
+import { Badge } from "@/components/ui/badge";
 
 type SubCategoryTableProps = {
   subCategories: SubCategoryType[];
@@ -70,9 +71,11 @@ const SubCategoryTableRow = memo(function SubCategoryTableRow({
         <p className="text-sm text-gray-500 truncate">{heading}</p>
       </td>
       <td className="px-4 py-3 ">
-        <p className="text-sm text-gray-500">
-          {categories.map((item) => item.name).join(", ")}
-        </p>
+        <div className="space-x-1">
+          {categories.map((item) => (
+            <Badge variant="outline">{item.name}</Badge>
+          ))}
+        </div>
       </td>
       <td className="px-4 py-3 ">
         <p className="text-sm text-gray-500 truncate">

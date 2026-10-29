@@ -20,12 +20,6 @@ final class ProductImageDTO
     public static function fromRequest(ProductCreatePostRequest|ProductUpdatePostRequest $request): self
     {
         $images = [];
-        // foreach($request->validated('images') as $image){
-        //     if($image->hasFile('image')){
-        //         $image = (new FileStorageService)->uploadPublic($image->file('image'), 'product-images');
-        //     }
-        //     $images[] = $image;
-        // }
         foreach ($request->file('images', []) as $image) {
             $images[] = (new FileStorageService)->uploadPublic($image['image'], 'product-images');
         }

@@ -34,6 +34,10 @@ function ProductMainForm({ image_url }: { image_url: string | undefined }) {
     name: "is_create",
     control: control,
   });
+  const category = useWatch({
+    name: "category",
+    control: control,
+  });
   return (
     <Card className="rounded-sm py-0 gap-0">
       <CardHeader className="px-4 py-3">
@@ -155,6 +159,8 @@ function ProductMainForm({ image_url }: { image_url: string | undefined }) {
                 <SubCategoryMultiSelect
                   value={field.value as { label: string; value: number }[]}
                   onChange={field.onChange}
+                  categories={category?.map((it) => it.value).join(",")}
+                  isDisabled={category?.length < 1}
                 />
                 {fieldState.invalid && (
                   <FieldError errors={[fieldState.error]} />

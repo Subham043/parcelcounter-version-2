@@ -130,6 +130,7 @@ use App\Features\PaymentOptions\Controllers\PaymentOptionExportController;
 use App\Features\PaymentOptions\Controllers\PaymentOptionPaginateController;
 use App\Features\PaymentOptions\Controllers\PaymentOptionSlugController;
 use App\Features\PaymentOptions\Controllers\PaymentOptionToggleStatusController;
+use App\Features\PaymentOptions\Controllers\PaymentOptionUpdateController;
 use App\Features\PaymentOptions\Controllers\PaymentOptionViewController;
 use App\Features\ProductColors\Controllers\ProductColorCreateController;
 use App\Features\ProductColors\Controllers\ProductColorDeleteController;
@@ -407,10 +408,11 @@ Route::prefix('v1')->middleware([Throttle::API->middleware()])->group(function (
                 Route::get('/view/{id}', [AboutSectionViewController::class, 'index']);
                 Route::delete('/delete/{id}', [AboutSectionDeleteController::class, 'index']);
             });
-
+            
             Route::prefix('payment-options')->group(function () {
                 Route::get('/excel', [PaymentOptionExportController::class, 'index']);
                 Route::get('/paginate', [PaymentOptionPaginateController::class, 'index']);
+                Route::post('/update/{id}', [PaymentOptionUpdateController::class, 'index']);
                 Route::get('/status/{id}', [PaymentOptionToggleStatusController::class, 'index']);
                 Route::get('/view/{id}', [PaymentOptionViewController::class, 'index']);
                 Route::get('/slug/{slug}', [PaymentOptionSlugController::class, 'index']);

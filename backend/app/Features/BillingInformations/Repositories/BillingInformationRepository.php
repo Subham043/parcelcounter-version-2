@@ -16,25 +16,25 @@ class BillingInformationRepository implements BillingInformationRepositoryInterf
 {
     private const SORT_COLUMNS = [
         'id',
-        'name', 
-        'created_at'
     ];
-
+    
     private const SEARCH_COLUMNS = [
         'name',
         'email',
         'phone',
         'gst',
     ];
-
+    
     private function getSelectColumns(): array
     {
         return [
             ...self::SORT_COLUMNS,
+            'name', 
             'email', 
             'phone', 
             'gst', 
             'user_id',
+            'created_at',
             'updated_at'
         ];
     }

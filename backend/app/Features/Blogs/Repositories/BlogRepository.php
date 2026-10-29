@@ -17,9 +17,8 @@ class BlogRepository implements BlogRepositoryInterface
 {
     private const SORT_COLUMNS = [
         'id',
-        'name',
     ];
-
+    
     private const SEARCH_COLUMNS = [
         'name',
         'slug',
@@ -29,11 +28,12 @@ class BlogRepository implements BlogRepositoryInterface
         'meta_description',
         'meta_keywords',
     ];
-
+    
     private function getSelectColumns(): array
     {
         return [
             ...self::SORT_COLUMNS,
+            'name',
             'heading', 
             'slug', 
             'description', 
@@ -61,9 +61,9 @@ class BlogRepository implements BlogRepositoryInterface
             ->defaultSort($dto?->sort ?? '-id')
             ->allowedSorts(...self::SORT_COLUMNS)
             ->allowedFilters([
-                AllowedFilter::custom('search', new SearchFilter(self::SEARCH_COLUMNS), null, false),
                 AllowedFilter::callback('is_active', new BooleanFilter),
                 AllowedFilter::callback('is_popular', new BooleanFilter),
+                AllowedFilter::custom('search', new SearchFilter(self::SEARCH_COLUMNS), null, false),
             ]);
     }
 

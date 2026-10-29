@@ -10,6 +10,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { getNameInitials } from "@/utils/helper";
 import { Link } from "react-router";
 import { page_routes } from "@/utils/routes/page_routes";
+import { Badge } from "@/components/ui/badge";
 
 type ProductTableProps = {
   products: ProductType[];
@@ -66,14 +67,18 @@ const ProductTableRow = memo(function ProductTableRow({
         <p className="text-sm text-gray-500 truncate">{hsn ?? "-"}</p>
       </td>
       <td className="px-4 py-3 ">
-        <p className="text-sm text-gray-500">
-          {categories.map((item) => item.name).join(", ")}
-        </p>
+        <div className="space-x-1">
+          {categories.map((item) => (
+            <Badge variant="outline">{item.name}</Badge>
+          ))}
+        </div>
       </td>
       <td className="px-4 py-3 ">
-        <p className="text-sm text-gray-500">
-          {sub_categories.map((item) => item.name).join(", ")}
-        </p>
+        <div className="space-x-1">
+          {sub_categories.map((item) => (
+            <Badge variant="outline">{item.name}</Badge>
+          ))}
+        </div>
       </td>
       <td className="px-4 py-3 ">
         <p className="text-sm text-gray-500 truncate">{brief_description}</p>

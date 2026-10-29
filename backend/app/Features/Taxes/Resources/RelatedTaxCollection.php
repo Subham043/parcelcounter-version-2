@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Features\Products\Resources;
+namespace App\Features\Taxes\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ProductStockCollection extends JsonResource
+class RelatedTaxCollection extends JsonResource
 {
 	/**
 	 * Transform the resource collection into an array.
@@ -16,10 +16,10 @@ class ProductStockCollection extends JsonResource
 	{
 		return [
 			'id' => $this->id,
-			'purchase_stock' => $this->purchase_stock,
-			'quantity' => $this->quantity,
-			'remaining_quantity' => $this->remaining_quantity,
-			'purchased_at' => $this->purchased_at,
+			'name' => $this->name,
+			'slug' => $this->slug,
+			'value' => $this->value,
+			'is_inter_state_tax' => $this->is_inter_state_tax,
 		];
 	}
 }

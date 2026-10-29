@@ -2,10 +2,11 @@
 
 namespace App\Features\Products\Controllers;
 
+use App\Features\Products\DTO\ProductFilterDTO;
 use App\Features\Products\Interfaces\ProductServiceInterface;
+use App\Features\Products\Requests\ProductFilterRequest;
 use App\Http\Controllers\Controller;
 use App\Features\Products\Resources\ProductCollection;
-use Illuminate\Http\Request;
 
 class ProductSlugController extends Controller
 {
@@ -17,9 +18,9 @@ class ProductSlugController extends Controller
      * @param  string $slug
      * @return \Illuminate\Http\Response
      */
-    public function index($slug, Request $request)
+    public function index($slug, ProductFilterRequest $request)
     {
-        $product = $this->productService->getBySlug($slug, $request->query('include-category') == 'yes', $request->query('include-sub-category') == 'yes', $request->query('include-tax') == 'yes', $request->query('include-specification') == 'yes', $request->query('include-image') == 'yes', $request->query('include-video') == 'yes', $request->query('include-color') == 'yes', $request->query('include-price') == 'yes', $request->query('include-stock') == 'yes', $request->query('include-latest-stock') == 'yes', $request->query('include-review') == 'yes');
+        $product = $this->productService->getBySlug($slug, ProductFilterDTO::fromRequest($request));
         return response()->json(["message" => "Product fetched successfully.", "data" => ProductCollection::make($product)], 200);
     }
 }

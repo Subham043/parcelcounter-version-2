@@ -36,7 +36,16 @@ return new class extends Migration
             $table->index(['name', 'slug'], 'products_name_slug_index');
             $table->index(['is_active', 'name', 'slug'], 'products_is_active_name_slug_index');
 
+            // Optimized Indexes for Filters & Sorts
+            $table->index('is_active', 'products_is_active_index');
+            $table->index(['is_active', 'name'], 'products_is_active_name_index');
+            $table->index(['is_active', 'is_new', 'name'], 'products_is_new_index');
+            $table->index(['is_active', 'is_on_sale', 'name'], 'products_is_on_sale_index');
+            $table->index(['is_active', 'is_featured', 'name'], 'products_is_featured_index');
+            
+            // FullText index for Spatie SearchFilter
             $table->fullText(['name', 'slug', 'hsn', 'description_unfiltered', 'brief_description', 'meta_title', 'meta_description', 'meta_keywords'], 'products_fulltext');
+            $table->fullText(['name', 'slug', 'meta_keywords'], 'products_global_fulltext');
 
         });
     }

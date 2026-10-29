@@ -25,9 +25,11 @@ return new class extends Migration
             $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete();
             $table->timestamps();
 
-            $table->index(['name', 'slug'], 'legal_contents_name_slug_index');
-            $table->index(['is_active', 'name', 'slug'], 'legal_contents_is_active_name_slug_index');
+            // Optimized Indexes for Filters & Sorts
+            $table->index(['is_active'], 'legal_contents_is_active_index');
+            $table->index(['is_active', 'name'], 'legal_contents_is_active_name_index');
 
+            // FullText index for Spatie SearchFilter
             $table->fullText(['name', 'slug', 'heading', 'description_unfiltered', 'meta_title', 'meta_description', 'meta_keywords'], 'legal_contents_fulltext');
 
         });

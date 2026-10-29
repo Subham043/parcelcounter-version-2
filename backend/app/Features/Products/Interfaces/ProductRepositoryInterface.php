@@ -2,6 +2,7 @@
 
 namespace App\Features\Products\Interfaces;
 
+use App\Features\Products\DTO\ProductFilterDTO;
 use App\Features\Products\Models\Product;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
@@ -10,8 +11,8 @@ use Illuminate\Database\Eloquent\Builder;
 
 interface ProductRepositoryInterface
 {
-    public function model(bool $withCategory = false, bool $withSubCategory = false, bool $withTax = false, bool $withSpecification = false, bool $withImage = false, bool $withVideo = false, bool $withColors = false, bool $withPrice = false, bool $withStock = false, bool $withLatestStock = false, bool $withReview = false): Builder;
-    public function query(bool $withCategory = false, bool $withSubCategory = false, bool $withTax = false, bool $withSpecification = false, bool $withImage = false, bool $withVideo = false, bool $withColors = false, bool $withPrice = false, bool $withStock = false, bool $withLatestStock = false, bool $withReview = false): QueryBuilder;
+    public function model(?ProductFilterDTO $dto = null): Builder;
+    public function query(?ProductFilterDTO $dto = null): QueryBuilder;
     public function create(array $data): Product;
     public function update(Product $product, array $data): Product;
     public function syncCategories(Product $product, array $data): Product;
@@ -24,9 +25,9 @@ interface ProductRepositoryInterface
     public function saveVideos(Product $product, array $data): Product;
     public function saveImages(Product $product, array $data): Product;
     public function delete(Product $product): Product;
-    public function getById(int $id, bool $withCategory = false, bool $withSubCategory = false, bool $withTax = false, bool $withSpecification = false, bool $withImage = false, bool $withVideo = false, bool $withColors = false, bool $withPrice = false, bool $withStock = false, bool $withLatestStock = false, bool $withReview = false): Product;
-    public function getByColumn(string $column, mixed $value, bool $withCategory = false, bool $withSubCategory = false, bool $withTax = false, bool $withSpecification = false, bool $withImage = false, bool $withVideo = false, bool $withColors = false, bool $withPrice = false, bool $withStock = false, bool $withLatestStock = false, bool $withReview = false): ?Product;
-    public function getByColumnOrFail(string $column, mixed $value, bool $withCategory = false, bool $withSubCategory = false, bool $withTax = false, bool $withSpecification = false, bool $withImage = false, bool $withVideo = false, bool $withColors = false, bool $withPrice = false, bool $withStock = false, bool $withLatestStock = false, bool $withReview = false): Product;
-    public function paginate(int $total = 15, bool $withCategory = false, bool $withSubCategory = false, bool $withTax = false, bool $withSpecification = false, bool $withImage = false, bool $withVideo = false, bool $withColors = false, bool $withPrice = false, bool $withStock = false, bool $withLatestStock = false, bool $withReview = false): LengthAwarePaginator;
-    public function getAll(bool $withCategory = false, bool $withSubCategory = false, bool $withTax = false, bool $withSpecification = false, bool $withImage = false, bool $withVideo = false, bool $withColors = false, bool $withPrice = false, bool $withStock = false, bool $withLatestStock = false, bool $withReview = false): Collection;
+    public function getById(int $id, ?ProductFilterDTO $dto = null): Product;
+    public function getByColumn(string $column, mixed $value, ?ProductFilterDTO $dto = null): ?Product;
+    public function getByColumnOrFail(string $column, mixed $value, ?ProductFilterDTO $dto = null): Product;
+    public function paginate(?ProductFilterDTO $dto = null): LengthAwarePaginator;
+    public function getAll(?ProductFilterDTO $dto = null): Collection;
 }

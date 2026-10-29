@@ -16,9 +16,6 @@ return new class extends Migration
             $table->string('video', 500)->nullable();
             $table->foreignId('product_id')->nullable()->constrained('products')->nullOnDelete();
             $table->timestamps();
-
-            // Main index for active feature listing
-            $table->index(['created_at', 'id'], 'product_videos_created_at_id_index');
         });
     }
 

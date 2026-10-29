@@ -16,14 +16,12 @@ class ContactFormEnquiryRepository implements ContactFormEnquiryRepositoryInterf
 {
     private const SORT_COLUMNS = [
         'id',
-        'name',
-        'created_at'
     ];
-
+    
     private const SEARCH_COLUMNS = [
         'name', 'email', 'phone', 'page_url', 'subject', 'message'
     ];
-
+    
     private function getSelectColumns(): array
     {
         return [
@@ -34,6 +32,7 @@ class ContactFormEnquiryRepository implements ContactFormEnquiryRepositoryInterf
             'subject', 
             'message', 
             'page_url',
+            'created_at',
             'updated_at'
         ];
     }

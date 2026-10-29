@@ -3,9 +3,8 @@
 namespace App\Features\Categories\Resources;
 
 use App\Http\Services\FileStorageService;
-use Illuminate\Http\Resources\Json\JsonResource;
 
-class CategoryCollection extends JsonResource
+class CategoryCollection extends RelatedCategoryCollection
 {
 
 	private function showData(\Illuminate\Http\Request $request, string $key) {
@@ -22,11 +21,9 @@ class CategoryCollection extends JsonResource
 	 */
 	public function toArray($request)
 	{
-		return [
-			'id' => $this->id,
-			'name' => $this->name,
-			'slug' => $this->slug,
-			'heading' => $this->showData($request, 'heading'),
+		$parentToArray = parent::toArray($request);
+        return array_merge($parentToArray, [
+            'heading' => $this->showData($request, 'heading'),
 			'description' => $this->showData($request, 'description'),
 			'description_unfiltered' => $this->showData($request, 'description_unfiltered'),
 			'image' => $this->showData($request, 'image'),
@@ -41,6 +38,6 @@ class CategoryCollection extends JsonResource
 			'user_id' => $this->showData($request, 'user_id'),
 			'created_at' => $this->showData($request, 'created_at'),
 			'updated_at' => $this->showData($request, 'updated_at'),
-		];
+        ]);
 	}
 }

@@ -20,18 +20,11 @@ return new class extends Migration
             $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete();
             $table->timestamps();
 
-            // Main index for active product_review listing
-            $table->index(
-                ['is_active', 'created_at'],
-                'product_reviews_active_created_at_index'
-            );
-
-            // Optional: useful if listing/filtering by rating
-            $table->index(
-                ['is_active', 'rating'],
-                'product_reviews_active_star_index'
-            );
-
+            // Optimized Indexes for Filters & Sorts
+            $table->index('is_active', 'product_reviews_is_active_index');
+            $table->index(['is_active', 'rating'], 'product_reviews_active_rating_index');
+            
+            // FullText index for Spatie SearchFilter
             $table->fullText(['comment']);
         });
     }

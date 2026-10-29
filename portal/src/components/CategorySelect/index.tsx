@@ -55,7 +55,7 @@ export default function CategorySelect({
   );
 
   return (
-    <div className="relative z-20 flex-1">
+    <div className="relative z-10 flex-1">
       <AsyncPaginate
         value={value ? value : null}
         isMulti={false}

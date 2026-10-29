@@ -2,6 +2,16 @@
 
 namespace App\Features\Products\Resources;
 
+use App\Features\Categories\Resources\RelatedCategoryCollection;
+use App\Features\ProductColors\Resources\RelatedProductColorCollection;
+use App\Features\ProductImages\Resources\RelatedProductImageCollection;
+use App\Features\ProductPrices\Resources\RelatedProductPriceCollection;
+use App\Features\ProductReviews\Resources\RelatedProductReviewCollection;
+use App\Features\ProductSpecifications\Resources\RelatedProductSpecificationCollection;
+use App\Features\ProductStocks\Resources\RelatedProductStockCollection;
+use App\Features\ProductVideos\Resources\RelatedProductVideoCollection;
+use App\Features\SubCategories\Resources\RelatedSubCategoryCollection;
+use App\Features\Taxes\Resources\RelatedTaxCollection;
 use App\Http\Services\FileStorageService;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -38,47 +48,47 @@ class ProductCollection extends JsonResource
 			'user_id' => $this->user_id,
 			'categories' => $this->when(
 				$this->relationLoaded('categories'),
-				fn () => ProductCategoryCollection::collection($this->categories)
+				fn () => RelatedCategoryCollection::collection($this->categories)
 			),
 			'sub_categories' => $this->when(
 				$this->relationLoaded('sub_categories'),
-				fn () => ProductSubCategoryCollection::collection($this->sub_categories)
+				fn () => RelatedSubCategoryCollection::collection($this->sub_categories)
 			),
 			'taxes' => $this->when(
 				$this->relationLoaded('taxes'),
-				fn () => ProductTaxCollection::collection($this->taxes)
+				fn () => RelatedTaxCollection::collection($this->taxes)
 			),
 			'specifications' => $this->when(
 				$this->relationLoaded('specifications'),
-				fn () => ProductSpecificationCollection::collection($this->specifications)
+				fn () => RelatedProductSpecificationCollection::collection($this->specifications)
 			),
 			'images' => $this->when(
 				$this->relationLoaded('images'),
-				fn () => ProductImageCollection::collection($this->images)
+				fn () => RelatedProductImageCollection::collection($this->images)
 			),
 			'videos' => $this->when(
 				$this->relationLoaded('videos'),
-				fn () => ProductVideoCollection::collection($this->videos)
+				fn () => RelatedProductVideoCollection::collection($this->videos)
 			),
 			'colors' => $this->when(
 				$this->relationLoaded('colors'),
-				fn () => ProductColorCollection::collection($this->colors)
+				fn () => RelatedProductColorCollection::collection($this->colors)
 			),
 			'prices' => $this->when(
 				$this->relationLoaded('prices'),
-				fn () => ProductPriceCollection::collection($this->prices)
+				fn () => RelatedProductPriceCollection::collection($this->prices)
 			),
 			'stocks' => $this->when(
 				$this->relationLoaded('stocks'),
-				fn () => ProductStockCollection::collection($this->stocks)
+				fn () => RelatedProductStockCollection::collection($this->stocks)
 			),
 			'latest_stock' => $this->when(
 				$this->relationLoaded('latest_stock'),
-				fn () => ProductStockCollection::make($this->latest_stock)
+				fn () => RelatedProductStockCollection::make($this->latest_stock)
 			),
 			'reviews' => $this->when(
 				$this->relationLoaded('reviews'),
-				fn () => ProductReviewCollection::collection($this->reviews)
+				fn () => RelatedProductReviewCollection::collection($this->reviews)
 			),
 			'created_at' => $this->created_at,
 			'updated_at' => $this->updated_at,

@@ -12,7 +12,7 @@ function AppHeader() {
   const { isMobile, open } = useSidebar();
   return (
     <header
-      className={`fixed top-0 right-0 transition-all duration-300 ease-in-out flex justify-between h-16 shrink-0 bg-background items-center gap-2 group-has-data-[collapsible=icon]/sidebar-wrapper:h-12 border-b`}
+      className={`fixed top-0 right-0 transition-all duration-300 ease-in-out flex justify-between h-16 shrink-0 bg-background items-center gap-2 group-has-data-[collapsible=icon]/sidebar-wrapper:h-12 border-b z-20`}
       style={{
         width: `calc(100% - ${
           open ? (isMobile ? SIDEBAR_WIDTH_MOBILE : SIDEBAR_WIDTH) : "0px"

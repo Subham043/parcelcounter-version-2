@@ -49,9 +49,9 @@ class DeliverySlotRepository implements DeliverySlotRepositoryInterface
             ->defaultSort($dto?->sort ?? '-id')
             ->allowedSorts(...self::SORT_COLUMNS)
             ->allowedFilters([
-                AllowedFilter::custom('search', new SearchFilter(self::SEARCH_COLUMNS), null, false),
                 AllowedFilter::callback('is_active', new BooleanFilter),
                 AllowedFilter::callback('is_cod_allowed', new BooleanFilter),
+                AllowedFilter::custom('search', new SearchFilter(self::SEARCH_COLUMNS), null, false),
             ]);
     }
 

@@ -6,6 +6,7 @@ use App\Features\SubCategories\DTO\SubCategoryFilterDTO;
 use App\Features\SubCategories\Interfaces\SubCategoryRepositoryInterface;
 use App\Features\SubCategories\Models\SubCategory;
 use App\Http\CommonFilters\BooleanFilter;
+use App\Http\CommonFilters\CategoriesFilter;
 use App\Http\CommonFilters\CategoryFilter;
 use App\Http\CommonFilters\SearchFilter;
 use Illuminate\Database\Eloquent\Builder;
@@ -79,9 +80,10 @@ class SubCategoryRepository implements SubCategoryRepositoryInterface
             ->defaultSort($dto?->sort ?? '-id')
             ->allowedSorts(...self::SORT_COLUMNS)
             ->allowedFilters([
-                AllowedFilter::custom('search', new SearchFilter(self::SEARCH_COLUMNS), null, false),
                 AllowedFilter::callback('is_active', new BooleanFilter),
                 AllowedFilter::callback('category', new CategoryFilter),
+                AllowedFilter::callback('categories', new CategoriesFilter),
+                AllowedFilter::custom('search', new SearchFilter(self::SEARCH_COLUMNS), null, false),
             ]);
     }
 

@@ -35,13 +35,15 @@ class SubCategoryFilterRequest extends InputRequest
             
             'is-select' => 'nullable|string|in:yes,no',
             
-            'filter' => 'nullable|array:search,is_active,category',
+            'filter' => 'nullable|array:search,is_active,category,categories',
 
             'filter.search' => 'nullable|string|max:255',
 
             'filter.is_active' => 'nullable|string|in:yes,no',
             
             'filter.category' => 'nullable|integer|gt:0',
+
+            'filter.categories' => ['nullable', 'string', 'regex:/^\d+(,\d+)*$/'],
         ];
     }
 }

@@ -2,48 +2,119 @@
 
 namespace App\Features\Products\Repositories;
 
+use App\Features\Products\DTO\ProductFilterDTO;
 use App\Features\Products\Interfaces\ProductRepositoryInterface;
 use App\Features\Products\Models\Product;
+use App\Http\CommonFilters\BooleanFilter;
+use App\Http\CommonFilters\CategoryFilter;
+use App\Http\CommonFilters\SubCategoryFilter;
+use App\Http\CommonFilters\SearchFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Spatie\QueryBuilder\AllowedFilter;
-use Spatie\QueryBuilder\Filters\Filter;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class ProductRepository implements ProductRepositoryInterface
 {
-    public function model(bool $withCategory = false, bool $withSubCategory = false, bool $withTax = false, bool $withSpecification = false, bool $withImage = false, bool $withVideo = false, bool $withColors = false, bool $withPrice = false, bool $withStock = false, bool $withLatestStock = false, bool $withReview = false): Builder
+    private const SORT_COLUMNS = [
+        'id',
+        'name',
+    ];
+
+    private const SEARCH_COLUMNS = [
+        'name',
+        'slug',
+        'hsn',
+        'description_unfiltered',
+        'brief_description',
+        'meta_title',
+        'meta_description',
+        'meta_keywords',
+    ];
+
+    private function getSelectColumns(): array
     {
-        return Product::select('id', 'name', 'hsn', 'slug', 'description', 'description_unfiltered', 'brief_description', 'image', 'meta_title', 'meta_description', 'meta_keywords', 'is_active', 'is_new', 'is_on_sale', 'is_featured', 'min_cart_quantity', 'cart_quantity_interval', 'cart_quantity_specification', 'user_id', 'created_at', 'updated_at')
-        ->when($withCategory, function ($query) {
-            return $query->with('categories:id,name');
+        return [
+            ...self::SORT_COLUMNS,
+            'slug',
+        ];
+    }
+
+    private function getAllColumns(): array
+    {
+        return [
+            ...$this->getSelectColumns(),
+            'hsn',
+            'description',
+            'description_unfiltered',
+            'brief_description',
+            'image',
+            'meta_title',
+            'meta_description',
+            'meta_keywords',
+            'is_active',
+            'is_new', 
+            'is_on_sale', 
+            'is_featured', 
+            'min_cart_quantity', 
+            'cart_quantity_interval', 
+            'cart_quantity_specification',
+            'user_id',
+            'created_at',
+            'updated_at',
+        ];
+    }
+
+    public function model(?ProductFilterDTO $dto = null): Builder
+    {
+        return Product::query()
+        ->when(
+            $dto?->is_select !== null,
+            fn ($query) => $query->select(
+                ...($dto?->is_select === true
+                    ? $this->getSelectColumns()
+                    : $this->getAllColumns())
+            )
+        )
+        ->when($dto?->include_category==true, function ($query) {
+            return $query->with('categories:id,name,slug');
         })
-        ->when($withSubCategory, function ($query) {
-            return $query->with('sub_categories:id,name');
+        ->when($dto?->include_sub_category==true, function ($query) {
+            return $query->with('sub_categories:id,name,slug');
         })
-        ->when($withTax, function ($query) {
+        ->when($dto?->include_tax==true, function ($query) {
             return $query->with('taxes:id,name,slug,value,is_inter_state_tax');
         })
-        ->when($withSpecification, function ($query) {
+        ->when($dto?->include_specification==true, function ($query) {
             return $query->with('specifications:id,title,description,product_id');
         })
-        ->when($withImage, function ($query) {
+        ->when($dto?->include_image==true, function ($query) {
             return $query->with('images:id,image,image_title,image_alt,product_id');
         })
-        ->when($withVideo, function ($query) {
+        ->when($dto?->include_video==true, function ($query) {
             return $query->with('videos:id,video,product_id');
         })
-        ->when($withColors, function ($query) {
+        ->when($dto?->include_color==true, function ($query) {
             return $query->with('colors:id,name,code,product_id');
         })
-        ->when($withPrice, function ($query) {
-            return $query->with('prices:id,min_quantity,price,product_id');
+        ->when($dto?->include_price==true, function ($query) {
+            // return $query->with('prices:id,min_quantity,price,product_id')->orderBy('product_prices.min_quantity', 'asc');
+            return $query->with([
+                'prices' => function ($query) {
+                    $query->select([
+                        'product_prices.id',
+                        'product_prices.product_id',
+                        'product_prices.min_quantity',
+                        'product_prices.price'
+                    ])->orderBy('product_prices.min_quantity', 'asc');
+                },
+            ]);
         })
-        ->when($withStock, function ($query) {
+        ->when($dto?->include_stock==true, function ($query) {
             return $query->with('stocks:id,purchase_stock,quantity,remaining_quantity,purchased_at,product_id');
         })
-        ->when($withLatestStock, function ($query) {
+        ->when($dto?->include_latest_stock==true, function ($query) {
             return $query->with([
                 'latest_stock' => function ($query) {
                     $query->select([
@@ -57,32 +128,30 @@ class ProductRepository implements ProductRepositoryInterface
                 },
             ]);
         })
-        ->when($withReview, function ($query) {
+        ->when($dto?->include_review==true, function ($query) {
             return $query->with('reviews:id,rating,comment,is_active,product_id');
         });
     }
 
-    public function query(bool $withCategory = false, bool $withSubCategory = false, bool $withTax = false, bool $withSpecification = false, bool $withImage = false, bool $withVideo = false, bool $withColors = false, bool $withPrice = false, bool $withStock = false, bool $withLatestStock = false, bool $withReview = false): QueryBuilder
+    public function query(?ProductFilterDTO $dto = null): QueryBuilder
     {
-        return QueryBuilder::for($this->model($withCategory, $withSubCategory, $withTax, $withSpecification, $withImage, $withVideo, $withColors, $withPrice, $withStock, $withLatestStock, $withReview))
-            ->defaultSort('-id')
-            ->allowedSorts('id', 'name')
+        return QueryBuilder::for($this->model($dto))
+            ->defaultSort($dto?->sort ?? '-id')
+            ->allowedSorts(...self::SORT_COLUMNS)
             ->allowedFilters([
-                AllowedFilter::custom('search', new CommonFilter, null, false),
-                AllowedFilter::callback('is_active', function (Builder $query, $value) {
-                    if (strtolower($value) == 'yes') {
-                        $query->where('is_active', true);
-                    }
-                    if (strtolower($value) == 'no') {
-                        $query->where('is_active', false);
-                    }
-                }),
+                AllowedFilter::callback('is_active', new BooleanFilter),
+                AllowedFilter::callback('is_new', new BooleanFilter),
+                AllowedFilter::callback('is_on_sale', new BooleanFilter),
+                AllowedFilter::callback('is_featured', new BooleanFilter),
+                AllowedFilter::callback('category', new CategoryFilter),
+                AllowedFilter::callback('sub_category', new SubCategoryFilter),
+                AllowedFilter::custom('search', new SearchFilter(self::SEARCH_COLUMNS), null, false),
             ]);
     }
 
     public function create(array $data): Product
     {
-        return $this->model(false)->create($data);
+        return $this->model(null)->create($data);
     }
 
     public function update(Product $product, array $data): Product
@@ -253,46 +322,28 @@ class ProductRepository implements ProductRepositoryInterface
         ]);
     }
 
-    public function getById(int $id, bool $withCategory = false, bool $withSubCategory = false, bool $withTax = false, bool $withSpecification = false, bool $withImage = false, bool $withVideo = false, bool $withColors = false, bool $withPrice = false, bool $withStock = false, bool $withLatestStock = false, bool $withReview = false): Product
+    public function getById(int $id, ?ProductFilterDTO $dto = null): Product
     {
-        return $this->model($withCategory, $withSubCategory, $withTax, $withSpecification, $withImage, $withVideo, $withColors, $withPrice, $withStock, $withLatestStock, $withReview)->findOrFail($id);
+        return $this->model($dto)->findOrFail($id);
     }
 
-    public function getByColumn(string $column, mixed $value, bool $withCategory = false, bool $withSubCategory = false, bool $withTax = false, bool $withSpecification = false, bool $withImage = false, bool $withVideo = false, bool $withColors = false, bool $withPrice = false, bool $withStock = false, bool $withLatestStock = false, bool $withReview = false): ?Product
+    public function getByColumn(string $column, mixed $value, ?ProductFilterDTO $dto = null): ?Product
     {
-        return $this->model($withCategory, $withSubCategory, $withTax, $withSpecification, $withImage, $withVideo, $withColors, $withPrice, $withStock, $withLatestStock, $withReview)->where($column, $value)->first();
+        return $this->model($dto)->where($column, $value)->first();
     }
 
-    public function getByColumnOrFail(string $column, mixed $value, bool $withCategory = false, bool $withSubCategory = false, bool $withTax = false, bool $withSpecification = false, bool $withImage = false, bool $withVideo = false, bool $withColors = false, bool $withPrice = false, bool $withStock = false, bool $withLatestStock = false, bool $withReview = false): Product
+    public function getByColumnOrFail(string $column, mixed $value, ?ProductFilterDTO $dto = null): Product
     {
-        return $this->model($withCategory, $withSubCategory, $withTax, $withSpecification, $withImage, $withVideo, $withColors, $withPrice, $withStock, $withLatestStock, $withReview)->where($column, $value)->firstOrFail();
+        return $this->model($dto)->where($column, $value)->firstOrFail();
     }
 
-    public function paginate(int $total = 15, bool $withCategory = false, bool $withSubCategory = false, bool $withTax = false, bool $withSpecification = false, bool $withImage = false, bool $withVideo = false, bool $withColors = false, bool $withPrice = false, bool $withStock = false, bool $withLatestStock = false, bool $withReview = false): LengthAwarePaginator
+    public function paginate(?ProductFilterDTO $dto = null): LengthAwarePaginator
     {
-        return $this->query($withCategory, $withSubCategory, $withTax, $withSpecification, $withImage, $withVideo, $withColors, $withPrice, $withStock, $withLatestStock, $withReview)->paginate($total)->appends(request()->query());
+        return $this->query($dto)->paginate(15)->appends(request()->query());
     }
 
-    public function getAll(bool $withCategory = false, bool $withSubCategory = false, bool $withTax = false, bool $withSpecification = false, bool $withImage = false, bool $withVideo = false, bool $withColors = false, bool $withPrice = false, bool $withStock = false, bool $withLatestStock = false, bool $withReview = false): Collection
+    public function getAll(?ProductFilterDTO $dto = null): Collection
     {
-        return $this->query($withCategory, $withSubCategory, $withTax, $withSpecification, $withImage, $withVideo, $withColors, $withPrice, $withStock, $withLatestStock, $withReview)->lazy(100)->collect();
-    }
-}
-
-class CommonFilter implements Filter
-{
-    public function __invoke(Builder $query, mixed $value, string $property): void
-    {
-        $query->where(function ($q) use ($value) {
-            $q->where('name', $value)
-                ->orWhere('slug', $value)
-                ->orWhere('hsn', $value)
-                ->orWhere('description_unfiltered', $value)
-                ->orWhere('brief_description', $value)
-                ->orWhere('meta_title', $value)
-                ->orWhere('meta_description', $value)
-                ->orWhere('meta_keywords', $value)
-                ->orWhereRaw('MATCH(name, slug, hsn, description_unfiltered, brief_description, meta_title, meta_description, meta_keywords) AGAINST(? IN BOOLEAN MODE)', [$value.'*']);
-        });
+        return $this->query($dto)->lazy(100)->collect();
     }
 }

@@ -234,10 +234,10 @@ export function AppSidebarNavMenus() {
                 title={item.label}
                 className={({ isActive }) =>
                   cn(
-                    "flex items-center gap-3 rounded-md text-sm transition-colors no-underline px-3 py-2",
+                    "flex items-center gap-3 rounded-sm text-sm transition-colors no-underline px-3 py-2",
                     isActive
-                      ? "text-[#DCEAE5] font-medium bg-[#193B32]"
-                      : "text-[#000000] hover:text-[#334E48]",
+                      ? "text-[#ffffff] font-medium bg-[#222222]"
+                      : "text-[#000000] hover:text-[#5b5b5b]",
                   )
                 }
               >

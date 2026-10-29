@@ -2,9 +2,8 @@
 
 namespace App\Features\ProductReviews\Resources;
 
-use Illuminate\Http\Resources\Json\JsonResource;
 
-class ProductReviewCollection extends JsonResource
+class ProductReviewCollection extends RelatedProductReviewCollection
 {
 	/**
 	 * Transform the resource collection into an array.
@@ -14,13 +13,10 @@ class ProductReviewCollection extends JsonResource
 	 */
 	public function toArray($request)
 	{
-		return [
-			'id' => $this->id,
-			'rating' => $this->rating,
-			'comment' => $this->comment,
-			'is_active' => $this->is_active,
-			'created_at' => $this->created_at,
+		$parentToArray = parent::toArray($request);
+        return array_merge($parentToArray, [
+            'created_at' => $this->created_at,
 			'updated_at' => $this->updated_at,
-		];
+        ]);
 	}
 }

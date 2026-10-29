@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Features\Products\Resources;
+namespace App\Features\ProductVideos\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ProductVideoCollection extends JsonResource
+class RelatedProductVideoCollection extends JsonResource
 {
 	/**
 	 * Transform the resource collection into an array.

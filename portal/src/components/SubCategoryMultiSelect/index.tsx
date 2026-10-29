@@ -13,6 +13,7 @@ type Props = {
   value: OptionType[] | undefined;
   onChange: (value: OptionType[] | undefined) => void;
   isDisabled?: boolean;
+  categories?: string;
   placeholder?: string;
   className?: string;
 };
@@ -22,6 +23,7 @@ export default function SubCategoryMultiSelect({
   onChange,
   isDisabled = false,
   placeholder = "Select Sub-Category",
+  categories,
   className,
 }: Props) {
   const authToken = useAuthStore((state) => state.authToken);
@@ -36,6 +38,7 @@ export default function SubCategoryMultiSelect({
         page: String(additional ? additional.page : 1),
         total: String(10),
         "filter[search]": search,
+        "filter[categories]": categories,
       });
       const response = await getSubCategoriesHandler(params, undefined, {
         isSelect: true,
@@ -53,11 +56,11 @@ export default function SubCategoryMultiSelect({
         },
       };
     },
-    [],
+    [categories],
   );
 
   return (
-    <div className="relative z-20 flex-1">
+    <div className="relative z-10 flex-1">
       <AsyncPaginate
         value={value}
         isMulti={true}
@@ -81,6 +84,7 @@ export default function SubCategoryMultiSelect({
         className={className}
         placeholder={placeholder}
         closeMenuOnSelect={false}
+        cacheUniqs={[categories]}
       />
     </div>
   );

@@ -10,7 +10,6 @@ use Illuminate\Pagination\LengthAwarePaginator;
 interface PaymentOptionServiceInterface
 {
     public function paginate(?PaymentOptionFilterDTO $dto = null): LengthAwarePaginator;
-    public function create(PaymentOptionDTO $data): PaymentOption;
     public function update(PaymentOptionDTO $data, PaymentOption $option): PaymentOption;
     public function getById(int $id): PaymentOption;
     public function getBySlug(string $slug): PaymentOption;

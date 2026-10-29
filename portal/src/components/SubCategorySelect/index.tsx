@@ -15,6 +15,7 @@ type Props = {
   isDisabled?: boolean;
   placeholder?: string;
   className?: string;
+  category?: string;
 };
 
 export default function SubCategorySelect({
@@ -22,6 +23,7 @@ export default function SubCategorySelect({
   onChange,
   isDisabled = false,
   placeholder = "Select Sub-Category",
+  category,
   className,
 }: Props) {
   const authToken = useAuthStore((state) => state.authToken);
@@ -36,6 +38,7 @@ export default function SubCategorySelect({
         page: String(additional ? additional.page : 1),
         total: String(10),
         "filter[search]": search,
+        "filter[category]": category,
       });
       const response = await getSubCategoriesHandler(params, undefined, {
         isSelect: true,
@@ -53,11 +56,11 @@ export default function SubCategorySelect({
         },
       };
     },
-    [],
+    [category],
   );
 
   return (
-    <div className="relative z-20 flex-1">
+    <div className="relative z-10 flex-1">
       <AsyncPaginate
         value={value ? value : null}
         isMulti={false}
@@ -74,6 +77,7 @@ export default function SubCategorySelect({
         className={className}
         placeholder={placeholder}
         closeMenuOnSelect={true}
+        cacheUniqs={[category]}
       />
     </div>
   );

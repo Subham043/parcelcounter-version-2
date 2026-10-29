@@ -22,19 +22,12 @@ return new class extends Migration
             $table->boolean('is_active')->default(false);
             $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete();
             $table->timestamps();
-
-            // Main index for active testimonial listing
-            $table->index(
-                ['is_active', 'created_at'],
-                'testimonials_active_created_at_index'
-            );
-
-            // Optional: useful if listing/filtering by rating
-            $table->index(
-                ['is_active', 'star'],
-                'testimonials_active_star_index'
-            );
-
+            
+            // Optimized Indexes for Filters & Sorts
+            $table->index('is_active', 'testimonials_is_active_index');
+            $table->index(['is_active', 'star'], 'testimonials_active_star_index');
+            
+            // FullText index for Spatie SearchFilter
             $table->fullText(['name', 'designation', 'message']);
 
         });

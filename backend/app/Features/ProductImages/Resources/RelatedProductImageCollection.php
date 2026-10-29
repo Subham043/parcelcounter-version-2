@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Features\Products\Resources;
+namespace App\Features\ProductImages\Resources;
 
 use App\Http\Services\FileStorageService;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ProductImageCollection extends JsonResource
+class RelatedProductImageCollection extends JsonResource
 {
 	/**
 	 * Transform the resource collection into an array.

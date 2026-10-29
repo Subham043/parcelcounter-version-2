@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Features\Products\Resources;
+namespace App\Features\ProductReviews\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ProductTaxCollection extends JsonResource
+class RelatedProductReviewCollection extends JsonResource
 {
 	/**
 	 * Transform the resource collection into an array.
@@ -16,10 +16,9 @@ class ProductTaxCollection extends JsonResource
 	{
 		return [
 			'id' => $this->id,
-			'name' => $this->name,
-			'slug' => $this->slug,
-			'value' => $this->value,
-			'is_inter_state_tax' => $this->is_inter_state_tax,
+			'rating' => $this->rating,
+			'comment' => $this->comment,
+			'is_active' => $this->is_active,
 		];
 	}
 }

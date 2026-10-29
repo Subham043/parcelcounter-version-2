@@ -5,6 +5,7 @@ namespace App\Features\ProductReviews\Repositories;
 use App\Features\ProductReviews\DTO\ProductReviewFilterDTO;
 use App\Features\ProductReviews\Models\ProductReview;
 use App\Features\ProductReviews\Interfaces\ProductReviewRepositoryInterface;
+use App\Http\CommonFilters\BooleanFilter;
 use App\Http\CommonFilters\SearchFilter;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
@@ -43,6 +44,7 @@ class ProductReviewRepository implements ProductReviewRepositoryInterface
             ->defaultSort($dto?->sort ?? '-id')
             ->allowedSorts(...self::SORT_COLUMNS)
             ->allowedFilters([
+                AllowedFilter::callback('is_active', new BooleanFilter),
                 AllowedFilter::custom('search', new SearchFilter(self::SEARCH_COLUMNS), null, false),
             ]);
     }

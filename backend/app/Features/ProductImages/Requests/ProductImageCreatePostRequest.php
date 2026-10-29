@@ -29,7 +29,7 @@ class ProductImageCreatePostRequest extends InputRequest
         return [
             'image_title' => 'nullable|string|max:255',
             'image_alt' => 'nullable|string|max:255',
-            'image' => 'required|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'image' => 'required|file|image|mimes:jpeg,png,jpg,webp|max:2048',
         ];
     }
 }

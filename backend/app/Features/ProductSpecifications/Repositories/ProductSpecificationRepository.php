@@ -17,18 +17,18 @@ class ProductSpecificationRepository implements ProductSpecificationRepositoryIn
 {
     private const SORT_COLUMNS = [
         'id',
-        'title',
     ];
-
+    
     private const SEARCH_COLUMNS = [
         'title',
         'description',
     ];
-
+    
     private function getSelectColumns(): array
     {
         return [
             ...self::SORT_COLUMNS,
+            'title',
             'description', 'product_id', 'created_at', 'updated_at'
         ];
     }

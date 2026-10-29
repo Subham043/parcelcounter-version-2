@@ -19,7 +19,7 @@ return new class extends Migration
             $table->timestamps();
 
             // Main index for active feature listing
-            $table->index(['created_at', 'id'], 'product_prices_created_at_id_index');
+            $table->index(['min_quantity'], 'product_prices_min_quantity_index');
         });
     }
 

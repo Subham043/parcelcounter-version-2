@@ -14,13 +14,14 @@ class ProductStockRepository implements ProductStockRepositoryInterface
 {
     private const SORT_COLUMNS = [
         'id',
+        'created_at'
     ];
 
     private function getSelectColumns(): array
     {
         return [
             ...self::SORT_COLUMNS,
-            'purchase_stock', 'quantity', 'remaining_quantity', 'purchased_at', 'product_id', 'created_at', 'updated_at'
+            'purchase_stock', 'quantity', 'remaining_quantity', 'purchased_at', 'product_id', 'updated_at'
         ];
     }
     public function model(int $product_id, ?ProductStockFilterDTO $dto = null): Builder

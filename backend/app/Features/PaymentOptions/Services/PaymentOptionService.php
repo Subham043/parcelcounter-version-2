@@ -33,13 +33,6 @@ class PaymentOptionService implements PaymentOptionServiceInterface
 		return $this->optionRepository->getByColumnOrFail('slug', $slug);
 	}
 
-	public function create(PaymentOptionDTO $data): PaymentOption
-	{
-		return DB::transaction(function () use ($data) {
-			return $this->optionRepository->create([...$data->toArray(), 'user_id' => auth(Guards::API->value())->user()->id]);
-		});
-	}
-
 	public function update(PaymentOptionDTO $data, PaymentOption $option): PaymentOption
 	{
 		return DB::transaction(function () use ($data, $option) {

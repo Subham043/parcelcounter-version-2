@@ -26,10 +26,13 @@ return new class extends Migration
             $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete();
             $table->timestamps();
 
-            $table->index(['name', 'slug'], 'sub_categories_name_slug_index');
-            $table->index(['is_active', 'name', 'slug'], 'sub_categories_is_active_name_slug_index');
+            // Optimized Indexes for Filters & Sorts
+            $table->index(['is_active'], 'sub_categories_is_active_index');
+            $table->index(['is_active', 'name'], 'sub_categories_is_active_name_index');
 
+            // FullText index for Spatie SearchFilter
             $table->fullText(['name', 'slug', 'heading', 'description_unfiltered', 'meta_title', 'meta_description', 'meta_keywords'], 'sub_categories_fulltext');
+            $table->fullText(['name', 'slug', 'meta_keywords'], 'sub_categories_global_fulltext');
 
         });
     }

@@ -2,9 +2,7 @@
 
 namespace App\Features\ProductSpecifications\Resources;
 
-use Illuminate\Http\Resources\Json\JsonResource;
-
-class ProductSpecificationCollection extends JsonResource
+class ProductSpecificationCollection extends RelatedProductSpecificationCollection
 {
 	/**
 	 * Transform the resource collection into an array.
@@ -14,12 +12,10 @@ class ProductSpecificationCollection extends JsonResource
 	 */
 	public function toArray($request)
 	{
-		return [
-			'id' => $this->id,
-			'title' => $this->title,
-			'description' => $this->description,
-			'created_at' => $this->created_at,
+		$parentToArray = parent::toArray($request);
+        return array_merge($parentToArray, [
+            'created_at' => $this->created_at,
 			'updated_at' => $this->updated_at,
-		];
+        ]);
 	}
 }

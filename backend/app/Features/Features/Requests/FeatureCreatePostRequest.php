@@ -29,7 +29,7 @@ class FeatureCreatePostRequest extends InputRequest
         return [
             'title' => 'required|string|max:255',
             'description' => 'required|string|max:500',
-            'image' => 'required|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'image' => 'required|file|image|mimes:jpeg,png,jpg,webp|max:2048',
             'is_active' => 'required|boolean',
         ];
     }

@@ -12,6 +12,7 @@ const ProductSubCategoryFilter = (props: PropType) => {
   const { paramValue, setQueryParams } = useCustomQueryParam(key);
   const { paramValue: subCategoryName } =
     useCustomQueryParam("sub_category_name");
+  const { paramValue: category } = useCustomQueryParam("filter[category]");
 
   const value = useMemo(() => {
     if (subCategoryName && paramValue)
@@ -42,6 +43,8 @@ const ProductSubCategoryFilter = (props: PropType) => {
         value={value}
         onChange={onChange}
         placeholder={placeholder}
+        category={category}
+        isDisabled={!category}
       />
     </div>
   );

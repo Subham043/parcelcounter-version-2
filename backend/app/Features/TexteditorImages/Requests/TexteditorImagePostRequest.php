@@ -27,7 +27,7 @@ class TexteditorImagePostRequest extends InputRequest
     public function rules()
     {
         return [
-            'image' => 'required|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'image' => 'required|file|image|mimes:jpeg,png,jpg,webp|max:2048',
         ];
     }
 }

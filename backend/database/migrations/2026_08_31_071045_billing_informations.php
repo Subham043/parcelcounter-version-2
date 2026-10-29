@@ -20,10 +20,7 @@ return new class extends Migration
             $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete();
             $table->timestamps();
 
-            // Main index for active feature listing
-            $table->index(['name', 'id'], 'billing_informations_name_id_index');
-            $table->index(['created_at', 'id'], 'billing_informations_created_at_id_index');
-
+            // FullText index for Spatie SearchFilter
             $table->fullText(['name', 'email', 'phone', 'gst'], 'billing_informations_fulltext_index');
 
         });

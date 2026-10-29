@@ -55,7 +55,7 @@ export default function RoleSelect({
   );
 
   return (
-    <div className="relative z-20">
+    <div className="relative z-10">
       <AsyncPaginate
         value={value ? { value: value, label: value } : null}
         isMulti={false}

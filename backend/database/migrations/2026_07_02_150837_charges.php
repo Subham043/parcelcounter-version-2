@@ -23,12 +23,12 @@ return new class extends Migration
             $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete();
             $table->timestamps();
 
-            $table->index(['name', 'slug'], 'charge_name_slug_index');
-            $table->index(['is_active', 'name', 'slug'], 'charge_is_active_name_slug_index');
-            $table->index(['is_percentage', 'name', 'slug'], 'charge_is_percentage_name_slug_index');
-            $table->index(['is_active', 'is_percentage', 'name', 'slug'], 'charge_is_active_is_percentage_name_slug_index');
-
-            $table->fullText(['name', 'slug']);
+            // Optimized Indexes for Filters & Sorts
+            $table->index('is_active', 'charges_is_active_index');
+            $table->index('is_percentage', 'charges_is_percentage_index');
+            
+            // FullText index for Spatie SearchFilter
+            $table->fullText(['name', 'slug'], 'charges_name_slug_fulltext');
 
         });
         

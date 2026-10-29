@@ -2,10 +2,11 @@
 
 namespace App\Features\Products\Controllers;
 
+use App\Features\Products\DTO\ProductFilterDTO;
 use App\Features\Products\Interfaces\ProductServiceInterface;
+use App\Features\Products\Requests\ProductFilterRequest;
 use App\Http\Controllers\Controller;
 use App\Features\Products\Resources\ProductCollection;
-use Illuminate\Http\Request;
 
 class ProductToggleStatusController extends Controller
 {
@@ -23,9 +24,9 @@ class ProductToggleStatusController extends Controller
      * of an error, it returns a 400 status JSON response with an error message.
      */
 
-    public function index($id, Request $request)
+    public function index($id, ProductFilterRequest $request)
     {
-        $product = $this->productService->getById($id, $request->query('include-category') == 'yes', $request->query('include-sub-category') == 'yes', $request->query('include-tax') == 'yes', $request->query('include-specification') == 'yes', $request->query('include-image') == 'yes', $request->query('include-video') == 'yes', $request->query('include-color') == 'yes', $request->query('include-price') == 'yes', $request->query('include-stock') == 'yes', $request->query('include-latest-stock') == 'yes', $request->query('include-review') == 'yes');
+        $product = $this->productService->getById($id, ProductFilterDTO::fromRequest($request));
         try {
             //code...
             $updated_product = $this->productService->toggleActive($product);

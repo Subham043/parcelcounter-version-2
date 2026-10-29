@@ -2,10 +2,10 @@
 
 namespace App\Features\SubCategories\Resources;
 
+use App\Features\Categories\Resources\RelatedCategoryCollection;
 use App\Http\Services\FileStorageService;
-use Illuminate\Http\Resources\Json\JsonResource;
 
-class SubCategoryCollection extends JsonResource
+class SubCategoryCollection extends RelatedSubCategoryCollection
 {
 	private function showData(\Illuminate\Http\Request $request, string $key) {
 		return $this->when(
@@ -22,11 +22,9 @@ class SubCategoryCollection extends JsonResource
 	 */
 	public function toArray($request)
 	{
-		return [
-			'id' => $this->id,
-			'name' => $this->name,
-			'slug' => $this->slug,
-			'heading' => $this->showData($request, 'heading'),
+		$parentToArray = parent::toArray($request);
+        return array_merge($parentToArray, [
+            'heading' => $this->showData($request, 'heading'),
 			'description' => $this->showData($request, 'description'),
 			'description_unfiltered' => $this->showData($request, 'description_unfiltered'),
 			'image' => $this->showData($request, 'image'),
@@ -43,8 +41,8 @@ class SubCategoryCollection extends JsonResource
 			'updated_at' => $this->showData($request, 'updated_at'),
 			'categories' => $this->when(
 				$this->relationLoaded('categories'),
-				fn () => CategoryCollection::collection($this->categories)
+				fn () => RelatedCategoryCollection::collection($this->categories)
 			),
-		];
+        ]);
 	}
 }

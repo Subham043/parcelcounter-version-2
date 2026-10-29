@@ -2,20 +2,20 @@
 
 namespace App\Features\Products\Controllers;
 
-use App\Features\Products\DTO\ProductCategoryIdDTO;
+use App\Features\Categories\DTO\CategoryIdDTO;
 use App\Features\Products\DTO\ProductColorDTO;
 use App\Features\Products\DTO\ProductDTO;
 use App\Features\Products\DTO\ProductImageDTO;
 use App\Features\Products\DTO\ProductPriceDTO;
 use App\Features\Products\DTO\ProductSpecificationDTO;
 use App\Features\Products\DTO\ProductStockDTO;
-use App\Features\Products\DTO\ProductSubCategoryIdDTO;
-use App\Features\Products\DTO\ProductTaxIdDTO;
 use App\Features\Products\DTO\ProductVideoDTO;
 use App\Features\Products\Interfaces\ProductServiceInterface;
 use App\Http\Controllers\Controller;
 use App\Features\Products\Requests\ProductCreatePostRequest;
 use App\Features\Products\Resources\ProductCollection;
+use App\Features\SubCategories\DTO\SubCategoryIdDTO;
+use App\Features\Taxes\DTO\TaxIdDTO;
 
 class ProductCreateController extends Controller
 {
@@ -35,9 +35,9 @@ class ProductCreateController extends Controller
             //code...
             $product = $this->productService->create(
                 ProductDTO::fromRequest($request),
-                ProductCategoryIdDTO::fromRequest($request),
-                ProductSubCategoryIdDTO::fromRequest($request),
-                ProductTaxIdDTO::fromRequest($request),
+                CategoryIdDTO::fromRequest($request),
+                SubCategoryIdDTO::fromRequest($request),
+                TaxIdDTO::fromRequest($request),
                 ProductSpecificationDTO::fromRequest($request),
                 ProductPriceDTO::fromRequest($request),
                 ProductStockDTO::fromRequest($request),

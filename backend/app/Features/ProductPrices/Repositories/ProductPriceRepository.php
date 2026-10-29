@@ -14,13 +14,14 @@ class ProductPriceRepository implements ProductPriceRepositoryInterface
 {
     private const SORT_COLUMNS = [
         'id',
+        'min_quantity'
     ];
 
     private function getSelectColumns(): array
     {
         return [
             ...self::SORT_COLUMNS,
-            'price', 'min_quantity', 'product_id', 'created_at', 'updated_at'
+            'price', 'product_id', 'created_at', 'updated_at'
         ];
     }
 

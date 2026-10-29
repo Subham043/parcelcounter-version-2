@@ -15,8 +15,8 @@ class BannerUpdatePostRequest extends BannerCreatePostRequest
     {
         $parentRules = parent::rules();
         return array_merge($parentRules, [
-            'desktop_image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
-            'mobile_image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'desktop_image' => 'nullable|file|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'mobile_image' => 'nullable|file|image|mimes:jpeg,png,jpg,webp|max:2048',
         ]);
     }
 }

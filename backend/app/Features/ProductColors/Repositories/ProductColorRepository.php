@@ -16,18 +16,18 @@ class ProductColorRepository implements ProductColorRepositoryInterface
 {
     private const SORT_COLUMNS = [
         'id',
-        'name',
     ];
-
+    
     private const SEARCH_COLUMNS = [
         'name',
         'code',
     ];
-
+    
     private function getSelectColumns(): array
     {
         return [
             ...self::SORT_COLUMNS,
+            'name',
             'code', 'product_id', 'created_at', 'updated_at'
         ];
     }

@@ -32,7 +32,7 @@ class CategoryCreatePostRequest extends InputRequest
             'heading' => 'required|string|max:255',
             'description' => 'required|string',
             'description_unfiltered' => 'required|string',
-            'image' => 'required|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'image' => 'required|file|image|mimes:jpeg,png,jpg,webp|max:2048',
             'is_active' => 'required|boolean',
             'meta_title' => 'nullable|string|max:255',
             'meta_description' => 'nullable|string|max:500',

@@ -2,9 +2,8 @@
 
 namespace App\Features\ProductColors\Resources;
 
-use Illuminate\Http\Resources\Json\JsonResource;
 
-class ProductColorCollection extends JsonResource
+class ProductColorCollection extends RelatedProductColorCollection
 {
 	/**
 	 * Transform the resource collection into an array.
@@ -14,12 +13,10 @@ class ProductColorCollection extends JsonResource
 	 */
 	public function toArray($request)
 	{
-		return [
-			'id' => $this->id,
-			'name' => $this->name,
-			'code' => $this->code,
-			'created_at' => $this->created_at,
+		$parentToArray = parent::toArray($request);
+        return array_merge($parentToArray, [
+            'created_at' => $this->created_at,
 			'updated_at' => $this->updated_at,
-		];
+        ]);
 	}
 }

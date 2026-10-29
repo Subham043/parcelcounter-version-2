@@ -2,7 +2,7 @@
 
 namespace App\Features\SubCategories\Interfaces;
 
-use App\Features\SubCategories\DTO\CategoryIdDTO;
+use App\Features\Categories\DTO\CategoryIdDTO;
 use App\Features\SubCategories\DTO\SubCategoryDTO;
 use App\Features\SubCategories\DTO\SubCategoryFilterDTO;
 use App\Features\SubCategories\Models\SubCategory;

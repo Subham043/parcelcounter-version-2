@@ -15,7 +15,7 @@ class BlogUpdatePostRequest extends BlogCreatePostRequest
     {
         $parentRules = parent::rules();
         return array_merge($parentRules, [
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'image' => 'nullable|file|image|mimes:jpeg,png,jpg,webp|max:2048',
             'slug' => 'required|string|max:255|unique:blogs,slug,' . $this->route('id'),
         ]);
     }

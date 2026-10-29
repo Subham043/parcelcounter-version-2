@@ -40,7 +40,7 @@ export function AppSidebarFooter() {
           cn(
             "flex items-center gap-3 rounded-lg text-sm transition-colors no-underline px-3 py-2",
             isActive
-              ? "text-white font-medium bg-[#1e3a52]"
+              ? "text-white font-medium bg-[#222222]"
               : "text-[#000000] hover:text-[#334E48]",
           )
         }
@@ -59,7 +59,7 @@ export function AppSidebarFooter() {
           cn(
             "flex items-center gap-3 rounded-lg text-sm transition-colors no-underline px-3 py-2",
             isActive
-              ? "text-white font-medium bg-[#1e3a52]"
+              ? "text-white font-medium bg-[#222222]"
               : "text-[#000000] hover:text-[#334E48]",
           )
         }

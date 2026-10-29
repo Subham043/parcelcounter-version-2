@@ -1,22 +1,21 @@
 <?php
 
-namespace App\Features\Products\DTO;
+namespace App\Features\Categories\DTO;
 
-use App\Features\Products\Requests\ProductCreatePostRequest;
-use App\Features\Products\Requests\ProductUpdatePostRequest;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Collection;
 
-final class ProductCategoryIdDTO
+final class CategoryIdDTO
 {
     public function __construct(
         public readonly array $category,
     ) {}
 
     /**
-     * @param ProductCreatePostRequest|ProductUpdatePostRequest $request
+     * @param FormRequest $request
      * @return self
      */
-    public static function fromRequest(ProductCreatePostRequest|ProductUpdatePostRequest $request): self
+    public static function fromRequest(FormRequest $request): self
     {
         return new self(
             category: $request->validated('category') ?? [],
@@ -32,7 +31,7 @@ final class ProductCategoryIdDTO
     }
 
     /**
-     * @extends \Illuminate\Support\Collection<int, ProductDTO>
+     * @extends \Illuminate\Support\Collection<int, CategoryIdDTO>
      */
     public function toCollection(): Collection
     {

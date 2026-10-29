@@ -21,18 +21,16 @@ return new class extends Migration
             $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete();
             $table->timestamps();
 
-            // Active slots, ordered by start time
+            
+            // Optimized Indexes for Filters & Sorts
+            $table->index('is_active', 'delivery_slots_is_active_index');
+            $table->index('is_cod_allowed', 'delivery_slots_is_cod_allowed_index');
             $table->index(
                 ['is_active', 'start_time'],
                 'delivery_slots_active_start_time_index'
             );
-
-            // Active slots where COD is allowed
-            $table->index(
-                ['is_active', 'is_cod_allowed', 'start_time'],
-                'delivery_slots_active_cod_start_time_index'
-            );
-
+            
+            // FullText index for Spatie SearchFilter
             $table->fullText(['name']);
 
         });

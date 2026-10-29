@@ -2,7 +2,7 @@
 
 namespace App\Features\SubCategories\Controllers;
 
-use App\Features\SubCategories\DTO\CategoryIdDTO;
+use App\Features\Categories\DTO\CategoryIdDTO;
 use App\Features\SubCategories\DTO\SubCategoryDTO;
 use App\Features\SubCategories\Interfaces\SubCategoryServiceInterface;
 use App\Http\Controllers\Controller;

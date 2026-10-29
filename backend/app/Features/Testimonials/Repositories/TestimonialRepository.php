@@ -17,7 +17,7 @@ class TestimonialRepository implements TestimonialRepositoryInterface
 {
     private const SORT_COLUMNS = [
         'id',
-        'name',
+        'star'
     ];
 
     private const SEARCH_COLUMNS = [
@@ -30,7 +30,7 @@ class TestimonialRepository implements TestimonialRepositoryInterface
     {
         return [
             ...self::SORT_COLUMNS,
-            'designation', 'star', 'message', 'image', 'is_active', 'user_id', 'created_at', 'updated_at'
+            'designation', 'name', 'message', 'image', 'is_active', 'user_id', 'created_at', 'updated_at'
         ];
     }
 
@@ -45,8 +45,8 @@ class TestimonialRepository implements TestimonialRepositoryInterface
             ->defaultSort($dto?->sort ?? '-id')
             ->allowedSorts(...self::SORT_COLUMNS)
             ->allowedFilters([
-                AllowedFilter::custom('search', new SearchFilter(self::SEARCH_COLUMNS), null, false),
                 AllowedFilter::callback('is_active', new BooleanFilter),
+                AllowedFilter::custom('search', new SearchFilter(self::SEARCH_COLUMNS), null, false),
             ]);
     }
 

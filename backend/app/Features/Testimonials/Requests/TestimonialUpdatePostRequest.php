@@ -15,7 +15,7 @@ class TestimonialUpdatePostRequest extends TestimonialCreatePostRequest
     {
         $parentRules = parent::rules();
         return array_merge($parentRules, [
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'image' => 'nullable|file|image|mimes:jpeg,png,jpg,webp|max:2048',
         ]);
     }
 }

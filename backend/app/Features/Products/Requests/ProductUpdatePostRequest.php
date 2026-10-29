@@ -15,7 +15,7 @@ class ProductUpdatePostRequest extends ProductCreatePostRequest
     {
         $parentRules = parent::rules();
         return array_merge($parentRules, [
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'image' => 'nullable|file|image|mimes:jpeg,png,jpg,webp|max:2048',
             'slug' => 'required|string|max:255|unique:products,slug,' . $this->route('id'),
             'specifications' => 'required|array|min:1',
             'specifications.*.id' => 'nullable|numeric|exists:product_specifications,id',
@@ -38,7 +38,7 @@ class ProductUpdatePostRequest extends ProductCreatePostRequest
             'videos.*.id' => 'nullable|numeric|exists:product_videos,id',
             'videos.*.video' => 'required|url|max:255',
             'images' => 'nullable|array',
-            'images.*.image' => 'required|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'images.*.image' => 'required|file|image|mimes:jpeg,png,jpg,webp|max:2048',
         ]);
     }
 }

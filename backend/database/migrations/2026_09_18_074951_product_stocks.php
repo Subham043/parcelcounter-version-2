@@ -21,7 +21,7 @@ return new class extends Migration
             $table->timestamps();
 
             // Main index for active feature listing
-            $table->index(['created_at', 'id'], 'product_stocks_created_at_id_index');
+            $table->index(['created_at'], 'product_stocks_created_at_index');
         });
     }
 

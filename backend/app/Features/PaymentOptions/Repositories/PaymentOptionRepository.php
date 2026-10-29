@@ -17,19 +17,19 @@ class PaymentOptionRepository implements PaymentOptionRepositoryInterface
 {
     private const SORT_COLUMNS = [
         'id',
-        'name',
     ];
-
+    
     private const SEARCH_COLUMNS = [
         'name',
         'slug',
         'description',
     ];
-
+    
     private function getSelectColumns(): array
     {
         return [
             ...self::SORT_COLUMNS,
+            'name',
             'slug', 
             'description', 
             'image', 
@@ -51,8 +51,8 @@ class PaymentOptionRepository implements PaymentOptionRepositoryInterface
             ->defaultSort($dto?->sort ?? '-id')
             ->allowedSorts(...self::SORT_COLUMNS)
             ->allowedFilters([
-                AllowedFilter::custom('search', new SearchFilter(self::SEARCH_COLUMNS), null, false),
                 AllowedFilter::callback('is_active', new BooleanFilter),
+                AllowedFilter::custom('search', new SearchFilter(self::SEARCH_COLUMNS), null, false),
             ]);
     }
 

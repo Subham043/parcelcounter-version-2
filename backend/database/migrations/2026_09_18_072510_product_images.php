@@ -19,9 +19,7 @@ return new class extends Migration
             $table->foreignId('product_id')->nullable()->constrained('products')->nullOnDelete();
             $table->timestamps();
 
-            // Main index for active feature listing
-            $table->index(['created_at', 'id'], 'product_images_created_at_id_index');
-
+            // FullText index for Spatie SearchFilter
             $table->fullText(['image_title', 'image_alt'], 'product_images_fulltext_index');
         });
     }

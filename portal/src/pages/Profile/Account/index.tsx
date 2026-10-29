@@ -20,8 +20,6 @@ export default function Account() {
   const { form, onSubmit, refetch, isProfileLoading, isProfileFetching } =
     useProfileUpdateForm();
 
-  console.log(form.formState.errors);
-
   return (
     <form onSubmit={onSubmit}>
       <Card className="rounded-sm py-0 gap-0">

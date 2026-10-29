@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Features\Products\Resources;
+namespace App\Features\ProductPrices\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ProductColorCollection extends JsonResource
+class RelatedProductPriceCollection extends JsonResource
 {
 	/**
 	 * Transform the resource collection into an array.
@@ -16,8 +16,8 @@ class ProductColorCollection extends JsonResource
 	{
 		return [
 			'id' => $this->id,
-			'name' => $this->name,
-			'code' => $this->code,
+			'price' => $this->price,
+			'min_quantity' => $this->min_quantity,
 		];
 	}
 }

@@ -21,10 +21,6 @@ return new class extends Migration
             $table->string('page_url', 500)->nullable();
             $table->timestamps();
 
-            // Main index for active feature listing
-            $table->index(['name', 'id'], 'contact_form_enquiries_name_id_index');
-            $table->index(['created_at', 'id'], 'contact_form_enquiries_created_at_id_index');
-
             $table->fullText(['name', 'email', 'phone', 'page_url', 'subject', 'message'], 'contact_form_enquiries_fulltext_index');
 
         });

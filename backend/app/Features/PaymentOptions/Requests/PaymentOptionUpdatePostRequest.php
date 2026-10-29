@@ -2,9 +2,21 @@
 
 namespace App\Features\PaymentOptions\Requests;
 
+use App\Http\Enums\Guards;
+use App\Http\Requests\InputRequest;
+use Illuminate\Support\Facades\Auth;
 
-class PaymentOptionUpdatePostRequest extends PaymentOptionCreatePostRequest
+class PaymentOptionUpdatePostRequest extends InputRequest
 {
+    /**
+     * Determine if the user is authorized to make this request.
+     *
+     * @return bool
+     */
+    public function authorize(): bool
+    {
+        return Auth::guard(Guards::API->value())->check();
+    }
 
     /**
      * Get the validation rules that apply to the request.
@@ -13,10 +25,10 @@ class PaymentOptionUpdatePostRequest extends PaymentOptionCreatePostRequest
      */
     public function rules()
     {
-        $parentRules = parent::rules();
-        return array_merge($parentRules, [
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
-            'slug' => 'required|string|max:255|unique:payment_options,slug,' . $this->route('id'),
-        ]);
+        return [
+            'description' => 'required|string',
+            'image' => 'nullable|file|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'is_active' => 'required|boolean',
+        ];
     }
 }

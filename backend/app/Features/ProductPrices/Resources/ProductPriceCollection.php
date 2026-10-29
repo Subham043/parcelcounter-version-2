@@ -2,9 +2,8 @@
 
 namespace App\Features\ProductPrices\Resources;
 
-use Illuminate\Http\Resources\Json\JsonResource;
 
-class ProductPriceCollection extends JsonResource
+class ProductPriceCollection extends RelatedProductPriceCollection
 {
 	/**
 	 * Transform the resource collection into an array.
@@ -14,12 +13,10 @@ class ProductPriceCollection extends JsonResource
 	 */
 	public function toArray($request)
 	{
-		return [
-			'id' => $this->id,
-			'price' => $this->price,
-			'min_quantity' => $this->min_quantity,
-			'created_at' => $this->created_at,
+		$parentToArray = parent::toArray($request);
+        return array_merge($parentToArray, [
+            'created_at' => $this->created_at,
 			'updated_at' => $this->updated_at,
-		];
+        ]);
 	}
 }
