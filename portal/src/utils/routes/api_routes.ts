@@ -199,6 +199,7 @@ export const api_routes = {
   payment_option: {
     paginate: "/api/v1/payment-options/paginate",
     view: "/api/v1/payment-options/view",
+    update: "/api/v1/payment-options/update",
     toggle_status: "/api/v1/payment-options/status",
     excel: "/api/v1/payment-options/excel",
   },

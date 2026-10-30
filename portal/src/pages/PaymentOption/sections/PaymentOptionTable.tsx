@@ -6,6 +6,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { getNameInitials } from "@/utils/helper";
 import { usePaymentOptionToggleStatusMutation } from "@/utils/data/mutation/payment_option";
 import StatusToggleBadge from "@/components/StatusToggleBadge";
+import { Button } from "@/components/ui/button";
+import { usePaymentOptionModalStore } from "../store/payment-option-modal.store";
 
 type PaymentOptionTableProps = {
   options: PaymentOptionType[];
@@ -35,6 +37,13 @@ const PaymentOptionTableRow = memo(function PaymentOptionTableRow({
   const onToggle = useCallback(async () => {
     await paymentOptionToggleStatusMutation.mutateAsync(undefined);
   }, [paymentOptionToggleStatusMutation]);
+
+  const handleModalEdit = usePaymentOptionModalStore(
+    (state) => state.handleModalOpen,
+  );
+  const onEditHandler = useCallback(() => {
+    handleModalEdit(id);
+  }, [id, handleModalEdit]);
   return (
     <tr>
       <td className="px-4 py-3 font-medium text-gray-900">
@@ -68,6 +77,13 @@ const PaymentOptionTableRow = memo(function PaymentOptionTableRow({
           {format(created_at, "dd MMM yyyy, hh:mm a")}
         </p>
       </td>
+      <td className="px-4 py-3 text-right">
+        <div className="flex items-center gap-2 justify-end">
+          <Button size="xs" variant="secondary" onClick={onEditHandler}>
+            Edit
+          </Button>
+        </div>
+      </td>
     </tr>
   );
 });
@@ -77,16 +93,18 @@ function PaymentOptionTable({ loading, options }: PaymentOptionTableProps) {
     <table className="w-full text-sm">
       <thead className="bg-gray-50 text-xs uppercase tracking-wide text-gray-500">
         <tr>
-          {["Name", "Slug", "Description", "Active", "Created At"].map((h) => (
-            <th key={h} className="px-4 py-3 text-left font-medium">
-              {h}
-            </th>
-          ))}
+          {["Name", "Slug", "Description", "Active", "Created At", ""].map(
+            (h) => (
+              <th key={h} className="px-4 py-3 text-left font-medium">
+                {h}
+              </th>
+            ),
+          )}
         </tr>
       </thead>
       <tbody className="divide-y divide-gray-100">
         {loading ? (
-          <TableRowLoading colSpan={5} />
+          <TableRowLoading colSpan={6} />
         ) : (
           options.map((item) => (
             <PaymentOptionTableRow

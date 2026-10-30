@@ -9,11 +9,24 @@ import PaymentOptionTable from "./sections/PaymentOptionTable";
 import EmptyDataBlock from "@/components/EmptyDataBlock";
 import CustomPagination from "@/components/CustomPagination";
 import PaymentOptionExcelBtn from "./sections/PaymentOptionExcelBtn";
+import { usePaymentOptionModalStore } from "./store/payment-option-modal.store";
+import { useEffect } from "react";
+import PaymentOptionForm from "./PaymentOptionForm";
 
 const EMPTY_DATA: PaymentOptionType[] = [];
 
 function PaymentOption() {
   const { data, refetch, isLoading, isFetching } = usePaymentOptionTable();
+
+  const handleModalClose = usePaymentOptionModalStore(
+    (state) => state.handleModalClose,
+  );
+
+  useEffect(() => {
+    return () => {
+      handleModalClose();
+    };
+  }, [handleModalClose]);
 
   return (
     <div className="space-y-6 pt-5">
@@ -66,6 +79,7 @@ function PaymentOption() {
           />
         )}
       </Card>
+      <PaymentOptionForm />
     </div>
   );
 }
