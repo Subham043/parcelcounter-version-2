@@ -2,7 +2,6 @@ import TableRowLoading from "@/components/TableRowLoading";
 import type { BlogType } from "@/utils/types";
 import { memo, useCallback } from "react";
 import { useBlogModalStore } from "../store/blog-modal.store";
-import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
 import BlogDeleteBtn from "./BlogDeleteBtn";
 import StatusToggleBadge from "@/components/StatusToggleBadge";
@@ -10,6 +9,8 @@ import { useBlogToggleStatusMutation } from "@/utils/data/mutation/blog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { getNameInitials } from "@/utils/helper";
 import ActiveBadge from "@/components/ActiveBadge";
+import TrippleDotMenu from "@/components/TrippleDotMenu";
+import EditButton from "@/components/EditButton";
 
 type BlogTableProps = {
   blogs: BlogType[];
@@ -89,10 +90,10 @@ const BlogTableRow = memo(function BlogTableRow({
       </td>
       <td className="px-4 py-3 text-right">
         <div className="flex items-center gap-2 justify-end">
-          <Button size="xs" variant="secondary" onClick={onEditHandler}>
-            Edit
-          </Button>
-          <BlogDeleteBtn id={id} />
+          <TrippleDotMenu>
+            <EditButton onClick={onEditHandler} />
+            <BlogDeleteBtn id={id} />
+          </TrippleDotMenu>
         </div>
       </td>
     </tr>

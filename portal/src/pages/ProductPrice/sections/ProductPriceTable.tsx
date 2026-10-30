@@ -2,9 +2,10 @@ import TableRowLoading from "@/components/TableRowLoading";
 import type { ProductPriceType } from "@/utils/types";
 import { memo, useCallback } from "react";
 import { useProductPriceModalStore } from "../store/product-price-modal.store";
-import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
 import ProductPriceDeleteBtn from "./ProductPriceDeleteBtn";
+import TrippleDotMenu from "@/components/TrippleDotMenu";
+import EditButton from "@/components/EditButton";
 
 type ProductPriceTableProps = {
   prices: ProductPriceType[];
@@ -46,10 +47,10 @@ const ProductPriceTableRow = memo(function ProductPriceTableRow({
       </td>
       <td className="px-4 py-3 text-right">
         <div className="flex items-center gap-2 justify-end">
-          <Button size="xs" variant="secondary" onClick={onEditHandler}>
-            Edit
-          </Button>
-          <ProductPriceDeleteBtn product_id={product_id} id={id} />
+          <TrippleDotMenu>
+            <EditButton onClick={onEditHandler} />
+            <ProductPriceDeleteBtn product_id={product_id} id={id} />
+          </TrippleDotMenu>
         </div>
       </td>
     </tr>

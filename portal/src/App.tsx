@@ -66,6 +66,7 @@ const ProductPrice = lazy(() => import("@/pages/ProductPrice/index.tsx"));
 const ProductImage = lazy(() => import("@/pages/ProductImage/index.tsx"));
 const ProductStock = lazy(() => import("@/pages/ProductStock/index.tsx"));
 const ProductReview = lazy(() => import("@/pages/ProductReview/index.tsx"));
+const ProductInfo = lazy(() => import("@/pages/ProductInfo/index.tsx"));
 
 function App() {
   return (
@@ -132,6 +133,10 @@ function App() {
                   <Route
                     path={page_routes.products.link}
                     element={<Product />}
+                  />
+                  <Route
+                    path={`${page_routes.view_product.link}/:id`}
+                    element={<ProductInfo />}
                   />
                   <Route
                     path={page_routes.add_product.link}

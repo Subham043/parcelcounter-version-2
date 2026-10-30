@@ -2,10 +2,11 @@ import TableRowLoading from "@/components/TableRowLoading";
 import type { ProductImageType } from "@/utils/types";
 import { memo, useCallback } from "react";
 import { useProductImageModalStore } from "../store/product-image-modal.store";
-import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
 import ProductImageDeleteBtn from "./ProductImageDeleteBtn";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import TrippleDotMenu from "@/components/TrippleDotMenu";
+import EditButton from "@/components/EditButton";
 
 type ProductImageTableProps = {
   images: ProductImageType[];
@@ -54,10 +55,10 @@ const ProductImageTableRow = memo(function ProductImageTableRow({
       </td>
       <td className="px-4 py-3 text-right">
         <div className="flex items-center gap-2 justify-end">
-          <Button size="xs" variant="secondary" onClick={onEditHandler}>
-            Edit
-          </Button>
-          <ProductImageDeleteBtn product_id={product_id} id={id} />
+          <TrippleDotMenu>
+            <EditButton onClick={onEditHandler} />
+            <ProductImageDeleteBtn product_id={product_id} id={id} />
+          </TrippleDotMenu>
         </div>
       </td>
     </tr>

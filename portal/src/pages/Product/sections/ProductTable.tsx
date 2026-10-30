@@ -1,7 +1,6 @@
 import TableRowLoading from "@/components/TableRowLoading";
 import type { ProductType } from "@/utils/types";
 import { memo, useCallback } from "react";
-import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
 import ProductDeleteBtn from "./ProductDeleteBtn";
 import StatusToggleBadge from "@/components/StatusToggleBadge";
@@ -11,6 +10,19 @@ import { getNameInitials } from "@/utils/helper";
 import { Link } from "react-router";
 import { page_routes } from "@/utils/routes/page_routes";
 import { Badge } from "@/components/ui/badge";
+import TrippleDotMenu from "@/components/TrippleDotMenu";
+import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
+import {
+  DollarSign,
+  Eye,
+  Gem,
+  Image,
+  Layers,
+  Paintbrush,
+  Pencil,
+  StarCheck,
+  Video,
+} from "lucide-react";
 
 type ProductTableProps = {
   products: ProductType[];
@@ -97,15 +109,65 @@ const ProductTableRow = memo(function ProductTableRow({
       </td>
       <td className="px-4 py-3 text-right">
         <div className="flex items-center gap-2 justify-end">
-          <Button
-            size="xs"
-            variant="secondary"
-            nativeButton={false}
-            render={<Link to={`${page_routes.edit_product.link}/${id}`} />}
-          >
-            Edit
-          </Button>
-          <ProductDeleteBtn id={id} />
+          <TrippleDotMenu>
+            <DropdownMenuItem
+              nativeButton={false}
+              render={<Link to={`${page_routes.edit_product.link}/${id}`} />}
+            >
+              <Pencil /> Edit
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              nativeButton={false}
+              render={<Link to={`${page_routes.view_product.link}/${id}`} />}
+            >
+              <Eye /> View
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              nativeButton={false}
+              render={<Link to={`${page_routes.product_prices.link}/${id}`} />}
+            >
+              <DollarSign /> Prices
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              nativeButton={false}
+              render={
+                <Link to={`${page_routes.product_specifications.link}/${id}`} />
+              }
+            >
+              <Gem /> Specifications
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              nativeButton={false}
+              render={<Link to={`${page_routes.product_stocks.link}/${id}`} />}
+            >
+              <Layers /> Stocks
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              nativeButton={false}
+              render={<Link to={`${page_routes.product_colors.link}/${id}`} />}
+            >
+              <Paintbrush /> Colors
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              nativeButton={false}
+              render={<Link to={`${page_routes.product_images.link}/${id}`} />}
+            >
+              <Image /> Images
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              nativeButton={false}
+              render={<Link to={`${page_routes.product_videos.link}/${id}`} />}
+            >
+              <Video /> Videos
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              nativeButton={false}
+              render={<Link to={`${page_routes.product_reviews.link}/${id}`} />}
+            >
+              <StarCheck /> Reviews
+            </DropdownMenuItem>
+            <ProductDeleteBtn id={id} />
+          </TrippleDotMenu>
         </div>
       </td>
     </tr>

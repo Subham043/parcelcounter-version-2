@@ -2,7 +2,6 @@ import TableRowLoading from "@/components/TableRowLoading";
 import type { SubCategoryType } from "@/utils/types";
 import { memo, useCallback } from "react";
 import { useSubCategoryModalStore } from "../store/sub-category-modal.store";
-import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
 import SubCategoryDeleteBtn from "./SubCategoryDeleteBtn";
 import StatusToggleBadge from "@/components/StatusToggleBadge";
@@ -10,6 +9,8 @@ import { useSubCategoryToggleStatusMutation } from "@/utils/data/mutation/sub_ca
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { getNameInitials } from "@/utils/helper";
 import { Badge } from "@/components/ui/badge";
+import TrippleDotMenu from "@/components/TrippleDotMenu";
+import EditButton from "@/components/EditButton";
 
 type SubCategoryTableProps = {
   subCategories: SubCategoryType[];
@@ -96,10 +97,10 @@ const SubCategoryTableRow = memo(function SubCategoryTableRow({
       </td>
       <td className="px-4 py-3 text-right">
         <div className="flex items-center gap-2 justify-end">
-          <Button size="xs" variant="secondary" onClick={onEditHandler}>
-            Edit
-          </Button>
-          <SubCategoryDeleteBtn id={id} />
+          <TrippleDotMenu>
+            <EditButton onClick={onEditHandler} />
+            <SubCategoryDeleteBtn id={id} />
+          </TrippleDotMenu>
         </div>
       </td>
     </tr>

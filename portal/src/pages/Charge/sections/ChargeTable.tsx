@@ -2,11 +2,12 @@ import TableRowLoading from "@/components/TableRowLoading";
 import type { ChargeType } from "@/utils/types";
 import { memo, useCallback } from "react";
 import { useChargeModalStore } from "../store/charge-modal.store";
-import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
 import ChargeDeleteBtn from "./ChargeDeleteBtn";
 import StatusToggleBadge from "@/components/StatusToggleBadge";
 import { useChargeToggleStatusMutation } from "@/utils/data/mutation/charge";
+import TrippleDotMenu from "@/components/TrippleDotMenu";
+import EditButton from "@/components/EditButton";
 
 type ChargeTableProps = {
   charges: ChargeType[];
@@ -66,10 +67,10 @@ const ChargeTableRow = memo(function ChargeTableRow({
       </td>
       <td className="px-4 py-3 text-right">
         <div className="flex items-center gap-2 justify-end">
-          <Button size="xs" variant="secondary" onClick={onEditHandler}>
-            Edit
-          </Button>
-          <ChargeDeleteBtn id={id} />
+          <TrippleDotMenu>
+            <EditButton onClick={onEditHandler} />
+            <ChargeDeleteBtn id={id} />
+          </TrippleDotMenu>
         </div>
       </td>
     </tr>

@@ -2,9 +2,10 @@ import TableRowLoading from "@/components/TableRowLoading";
 import type { ProductVideoType } from "@/utils/types";
 import { memo, useCallback } from "react";
 import { useProductVideoModalStore } from "../store/product-video-modal.store";
-import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
 import ProductVideoDeleteBtn from "./ProductVideoDeleteBtn";
+import TrippleDotMenu from "@/components/TrippleDotMenu";
+import EditButton from "@/components/EditButton";
 
 type ProductVideoTableProps = {
   videos: ProductVideoType[];
@@ -41,10 +42,10 @@ const ProductVideoTableRow = memo(function ProductVideoTableRow({
       </td>
       <td className="px-4 py-3 text-right">
         <div className="flex items-center gap-2 justify-end">
-          <Button size="xs" variant="secondary" onClick={onEditHandler}>
-            Edit
-          </Button>
-          <ProductVideoDeleteBtn product_id={product_id} id={id} />
+          <TrippleDotMenu>
+            <EditButton onClick={onEditHandler} />
+            <ProductVideoDeleteBtn product_id={product_id} id={id} />
+          </TrippleDotMenu>
         </div>
       </td>
     </tr>

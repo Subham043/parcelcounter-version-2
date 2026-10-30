@@ -2,7 +2,6 @@ import TableRowLoading from "@/components/TableRowLoading";
 import type { UserType } from "@/utils/types";
 import { memo, useCallback } from "react";
 import { useUserModalStore } from "../store/user-modal.store";
-import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
 import UserDeleteBtn from "./UserDeleteBtn";
 import {
@@ -12,6 +11,8 @@ import {
 import StatusToggleBadge from "@/components/StatusToggleBadge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { getNameInitials } from "@/utils/helper";
+import TrippleDotMenu from "@/components/TrippleDotMenu";
+import EditButton from "@/components/EditButton";
 
 type UserTableProps = {
   users: UserType[];
@@ -96,10 +97,10 @@ const UserTableRow = memo(function UserTableRow({
       </td>
       <td className="px-4 py-3 text-right">
         <div className="flex items-center gap-2 justify-end">
-          <Button size="xs" variant="secondary" onClick={onEditHandler}>
-            Edit
-          </Button>
-          <UserDeleteBtn id={id} />
+          <TrippleDotMenu>
+            <EditButton onClick={onEditHandler} />
+            <UserDeleteBtn id={id} />
+          </TrippleDotMenu>
         </div>
       </td>
     </tr>

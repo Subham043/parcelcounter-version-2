@@ -2,7 +2,6 @@ import TableRowLoading from "@/components/TableRowLoading";
 import type { TestimonialType } from "@/utils/types";
 import { memo, useCallback } from "react";
 import { useTestimonialModalStore } from "../store/testimonial-modal.store";
-import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
 import TestimonialDeleteBtn from "./TestimonialDeleteBtn";
 import StatusToggleBadge from "@/components/StatusToggleBadge";
@@ -10,6 +9,8 @@ import { useTestimonialToggleStatusMutation } from "@/utils/data/mutation/testim
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { getNameInitials } from "@/utils/helper";
 import { Star } from "lucide-react";
+import TrippleDotMenu from "@/components/TrippleDotMenu";
+import EditButton from "@/components/EditButton";
 
 type TestimonialTableProps = {
   testimonials: TestimonialType[];
@@ -89,10 +90,10 @@ const TestimonialTableRow = memo(function TestimonialTableRow({
       </td>
       <td className="px-4 py-3 text-right">
         <div className="flex items-center gap-2 justify-end">
-          <Button size="xs" variant="secondary" onClick={onEditHandler}>
-            Edit
-          </Button>
-          <TestimonialDeleteBtn id={id} />
+          <TrippleDotMenu>
+            <EditButton onClick={onEditHandler} />
+            <TestimonialDeleteBtn id={id} />
+          </TrippleDotMenu>
         </div>
       </td>
     </tr>

@@ -2,12 +2,13 @@ import TableRowLoading from "@/components/TableRowLoading";
 import type { TaxType } from "@/utils/types";
 import { memo, useCallback } from "react";
 import { useTaxModalStore } from "../store/tax-modal.store";
-import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
 import TaxDeleteBtn from "./TaxDeleteBtn";
 import StatusToggleBadge from "@/components/StatusToggleBadge";
 import { useTaxToggleStatusMutation } from "@/utils/data/mutation/tax";
 import ActiveBadge from "@/components/ActiveBadge";
+import TrippleDotMenu from "@/components/TrippleDotMenu";
+import EditButton from "@/components/EditButton";
 
 type TaxTableProps = {
   taxes: TaxType[];
@@ -68,10 +69,10 @@ const TaxTableRow = memo(function TaxTableRow({
       </td>
       <td className="px-4 py-3 text-right">
         <div className="flex items-center gap-2 justify-end">
-          <Button size="xs" variant="secondary" onClick={onEditHandler}>
-            Edit
-          </Button>
-          <TaxDeleteBtn id={id} />
+          <TrippleDotMenu>
+            <EditButton onClick={onEditHandler} />
+            <TaxDeleteBtn id={id} />
+          </TrippleDotMenu>
         </div>
       </td>
     </tr>

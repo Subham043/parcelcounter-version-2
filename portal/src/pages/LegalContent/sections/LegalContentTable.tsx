@@ -2,11 +2,12 @@ import TableRowLoading from "@/components/TableRowLoading";
 import type { LegalContentType } from "@/utils/types";
 import { memo, useCallback } from "react";
 import { useLegalContentModalStore } from "../store/legal-content-modal.store";
-import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
 import LegalContentDeleteBtn from "./LegalContentDeleteBtn";
 import StatusToggleBadge from "@/components/StatusToggleBadge";
 import { useLegalContentToggleStatusMutation } from "@/utils/data/mutation/legal_content";
+import TrippleDotMenu from "@/components/TrippleDotMenu";
+import EditButton from "@/components/EditButton";
 
 type LegalContentTableProps = {
   legalContents: LegalContentType[];
@@ -72,10 +73,10 @@ const LegalContentTableRow = memo(function LegalContentTableRow({
       </td>
       <td className="px-4 py-3 text-right">
         <div className="flex items-center gap-2 justify-end">
-          <Button size="xs" variant="secondary" onClick={onEditHandler}>
-            Edit
-          </Button>
-          <LegalContentDeleteBtn id={id} />
+          <TrippleDotMenu>
+            <EditButton onClick={onEditHandler} />
+            <LegalContentDeleteBtn id={id} />
+          </TrippleDotMenu>
         </div>
       </td>
     </tr>

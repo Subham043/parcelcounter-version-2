@@ -2,12 +2,13 @@ import TableRowLoading from "@/components/TableRowLoading";
 import type { DeliverySlotType } from "@/utils/types";
 import { memo, useCallback } from "react";
 import { useDeliverySlotModalStore } from "../store/delivery-slot-modal.store";
-import { Button } from "@/components/ui/button";
 import DeliverySlotDeleteBtn from "./DeliverySlotDeleteBtn";
 import StatusToggleBadge from "@/components/StatusToggleBadge";
 import { useDeliverySlotToggleStatusMutation } from "@/utils/data/mutation/delivery_slot";
 import ActiveBadge from "@/components/ActiveBadge";
 import { parse, format } from "date-fns";
+import TrippleDotMenu from "@/components/TrippleDotMenu";
+import EditButton from "@/components/EditButton";
 
 type DeliverySlotTableProps = {
   deliverySlots: DeliverySlotType[];
@@ -90,10 +91,10 @@ const DeliverySlotTableRow = memo(function DeliverySlotTableRow({
       </td>
       <td className="px-4 py-3 text-right">
         <div className="flex items-center gap-2 justify-end">
-          <Button size="xs" variant="secondary" onClick={onEditHandler}>
-            Edit
-          </Button>
-          <DeliverySlotDeleteBtn id={id} />
+          <TrippleDotMenu>
+            <EditButton onClick={onEditHandler} />
+            <DeliverySlotDeleteBtn id={id} />
+          </TrippleDotMenu>
         </div>
       </td>
     </tr>

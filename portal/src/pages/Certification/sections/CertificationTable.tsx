@@ -2,12 +2,13 @@ import TableRowLoading from "@/components/TableRowLoading";
 import type { CertificationType } from "@/utils/types";
 import { memo, useCallback } from "react";
 import { useCertificationModalStore } from "../store/certification-modal.store";
-import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
 import CertificationDeleteBtn from "./CertificationDeleteBtn";
 import StatusToggleBadge from "@/components/StatusToggleBadge";
 import { useCertificationToggleStatusMutation } from "@/utils/data/mutation/certification";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import TrippleDotMenu from "@/components/TrippleDotMenu";
+import EditButton from "@/components/EditButton";
 
 type CertificationTableProps = {
   certifications: CertificationType[];
@@ -63,10 +64,10 @@ const CertificationTableRow = memo(function CertificationTableRow({
       </td>
       <td className="px-4 py-3 text-right">
         <div className="flex items-center gap-2 justify-end">
-          <Button size="xs" variant="secondary" onClick={onEditHandler}>
-            Edit
-          </Button>
-          <CertificationDeleteBtn id={id} />
+          <TrippleDotMenu>
+            <EditButton onClick={onEditHandler} />
+            <CertificationDeleteBtn id={id} />
+          </TrippleDotMenu>
         </div>
       </td>
     </tr>

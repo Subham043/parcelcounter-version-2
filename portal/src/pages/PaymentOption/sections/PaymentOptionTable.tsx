@@ -6,8 +6,9 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { getNameInitials } from "@/utils/helper";
 import { usePaymentOptionToggleStatusMutation } from "@/utils/data/mutation/payment_option";
 import StatusToggleBadge from "@/components/StatusToggleBadge";
-import { Button } from "@/components/ui/button";
 import { usePaymentOptionModalStore } from "../store/payment-option-modal.store";
+import TrippleDotMenu from "@/components/TrippleDotMenu";
+import EditButton from "@/components/EditButton";
 
 type PaymentOptionTableProps = {
   options: PaymentOptionType[];
@@ -79,9 +80,9 @@ const PaymentOptionTableRow = memo(function PaymentOptionTableRow({
       </td>
       <td className="px-4 py-3 text-right">
         <div className="flex items-center gap-2 justify-end">
-          <Button size="xs" variant="secondary" onClick={onEditHandler}>
-            Edit
-          </Button>
+          <TrippleDotMenu>
+            <EditButton onClick={onEditHandler} />
+          </TrippleDotMenu>
         </div>
       </td>
     </tr>

@@ -2,12 +2,13 @@ import TableRowLoading from "@/components/TableRowLoading";
 import type { ProductReviewType } from "@/utils/types";
 import { memo, useCallback } from "react";
 import { useProductReviewModalStore } from "../store/product-review-modal.store";
-import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
 import ProductReviewDeleteBtn from "./ProductRatingDeleteBtn";
 import { Star } from "lucide-react";
 import StatusToggleBadge from "@/components/StatusToggleBadge";
 import { useProductReviewToggleStatusMutation } from "@/utils/data/mutation/product_review";
+import TrippleDotMenu from "@/components/TrippleDotMenu";
+import EditButton from "@/components/EditButton";
 
 type ProductReviewTableProps = {
   reviews: ProductReviewType[];
@@ -72,10 +73,10 @@ const ProductReviewTableRow = memo(function ProductReviewTableRow({
       </td>
       <td className="px-4 py-3 text-right">
         <div className="flex items-center gap-2 justify-end">
-          <Button size="xs" variant="secondary" onClick={onEditHandler}>
-            Edit
-          </Button>
-          <ProductReviewDeleteBtn product_id={product_id} id={id} />
+          <TrippleDotMenu>
+            <EditButton onClick={onEditHandler} />
+            <ProductReviewDeleteBtn product_id={product_id} id={id} />
+          </TrippleDotMenu>
         </div>
       </td>
     </tr>

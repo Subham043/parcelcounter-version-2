@@ -2,9 +2,10 @@ import TableRowLoading from "@/components/TableRowLoading";
 import type { ProductColorType } from "@/utils/types";
 import { memo, useCallback } from "react";
 import { useProductColorModalStore } from "../store/product-color-modal.store";
-import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
 import ProductColorDeleteBtn from "./ProductColorDeleteBtn";
+import TrippleDotMenu from "@/components/TrippleDotMenu";
+import EditButton from "@/components/EditButton";
 
 type ProductColorTableProps = {
   colors: ProductColorType[];
@@ -52,10 +53,10 @@ const ProductColorTableRow = memo(function ProductColorTableRow({
       </td>
       <td className="px-4 py-3 text-right">
         <div className="flex items-center gap-2 justify-end">
-          <Button size="xs" variant="secondary" onClick={onEditHandler}>
-            Edit
-          </Button>
-          <ProductColorDeleteBtn product_id={product_id} id={id} />
+          <TrippleDotMenu>
+            <EditButton onClick={onEditHandler} />
+            <ProductColorDeleteBtn product_id={product_id} id={id} />
+          </TrippleDotMenu>
         </div>
       </td>
     </tr>

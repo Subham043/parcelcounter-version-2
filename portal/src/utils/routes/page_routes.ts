@@ -30,6 +30,7 @@ export const page_routes = {
   products: { link: "/products", name: "Products" },
   add_product: { link: "/products/add", name: "Add Product" },
   edit_product: { link: "/products/edit", name: "Edit Product" },
+  view_product: { link: "/products/view", name: "View Product" },
   product_specifications: { link: "/products/specifications", name: "Product Specifications" },
   product_colors: { link: "/products/colors", name: "Product Colors" },
   product_videos: { link: "/products/videos", name: "Product Videos" },

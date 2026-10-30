@@ -2,9 +2,10 @@ import TableRowLoading from "@/components/TableRowLoading";
 import type { ProductStockType } from "@/utils/types";
 import { memo, useCallback } from "react";
 import { useProductStockModalStore } from "../store/product-stock-modal.store";
-import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
 import ProductStockDeleteBtn from "./ProductStockDeleteBtn";
+import TrippleDotMenu from "@/components/TrippleDotMenu";
+import EditButton from "@/components/EditButton";
 
 type ProductStockTableProps = {
   stocks: ProductStockType[];
@@ -53,10 +54,10 @@ const ProductStockTableRow = memo(function ProductStockTableRow({
       </td>
       <td className="px-4 py-3 text-right">
         <div className="flex items-center gap-2 justify-end">
-          <Button size="xs" variant="secondary" onClick={onEditHandler}>
-            Edit
-          </Button>
-          <ProductStockDeleteBtn product_id={product_id} id={id} />
+          <TrippleDotMenu>
+            <EditButton onClick={onEditHandler} />
+            <ProductStockDeleteBtn product_id={product_id} id={id} />
+          </TrippleDotMenu>
         </div>
       </td>
     </tr>

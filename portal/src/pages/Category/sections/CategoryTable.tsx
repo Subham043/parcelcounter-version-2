@@ -2,13 +2,14 @@ import TableRowLoading from "@/components/TableRowLoading";
 import type { CategoryType } from "@/utils/types";
 import { memo, useCallback } from "react";
 import { useCategoryModalStore } from "../store/category-modal.store";
-import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
 import CategoryDeleteBtn from "./CategoryDeleteBtn";
 import StatusToggleBadge from "@/components/StatusToggleBadge";
 import { useCategoryToggleStatusMutation } from "@/utils/data/mutation/category";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { getNameInitials } from "@/utils/helper";
+import TrippleDotMenu from "@/components/TrippleDotMenu";
+import EditButton from "@/components/EditButton";
 
 type CategoryTableProps = {
   categories: CategoryType[];
@@ -85,10 +86,10 @@ const CategoryTableRow = memo(function CategoryTableRow({
       </td>
       <td className="px-4 py-3 text-right">
         <div className="flex items-center gap-2 justify-end">
-          <Button size="xs" variant="secondary" onClick={onEditHandler}>
-            Edit
-          </Button>
-          <CategoryDeleteBtn id={id} />
+          <TrippleDotMenu>
+            <EditButton onClick={onEditHandler} />
+            <CategoryDeleteBtn id={id} />
+          </TrippleDotMenu>
         </div>
       </td>
     </tr>

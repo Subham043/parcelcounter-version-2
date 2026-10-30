@@ -2,11 +2,13 @@ import TableRowLoading from "@/components/TableRowLoading";
 import type { ContactFormEnquiryType } from "@/utils/types";
 import { memo, useCallback } from "react";
 import { useContactFormEnquiryModalStore } from "../store/contact-form-enquiry-modal.store";
-import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
 import ContactFormEnquiryDeleteBtn from "./ContactFormEnquiryDeleteBtn";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { getNameInitials } from "@/utils/helper";
+import TrippleDotMenu from "@/components/TrippleDotMenu";
+import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
+import { Eye } from "lucide-react";
 
 type ContactFormEnquiryTableProps = {
   enquiries: ContactFormEnquiryType[];
@@ -72,10 +74,12 @@ const ContactFormEnquiryTableRow = memo(function ContactFormEnquiryTableRow({
       </td>
       <td className="px-4 py-3 text-right">
         <div className="flex items-center gap-2 justify-end">
-          <Button size="xs" variant="secondary" onClick={onViewHandler}>
-            View
-          </Button>
-          <ContactFormEnquiryDeleteBtn id={id} />
+          <TrippleDotMenu>
+            <DropdownMenuItem onClick={onViewHandler}>
+              <Eye /> Edit
+            </DropdownMenuItem>
+            <ContactFormEnquiryDeleteBtn id={id} />
+          </TrippleDotMenu>
         </div>
       </td>
     </tr>

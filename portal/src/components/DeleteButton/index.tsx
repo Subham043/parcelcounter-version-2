@@ -1,7 +1,8 @@
-import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { useDeleteConfirmation } from "@/hooks/useDeleteConfirmation";
+import { Trash } from "lucide-react";
 import { useCallback } from "react";
+import { DropdownMenuItem } from "../ui/dropdown-menu";
 
 function DeleteButton({
   onDelete,
@@ -19,15 +20,14 @@ function DeleteButton({
     [onDelete],
   );
   return (
-    <Button
-      size="xs"
+    <DropdownMenuItem
       variant="destructive"
       onClick={onDeleteHandler}
       disabled={loading}
     >
-      {loading && <Spinner className="size-5" data-icon="inline-start" />}
+      {loading ? <Spinner className="size-5" /> : <Trash />}{" "}
       {loading ? "Deleting..." : "Delete"}
-    </Button>
+    </DropdownMenuItem>
   );
 }
 

@@ -2,12 +2,13 @@ import TableRowLoading from "@/components/TableRowLoading";
 import type { BannerType } from "@/utils/types";
 import { memo, useCallback } from "react";
 import { useBannerModalStore } from "../store/banner-modal.store";
-import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
 import BannerDeleteBtn from "./BannerDeleteBtn";
 import StatusToggleBadge from "@/components/StatusToggleBadge";
 import { useBannerToggleStatusMutation } from "@/utils/data/mutation/banner";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import TrippleDotMenu from "@/components/TrippleDotMenu";
+import EditButton from "@/components/EditButton";
 
 type BannerTableProps = {
   banners: BannerType[];
@@ -72,10 +73,10 @@ const BannerTableRow = memo(function BannerTableRow({
       </td>
       <td className="px-4 py-3 text-right">
         <div className="flex items-center gap-2 justify-end">
-          <Button size="xs" variant="secondary" onClick={onEditHandler}>
-            Edit
-          </Button>
-          <BannerDeleteBtn id={id} />
+          <TrippleDotMenu>
+            <EditButton onClick={onEditHandler} />
+            <BannerDeleteBtn id={id} />
+          </TrippleDotMenu>
         </div>
       </td>
     </tr>

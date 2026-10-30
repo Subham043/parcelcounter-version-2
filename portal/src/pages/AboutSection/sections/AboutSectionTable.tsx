@@ -2,13 +2,14 @@ import TableRowLoading from "@/components/TableRowLoading";
 import type { AboutSectionType } from "@/utils/types";
 import { memo, useCallback } from "react";
 import { useAboutSectionModalStore } from "../store/about-section-modal.store";
-import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
 import AboutSectionDeleteBtn from "./AboutSectionDeleteBtn";
 import StatusToggleBadge from "@/components/StatusToggleBadge";
 import { useAboutSectionToggleStatusMutation } from "@/utils/data/mutation/about_section";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { getNameInitials } from "@/utils/helper";
+import TrippleDotMenu from "@/components/TrippleDotMenu";
+import EditButton from "@/components/EditButton";
 
 type AboutSectionTableProps = {
   sections: AboutSectionType[];
@@ -76,10 +77,10 @@ const AboutSectionTableRow = memo(function AboutSectionTableRow({
       </td>
       <td className="px-4 py-3 text-right">
         <div className="flex items-center gap-2 justify-end">
-          <Button size="xs" variant="secondary" onClick={onEditHandler}>
-            Edit
-          </Button>
-          <AboutSectionDeleteBtn id={id} />
+          <TrippleDotMenu>
+            <EditButton onClick={onEditHandler} />
+            <AboutSectionDeleteBtn id={id} />
+          </TrippleDotMenu>
         </div>
       </td>
     </tr>
