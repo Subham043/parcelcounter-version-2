@@ -187,6 +187,15 @@ export const api_routes = {
     toggle_status: "/api/v1/banners/status",
     excel: "/api/v1/banners/excel",
   },
+  certification: {
+    paginate: "/api/v1/certifications/paginate",
+    view: "/api/v1/certifications/view",
+    create: "/api/v1/certifications/create",
+    update: "/api/v1/certifications/update",
+    delete: "/api/v1/certifications/delete",
+    toggle_status: "/api/v1/certifications/status",
+    excel: "/api/v1/certifications/excel",
+  },
   about_section: {
     paginate: "/api/v1/about-sections/paginate",
     view: "/api/v1/about-sections/view",

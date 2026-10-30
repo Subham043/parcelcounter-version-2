@@ -117,6 +117,13 @@ use App\Features\BillingInformations\Controllers\BillingInformationExportControl
 use App\Features\BillingInformations\Controllers\BillingInformationPaginateController;
 use App\Features\BillingInformations\Controllers\BillingInformationUpdateController;
 use App\Features\BillingInformations\Controllers\BillingInformationViewController;
+use App\Features\Certifications\Controllers\CertificationCreateController;
+use App\Features\Certifications\Controllers\CertificationDeleteController;
+use App\Features\Certifications\Controllers\CertificationExportController;
+use App\Features\Certifications\Controllers\CertificationPaginateController;
+use App\Features\Certifications\Controllers\CertificationToggleStatusController;
+use App\Features\Certifications\Controllers\CertificationUpdateController;
+use App\Features\Certifications\Controllers\CertificationViewController;
 use App\Features\ContactFormEnquiries\Controllers\ContactFormEnquiryCreateController;
 use App\Features\ContactFormEnquiries\Controllers\ContactFormEnquiryDeleteController;
 use App\Features\ContactFormEnquiries\Controllers\ContactFormEnquiryExportController;
@@ -374,6 +381,16 @@ Route::prefix('v1')->middleware([Throttle::API->middleware()])->group(function (
                 Route::get('/status/{id}', [BannerToggleStatusController::class, 'index']);
                 Route::get('/view/{id}', [BannerViewController::class, 'index']);
                 Route::delete('/delete/{id}', [BannerDeleteController::class, 'index']);
+            });
+            
+            Route::prefix('certifications')->group(function () {
+                Route::get('/excel', [CertificationExportController::class, 'index']);
+                Route::get('/paginate', [CertificationPaginateController::class, 'index']);
+                Route::post('/create', [CertificationCreateController::class, 'index']);
+                Route::post('/update/{id}', [CertificationUpdateController::class, 'index']);
+                Route::get('/status/{id}', [CertificationToggleStatusController::class, 'index']);
+                Route::get('/view/{id}', [CertificationViewController::class, 'index']);
+                Route::delete('/delete/{id}', [CertificationDeleteController::class, 'index']);
             });
 
             Route::prefix('delivery-slots')->group(function () {

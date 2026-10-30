@@ -46,6 +46,7 @@ const ContactFormEnquiry = lazy(
   () => import("@/pages/ContactFormEnquiry/index.tsx"),
 );
 const Banner = lazy(() => import("@/pages/Banner/index.tsx"));
+const Certification = lazy(() => import("@/pages/Certification/index.tsx"));
 const PaymentOption = lazy(() => import("@/pages/PaymentOption/index.tsx"));
 const LegalContent = lazy(() => import("@/pages/LegalContent/index.tsx"));
 const Blog = lazy(() => import("@/pages/Blog/index.tsx"));
@@ -98,6 +99,10 @@ function App() {
                     element={<ContactFormEnquiry />}
                   />
                   <Route path={page_routes.banners.link} element={<Banner />} />
+                  <Route
+                    path={page_routes.certifications.link}
+                    element={<Certification />}
+                  />
                   <Route
                     path={page_routes.payment_options.link}
                     element={<PaymentOption />}

@@ -17,6 +17,7 @@ import {
   Users,
   LayoutTemplate,
   ShoppingBasket,
+  FileBadge,
 } from "lucide-react";
 import { cn } from "@/utils/lib/utils";
 import { useMemo, useState } from "react";
@@ -57,79 +58,14 @@ const navSections: NavSection[] = [
         // ],
       },
       {
-        label: page_routes.charges.name,
-        icon: <BanknoteArrowUp size={17} />,
-        to: page_routes.charges.link,
-      },
-      {
-        label: page_routes.delivery_slots.name,
-        icon: <ClipboardClock size={17} />,
-        to: page_routes.delivery_slots.link,
-      },
-      {
-        label: page_routes.features.name,
-        icon: <ScrollText size={17} />,
-        to: page_routes.features.link,
-      },
-      {
-        label: page_routes.testimonials.name,
-        icon: <UserStar size={17} />,
-        to: page_routes.testimonials.link,
-      },
-      {
-        label: page_routes.tax.name,
-        icon: <HandCoins size={17} />,
-        to: page_routes.tax.link,
-      },
-      {
         label: page_routes.contact_form_enquiry.name,
         icon: <MessageSquareDot size={17} />,
         to: page_routes.contact_form_enquiry.link,
       },
       {
-        label: page_routes.banners.name,
-        icon: <Image size={17} />,
-        to: page_routes.banners.link,
-      },
-      {
-        label: page_routes.payment_options.name,
-        icon: <CreditCard size={17} />,
-        to: page_routes.payment_options.link,
-      },
-      {
-        label: page_routes.legal_content.name,
-        icon: <Gavel size={17} />,
-        to: page_routes.legal_content.link,
-      },
-      {
-        label: page_routes.blogs.name,
-        icon: <FilePenLine size={17} />,
-        to: page_routes.blogs.link,
-      },
-      {
-        label: page_routes.categories.name,
-        icon: <ChartBarStacked size={17} />,
-        to: page_routes.categories.link,
-      },
-      {
-        label: page_routes.sub_categories.name,
-        icon: <ChartColumnStacked size={17} />,
-        to: page_routes.sub_categories.link,
-      },
-      {
         label: page_routes.users.name,
         icon: <Users size={17} />,
         to: page_routes.users.link,
-      },
-      {
-        label: page_routes.about_section.name,
-        icon: <LayoutTemplate size={17} />,
-        to: page_routes.about_section.link,
-      },
-      {
-        label: page_routes.products.name,
-        icon: <ShoppingBasket size={17} />,
-        to: page_routes.products.link,
       },
     ],
     // allowedRolesAndPermission: [
@@ -142,30 +78,94 @@ const navSections: NavSection[] = [
     //   "Learner",
     // ],
   },
-  // {
-  //   section: "MANAGE TRAINING",
-  //   items: [
-  //     {
-  //       label: page_routes.manage_training_course.name,
-  //       icon: <BookOpenText size={17} />,
-  //       to: page_routes.manage_training_course.link,
-  //       allowedRolesAndPermission: ["canManageCourses", "Super Admin", "Admin"],
-  //     },
-  //     {
-  //       label: page_routes.manage_training_category.name,
-  //       icon: <ChartBarStacked size={17} />,
-  //       to: page_routes.manage_training_category.link,
-  //       allowedRolesAndPermission: ["canManageCourses", "Super Admin", "Admin"],
-  //     },
-  //     {
-  //       label: page_routes.manage_training_sub_category.name,
-  //       icon: <ChartColumnStacked size={17} />,
-  //       to: page_routes.manage_training_sub_category.link,
-  //       allowedRolesAndPermission: ["canManageCourses", "Super Admin", "Admin"],
-  //     },
-  //   ],
-  //   allowedRolesAndPermission: ["canManageCourses", "Super Admin", "Admin"],
-  // },
+  {
+    section: "CONTENT MANAGEMENT",
+    items: [
+      {
+        label: page_routes.about_section.name,
+        icon: <LayoutTemplate size={17} />,
+        to: page_routes.about_section.link,
+      },
+      {
+        label: page_routes.banners.name,
+        icon: <Image size={17} />,
+        to: page_routes.banners.link,
+      },
+      {
+        label: page_routes.blogs.name,
+        icon: <FilePenLine size={17} />,
+        to: page_routes.blogs.link,
+      },
+      {
+        label: page_routes.certifications.name,
+        icon: <FileBadge size={17} />,
+        to: page_routes.certifications.link,
+      },
+      {
+        label: page_routes.features.name,
+        icon: <ScrollText size={17} />,
+        to: page_routes.features.link,
+      },
+      {
+        label: page_routes.legal_content.name,
+        icon: <Gavel size={17} />,
+        to: page_routes.legal_content.link,
+      },
+      {
+        label: page_routes.testimonials.name,
+        icon: <UserStar size={17} />,
+        to: page_routes.testimonials.link,
+      },
+    ],
+    // allowedRolesAndPermission: ["canManageCourses", "Super Admin", "Admin"],
+  },
+  {
+    section: "PRODUCT MANAGEMENT",
+    items: [
+      {
+        label: page_routes.categories.name,
+        icon: <ChartBarStacked size={17} />,
+        to: page_routes.categories.link,
+      },
+      {
+        label: page_routes.sub_categories.name,
+        icon: <ChartColumnStacked size={17} />,
+        to: page_routes.sub_categories.link,
+      },
+      {
+        label: page_routes.products.name,
+        icon: <ShoppingBasket size={17} />,
+        to: page_routes.products.link,
+      },
+    ],
+    // allowedRolesAndPermission: ["canManageCourses", "Super Admin", "Admin"],
+  },
+  {
+    section: "ORDER SETTINGS",
+    items: [
+      {
+        label: page_routes.charges.name,
+        icon: <BanknoteArrowUp size={17} />,
+        to: page_routes.charges.link,
+      },
+      {
+        label: page_routes.delivery_slots.name,
+        icon: <ClipboardClock size={17} />,
+        to: page_routes.delivery_slots.link,
+      },
+      {
+        label: page_routes.payment_options.name,
+        icon: <CreditCard size={17} />,
+        to: page_routes.payment_options.link,
+      },
+      {
+        label: page_routes.tax.name,
+        icon: <HandCoins size={17} />,
+        to: page_routes.tax.link,
+      },
+    ],
+    // allowedRolesAndPermission: ["canManageCourses", "Super Admin", "Admin"],
+  },
 ];
 
 export function AppSidebarNavMenus() {
@@ -212,14 +212,14 @@ export function AppSidebarNavMenus() {
             >
               <span
                 className="text-xs font-semibold tracking-widest uppercase"
-                style={{ color: "#6b849e" }}
+                style={{ color: "#5a5a5a" }}
               >
                 {sec.section}
               </span>
               {expandedSections.has(sec.section) ? (
-                <ChevronDown size={12} style={{ color: "#6b849e" }} />
+                <ChevronDown size={12} style={{ color: "#5a5a5a" }} />
               ) : (
-                <ChevronRight size={12} style={{ color: "#6b849e" }} />
+                <ChevronRight size={12} style={{ color: "#5a5a5a" }} />
               )}
             </button>
           )}

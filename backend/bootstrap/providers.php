@@ -17,6 +17,7 @@ return [
     App\Providers\FeatureServiceProvider::class,
     App\Providers\TaxServiceProvider::class,
     App\Providers\BannerServiceProvider::class,
+    App\Providers\CertificationServiceProvider::class,
     App\Providers\BlogServiceProvider::class,
     App\Providers\CategoryServiceProvider::class,
     App\Providers\SubCategoryServiceProvider::class,
